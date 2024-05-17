@@ -80,8 +80,8 @@
                                 <div class="langbtn">
                                     <i class="fa fa-globe" aria-hidden="true"></i>
                                     <select class="form-control changeLang" style="padding-inline: 19px;">
-                                        <option value="ch"
-                                            {{ session()->get('locale') == 'ch' ? 'selected' : '' }}>中文</option>
+                                        {{-- <option value="ch"
+                                            {{ session()->get('locale') == 'ch' ? 'selected' : '' }}>中文</option> --}}
                                         <option value="en"
                                             {{ session()->get('locale') == 'en' ? 'selected' : '' }}>English</option>
                                         <option value="th"
