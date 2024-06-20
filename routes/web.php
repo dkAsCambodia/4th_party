@@ -251,7 +251,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth:sanctum', 'is_admin', 
     });
 
     // summary report
-    Route::controller(ReportController::class)->group(function () {
+    Route::controller(ReportController::class)->group(function () { 
         Route::get('summary-report', 'indexAdmin')->name('admin-summary-report');
         Route::get('summary-report/{date}/{merchant_code?}', 'indexAdminReportByDate')->name('admin-summary-report-by-date');
         Route::get('report/export/{date}/{merchant_code?}', 'exportAdminReport')->name('exportAdminReport');
