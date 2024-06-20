@@ -690,4 +690,5 @@ return [
     'Total Payout' => 'การจ่ายเงินทั้งหมด',
     'Total Available Balance For Payout' => 'ยอดคงเหลือทั้งหมดสำหรับการจ่ายเงิน',
     'Total Payout Count' => 'จำนวนการจ่ายเงินทั้งหมด',
+     'Transactions count' => 'นับธุรกรรม'
 ];

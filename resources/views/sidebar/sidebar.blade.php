@@ -45,7 +45,7 @@
                 </li>
             @endif
             @if (Auth()->user()->role_name === 'Merchant')
-                <li>
+                {{-- <li>
                     <a class=" ai-icon" href="{{ route('Account: View Merchant Account') }}" aria-expanded="false">
                         <i class="flaticon-093-account"></i>
                         <span class="nav-text">{{ __('messages.Bank Account') }}</span>
@@ -56,7 +56,7 @@
                         <i class="flaticon-093-waving"></i>
                         <span class="nav-text">{{ __('messages.Product Management') }}</span>
                     </a>
-                </li>
+                </li> --}}
                 <li>
                     <a class=" ai-payments" href="{{ route('details-payment/list-merchant') }}" aria-expanded="false">
                         <i class="flaticon-072-paymentdetails"></i>
@@ -96,14 +96,14 @@
                 </li>
             @endif
             @if (Auth()->user()->role_name === 'Admin')
-                @if (auth()->user()->can('Account: View Account'))
+                {{-- @if (auth()->user()->can('Account: View Account'))
                     <li>
                         <a class=" ai-icon" href="{{ route('Account: View Account') }}" aria-expanded="false">
                             <i class="flaticon-093-account"></i>
                             <span class="nav-text">{{ __('messages.Bank Account') }}</span>
                         </a>
                     </li>
-                @endif
+                @endif --}}
                 @if (auth()->user()->can('Merchant: View Merchant'))
                     <li
                         class="{{ Route::currentRouteName() == 'Merchant: View PaymentMap Merchant'
@@ -255,11 +255,11 @@
                             <li><a
                                     href="{{ route('setting.account.list') }}">{{ __('messages.Account Setting') }}</a>
                             </li>
-                            @if (auth()->user()->can('Settlement: Billing View Settlement'))
+                            {{-- @if (auth()->user()->can('Settlement: Billing View Settlement'))
                                 <li><a
                                         href="{{ route('Settlement: Billing View Settlement') }}">{{ __('messages.Settlement settings') }}</a>
                                 </li>
-                            @endif
+                            @endif --}}
                             <li><a
                                     href="{{ route('setting.timezone.list') }}">{{ __('messages.Timezone Setting') }}</a>
                             </li>

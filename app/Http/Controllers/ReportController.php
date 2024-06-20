@@ -22,7 +22,8 @@ class ReportController extends Controller
                 ->selectRaw('SUM(amount) as total_amount')
                 ->selectRaw('COUNT(amount) as order_count')
                 ->selectRaw("(DATE_FORMAT(created_at, '%Y-%m-%d')) as date")
-                ->groupBy('date');
+                ->selectRaw('Currency')
+                ->groupBy('date', 'Currency');
 
             return DataTables::of($data)
                 ->editColumn('date', function ($data) use ($request) {
@@ -73,16 +74,16 @@ class ReportController extends Controller
                 ->where('payment_status', 'success')
                 ->when($merchant_code, fn ($q) => $q->where('merchant_code', $merchant_code))
                 ->with('merchantData:merchant_code,merchant_name')
-                ->select('amount', 'merchant_code', 'transaction_id', 'customer_name', 'fourth_party_transection', 'created_at', 'cny_amount')
+                ->select('amount', 'merchant_code', 'transaction_id', 'customer_name', 'fourth_party_transection', 'created_at', 'Currency')
                 ->get();
 
             return DataTables::of($data)
                 ->editColumn('amount', function ($data) {
                     return number_format($data->amount, 2);
                 })
-                ->editColumn('cny_amount', function ($data) {
-                    return number_format($data->cny_amount, 2);
-                })
+                // ->editColumn('cny_amount', function ($data) {
+                //     return number_format($data->cny_amount, 2);
+                // })
                 ->editColumn('created_at', function ($data) {
                     return getAuthPreferenceTimezone($data->created_at);
                 })
@@ -108,7 +109,7 @@ class ReportController extends Controller
                 'customer_name',
                 'fourth_party_transection',
                 'created_at',
-                'cny_amount'
+                'Currency'
             )
             ->orderBy('created_at', 'desc')
             ->get();
@@ -120,8 +121,8 @@ class ReportController extends Controller
             trans('messages.Transaction ID'),
             trans('messages.Merchant Track No.'),
             trans('messages.Customer Name'),
-            trans('messages.usd_amount'),
-            trans('messages.cny_amount'),
+            trans('messages.Amount'),
+            trans('messages.Currency'),
         ];
 
         foreach ($data as $item) {
@@ -132,8 +133,8 @@ class ReportController extends Controller
                 trans('messages.Transaction ID') => $item->fourth_party_transection,
                 trans('messages.Merchant Track No.') => $item->transaction_id,
                 trans('messages.Customer Name') => $item->customer_name,
-                trans('messages.usd_amount') => number_format($item->amount, 2),
-                trans('messages.cny_amount') => number_format($item->cny_amount, 2),
+                trans('messages.Amount') => number_format($item->amount, 2),
+                trans('messages.Currency') => $item->Currency,
             ];
         }
 
@@ -153,7 +154,8 @@ class ReportController extends Controller
                 ->selectRaw('SUM(amount) as total_amount')
                 ->selectRaw('COUNT(amount) as order_count')
                 ->selectRaw("(DATE_FORMAT(created_at, '%Y-%m-%d')) as date")
-                ->groupBy('date');
+                ->selectRaw('Currency')
+                ->groupBy('date', 'Currency');
 
             return DataTables::of($data)
                 ->editColumn('date', function ($data) {
@@ -181,7 +183,7 @@ class ReportController extends Controller
                 ->rawColumns(['date'])
                 ->make(true);
         }
-
+ 
         return view('reports.merchant.index');
     }
 
@@ -195,16 +197,16 @@ class ReportController extends Controller
             $data = PaymentDetail::whereDate('created_at', $date)
                 ->where('payment_status', 'success')
                 ->where('merchant_code', $merchantCode)
-                ->select('amount', 'transaction_id', 'customer_name', 'fourth_party_transection', 'created_at', 'cny_amount')
+                ->select('amount', 'transaction_id', 'customer_name', 'fourth_party_transection', 'created_at', 'Currency')
                 ->get();
 
             return DataTables::of($data)
                 ->editColumn('amount', function ($data) {
                     return number_format($data->amount, 2);
                 })
-                ->editColumn('cny_amount', function ($data) {
-                    return number_format($data->cny_amount, 2);
-                })
+                // ->editColumn('cny_amount', function ($data) {
+                //     return $data->cny_amount;
+                // })
                 ->editColumn('created_at', function ($data) {
                     return getAuthPreferenceTimezone($data->created_at);
                 })
@@ -221,7 +223,7 @@ class ReportController extends Controller
         $data = PaymentDetail::whereDate('created_at', $date)
             ->where('payment_status', 'success')
             ->where('merchant_code', $merchantCode)
-            ->select('amount', 'transaction_id', 'customer_name', 'fourth_party_transection', 'created_at', 'cny_amount')
+            ->select('amount', 'transaction_id', 'customer_name', 'fourth_party_transection', 'created_at', 'Currency')
             ->orderBy('created_at', 'desc')
             ->get();
 
@@ -230,8 +232,8 @@ class ReportController extends Controller
             trans('messages.Transaction ID'),
             trans('messages.Merchant Track No.'),
             trans('messages.Customer Name'),
-            trans('messages.usd_amount'),
-            trans('messages.cny_amount'),
+            trans('messages.Amount'),
+            trans('messages.Currency'),
         ];
 
         foreach ($data as $item) {
@@ -240,8 +242,8 @@ class ReportController extends Controller
                 trans('messages.Transaction ID') => $item->fourth_party_transection,
                 trans('messages.Merchant Track No.') => $item->transaction_id,
                 trans('messages.Customer Name') => $item->customer_name,
-                trans('messages.usd_amount') => number_format($item->amount, 2),
-                trans('messages.cny_amount') => number_format($item->cny_amount, 2),
+                trans('messages.Amount') => number_format($item->amount, 2),
+                trans('messages.Currency') => $item->Currency,
             ];
         }
 

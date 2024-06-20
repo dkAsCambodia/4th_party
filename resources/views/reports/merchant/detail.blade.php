@@ -35,8 +35,8 @@
 											<th>{{ __('messages.Transaction ID') }}</th>
 											<th>{{ __('messages.Merchant Track No.') }}</th>
 											<th>{{ __('messages.Customer Name') }}</th>
-											<th>{{ __('messages.usd_amount') }}</th>
-											<th>{{ __('messages.cny_amount') }}</th>
+											<th>{{ __('messages.Amount') }}</th>
+											<th>{{ __('messages.Currency') }}</th>
 										</tr>
 									</thead>
 									<tbody></tbody>
@@ -72,7 +72,7 @@
                         {data: 'transaction_id'},
                         {data: 'customer_name'},
                         {data: 'amount'},
-                        {data: 'cny_amount'},
+                        {data: 'Currency'},
                     ],
                     columnDefs: [
                         { className: "dt-right", targets: [ 4, 5 ] },

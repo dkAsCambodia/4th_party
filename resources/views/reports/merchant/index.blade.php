@@ -31,8 +31,9 @@
 									<thead>
 										<tr>
 											<th>{{ __('messages.Date') }}</th>
-											<th>{{ __('messages.Order count') }}</th>
+											<th>{{ __('messages.Transactions count') }}</th>
 											<th>{{ __('messages.Total Amount') }}</th>
+                                            <th>{{ __('messages.Currency') }}</th>
 										</tr>
 									</thead>
 									<tbody></tbody>
@@ -69,6 +70,7 @@
                         {data: 'date'},
                         {data: 'order_count'},
                         {data: 'total_amount'},
+                        {data: 'Currency'},
                     ],
                     columnDefs: [
                         { className: "dt-right", targets: [ 2 ] },
