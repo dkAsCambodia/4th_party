@@ -137,6 +137,11 @@
                             <span class="nav-text">{{ __('messages.Payment Config') }}</span>
                         </a>
                         <ul aria-expanded="false">
+                            @if (auth()->user()->can('Channel: View Channel'))
+                                <li><a
+                                        href="{{ route('Channel: View Channel') }}">{{ __('messages.Payment Gateway') }}</a>
+                                </li>
+                            @endif
                             @if (auth()->user()->can('GatewayAccount: View Gateway Account'))
                                 <li
                                     class="{{ Route::currentRouteName() == 'GatewayAccountMethod: View Method Account' ? 'mm-active' : '' }}">
@@ -242,19 +247,15 @@
                             <span class="nav-text">{{ __('messages.System Setting') }}</span>
                         </a>
                         <ul aria-expanded="false">
-                            @if (auth()->user()->can('Channel: View Channel'))
-                                <li><a
-                                        href="{{ route('Channel: View Channel') }}">{{ __('messages.Payment Gateway') }}</a>
-                                </li>
-                            @endif
+                            
                             @if (auth()->user()->can('Method: View Method'))
                                 <li><a
                                         href="{{ route('Method: View Method') }}">{{ __('messages.Payment Method') }}</a>
                                 </li>
                             @endif
-                            <li><a
+                            {{-- <li><a
                                     href="{{ route('setting.account.list') }}">{{ __('messages.Account Setting') }}</a>
-                            </li>
+                            </li> --}}
                             {{-- @if (auth()->user()->can('Settlement: Billing View Settlement'))
                                 <li><a
                                         href="{{ route('Settlement: Billing View Settlement') }}">{{ __('messages.Settlement settings') }}</a>
