@@ -56,11 +56,11 @@
                                 <label class="form-label">{{ __('messages.Status') }}</label>
                                 <select id="status" class="form-control filterTable">
                                     <option value="" selected>{{ __('messages.All') }}</option>
-                                    <option value="approved">{{ __('messages.Approved') }}</option>
-                                    <option value="success">{{ __('messages.success') }}</option>
+                                    {{-- <option value="approved">{{ __('messages.Approved') }}</option> --}}
+                                    {{-- <option value="paid">{{ __('messages.Paid') }}</option> --}}
                                     <option value="pending">{{ __('messages.pending') }}</option>
+                                    <option value="success">{{ __('messages.success') }}</option>
                                     <option value="failed">{{ __('messages.Failed') }}</option>
-                                    <option value="paid">{{ __('messages.Paid') }}</option>
                                 </select>
                             </div>
 
