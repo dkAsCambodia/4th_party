@@ -327,10 +327,10 @@ class PaymentDetailController extends Controller
                 ->where('payment_status', 'success')->sum('net_amount');
             $order_success_count = PaymentDetail::whereIn('merchant_code', $merchantCode)
                 ->when($request->status, fn($q) => $q->where('payment_status', $request->status))
-                ->where('payment_status', '1')->count();
+                ->where('payment_status', 'success')->count();
             $order_success_sum = PaymentDetail::whereIn('merchant_code', $merchantCode)
                 ->when($request->status, fn($q) => $q->where('payment_status', $request->status))
-                ->where('payment_status', '1')->sum('amount');
+                ->where('payment_status', 'success')->sum('amount');
 
             $data = PaymentDetail::query()
                 ->whereIn('merchant_code', $merchantCode)
