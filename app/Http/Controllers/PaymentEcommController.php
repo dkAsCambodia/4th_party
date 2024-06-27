@@ -247,7 +247,7 @@ class PaymentEcommController extends Controller
         return true;
     }
 
-    public function storePayamentDetails($paymentMap, $request, $gatewayPaymentChannel, $paymentMethod, $res = null, $amount = null, $frtransaction = null, $merchantAmount = null)
+    public function storePayamentDetails($paymentMap, $request, $gatewayPaymentChannel, $paymentMethod, $res = null, $amount = null, $frtransaction = null, $net_amount = null)
     {
         if (getenv('HTTP_CLIENT_IP')) {
             $ip = getenv('HTTP_CLIENT_IP');
@@ -263,7 +263,14 @@ class PaymentEcommController extends Controller
         } else {
             $ip = '0.0.0.0';
         }
-
+        // for H2p deposit charge START
+        if(!empty($amount)){
+            $percentage = 3.5;
+            $totalWidth = 100;
+            $mdr_fee_amount = ($percentage / 100) * $totalWidth;
+            $net_amount= $totalWidth-$mdr_fee_amount;
+        }
+        // for H2p deposit charge END
         $addRecord = [
             'merchant_code' => $request->merchant_code,
             'transaction_id' => $request->transaction_id,
@@ -272,15 +279,16 @@ class PaymentEcommController extends Controller
             'customer_name' => $request->customer_name,
             'callback_url' => $request->callback_url,
             'amount' => $amount,
-            //  'cny_amount' => $amountTemp,
+            'Currency' => $request->currency,
             'product_id' => $request->product_id,
             'payment_channel' => $gatewayPaymentChannel->id,
             'payment_method' => $paymentMethod->method_name,
             'request_data' => json_encode($res),
             'customer_id' => ! empty($request->customer_id) ? $request->customer_id : 0,
             'ip_address' => $ip,
-            'merchantAmount' => $merchantAmount,
-            'Currency' => $request->currency,
+            'net_amount' => $net_amount ?? '',
+            'mdr_fee_amount' => $mdr_fee_amount ?? '',
+        
         ];
 
         PaymentDetail::create($addRecord);
