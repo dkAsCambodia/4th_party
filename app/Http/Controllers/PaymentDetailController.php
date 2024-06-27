@@ -142,7 +142,7 @@ class PaymentDetailController extends Controller
             $data = PaymentDetail::query()
                 ->leftJoin('payment_maps', 'payment_maps.id', '=', 'payment_details.product_id')
                 //->select('payment_details.id', 'payment_details.created_at', 'payment_details.fourth_party_transection', 'payment_details.transaction_id', 'payment_details.amount', 'payment_details.customer_name', 'payment_details.payment_status', 'payment_details.merchant_code', 'payment_maps.cny_min', 'payment_maps.cny_max', 'payment_details.cny_amount');
-                ->select('payment_details.id','payment_details.created_at', 'payment_details.fourth_party_transection', 'payment_details.transaction_id', 'payment_details.amount', 'payment_details.customer_name', 'payment_details.payment_status', 'payment_details.merchant_code', 'payment_details.Currency');
+                ->select('payment_details.id','payment_details.created_at', 'payment_details.fourth_party_transection', 'payment_details.transaction_id', 'payment_details.amount', 'payment_details.customer_name', 'payment_details.payment_status', 'payment_details.merchant_code', 'payment_details.Currency', 'payment_details.mdr_fee_amount', 'payment_details.net_amount')->orderBy('payment_details.id', 'desc');
             $tz = Timezone::where('id', $request->timezone)->value('timezone');
 
             return DataTables::of($data)
@@ -241,7 +241,7 @@ class PaymentDetailController extends Controller
             $data = PaymentDetail::query()
                 ->leftJoin('payment_maps', 'payment_maps.id', '=', 'payment_details.product_id')
                 ->where('payment_details.merchant_code', $merchant->merchant_code)
-                ->select('payment_details.created_at', 'payment_details.fourth_party_transection', 'payment_details.transaction_id', 'payment_details.amount', 'payment_details.customer_name', 'payment_details.payment_status', 'payment_maps.cny_min', 'payment_maps.cny_max', 'payment_details.Currency');
+                ->select('payment_details.created_at', 'payment_details.fourth_party_transection', 'payment_details.transaction_id', 'payment_details.amount', 'payment_details.customer_name', 'payment_details.payment_status', 'payment_maps.cny_min', 'payment_maps.cny_max', 'payment_details.Currency', 'payment_details.mdr_fee_amount', 'payment_details.net_amount')->orderBy('payment_details.id', 'desc');
             // ->select('created_at', 'fourth_party_transection', 'transaction_id', 'amount', 'order_status', 'payment_status', 'customer_name');
 
             $tz = Timezone::where('id', $request->timezone)->value('timezone');
@@ -335,7 +335,7 @@ class PaymentDetailController extends Controller
 
             $data = PaymentDetail::query()
                 ->whereIn('merchant_code', $merchantCode)
-                ->select('payment_details.created_at', 'payment_details.fourth_party_transection', 'payment_details.transaction_id', 'payment_details.amount', 'payment_details.customer_name', 'payment_details.payment_status', 'payment_details.Currency');
+                ->select('payment_details.created_at', 'payment_details.fourth_party_transection', 'payment_details.transaction_id', 'payment_details.amount', 'payment_details.customer_name', 'payment_details.payment_status', 'payment_details.Currency', 'payment_details.mdr_fee_amount', 'payment_details.net_amount')->orderBy('payment_details.id', 'desc');
 
             $tz = Timezone::where('id', $request->timezone)->value('timezone');
 
@@ -397,7 +397,7 @@ class PaymentDetailController extends Controller
                 ->make(true);
         }
 
-        return view('form.agent.paymentTable', compact('timezones'));
+        return view('form.agent.paymentTable', compact('timezones')); 
     }
 
     public function paymentOld(PaymentFormRequest $request): JsonResponse

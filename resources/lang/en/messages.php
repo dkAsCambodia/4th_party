@@ -695,5 +695,7 @@ return [
     'Total Payout' => 'Total Payout',
     'Total Available Balance For Payout' => 'Total Available Balance For Payout',
     'Total Payout Count' => 'Total Payout Count',
-    'Transactions count' => 'Transactions count'
+    'Transactions count' => 'Transactions count',
+    'MDR' => 'MDR',
+    'Net' => 'Net',
 ];

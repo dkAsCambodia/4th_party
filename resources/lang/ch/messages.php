@@ -722,5 +722,7 @@ return [
     'Total Payout' => '总支出',
     'Total Available Balance For Payout' => '付款可用余额总额',
     'Total Payout Count' => '总支付次数',
-    'Transactions count' => '交易数'
+    'Transactions count' => '交易数',
+    'MDR' => '多重耐药',
+    'Net' => '网',
 ];
