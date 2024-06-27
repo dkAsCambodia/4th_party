@@ -100,6 +100,8 @@
                                             <th>{{ __('messages.Merchant Track No') }}</th>
                                             <th>{{ __('messages.Customer Name') }} </th>
                                             <th>{{ __('messages.Amount') }} </th>
+                                            <th>{{ __('messages.MDR') }} </th>
+                                            <th>{{ __('messages.Net') }} </th>
                                             <th>{{ __('messages.Currency') }}</th>
                                             <th>{{ __('messages.Status') }}</th>
                                             <th>{{ __('messages.Action') }}</th>
@@ -129,59 +131,11 @@
                     <div class="table-responsive">
                         <table class="table table-bordered">
                             <tr>
-                                <td class="bg-dark text-white">{{ __('messages.Merchant Code') }}</td>
-                                <td><span class="merchant_code"></span></td>
+                                
                                 <td class="bg-dark text-white" style="width: 20%;">{{ __('messages.Transaction ID') }}</td>
                                 <td><span class="fourth_transaction_id"></span></td>
-                            </tr>
-                            <tr>
-                                <td class="bg-dark text-white">{{ __('messages.Platform Profit') }}</td>
-                                <td><span class="platform_profit"></span></td>
-                                <td class="bg-dark text-white">{{ __('messages.Merchant Name') }}</td>
-                                <td><span class="merchant_name"></span></td>
-                            </tr>
-                            <tr>
-                                <td class="bg-dark text-white">{{ __('messages.Agent Code') }}</td>
-                                <td><span class="agent_code"></span></td>
-                                <td class="bg-dark text-white">{{ __('messages.Agent Name') }}</td>
-                                <td><span class="agent_name"></span></td>
-                            </tr>
-                            <tr>
-                                <td class="bg-dark text-white">{{ __('messages.Created Time') }}</td>
-                                <td><span class="created_date"></span></td>
-                                <td class="bg-dark text-white">{{ __('messages.Merchant Track No.') }}</td>
-                                <td><span class="transaction_id"></span></td>
-                            </tr>
-                            <tr>
-                                <td class="bg-dark text-white">{{ __('messages.Gateway Order No.') }}</td>
-                                <td><span class="Gateway_Order_No"></span></td>
-                                <td class="bg-dark text-white">{{ __('messages.Customer Name') }}</td>
-                                <td><span class="customer_name"></span></td>
-                            </tr>
-                            <tr>
-                                <td class="bg-dark text-white">{{ __('messages.Gateway Ref No.') }}</td>
-                                <td><span class="Gateway_Ref_ID"></span></td>
                                 <td class="bg-dark text-white">{{ __('messages.Status') }}</td>
                                 <td><span class="order_status"></span></td>
-                            </tr>
-
-                            <tr>
-                                <td class="bg-dark text-white">{{ __('messages.Remark') }}</td>
-                                <td><span class="error_desc"></span></td>
-                                <td class="bg-dark text-white">{{ __('messages.Settlement Status') }}</td>
-                                <td><span class="merchant_settle_status"></span></td>
-                            </tr>
-                            {{-- <tr>
-                                <td class="bg-dark text-white">{{ __('messages.Device') }}</td>
-                                <td><span class=""></span>NULL</td>
-                                <td class="bg-dark text-white">{{ __('messages.IP Address') }}</td>
-                                <td><span class=""></span>NULL</td>
-                            </tr> --}}
-                            <tr>
-                                <td class="bg-white text-white"></td>
-                                <td><span class=""></span></td>
-                                <td class="bg-white text-white"></td>
-                                <td><span class=""></span></td>
                             </tr>
                             <tr>
                                 <td class="bg-dark text-white">{{ __('messages.Payment Amount') }}</td>
@@ -190,35 +144,41 @@
                                 <td><span class="currency"></span></td>
                             </tr>
                             <tr>
-                                <td class="bg-dark text-white">{{ __('messages.Merchant Rate') }}</td>
-                                <td><span class="merchant_rate"></span></td>
-                                <td class="bg-dark text-white">{{ __('messages.Merchant Income') }}</td>
-                                <td><span class="merchant_income"></span></td>
-                            </tr>
-                            <tr>
-                                <td class="bg-dark text-white">{{ __('messages.Agent Rate') }}</td>
-                                <td><span class="agent_rate"></span></td>
-                                <td class="bg-dark text-white">{{ __('messages.Agent Profit') }}</td>
-                                <td><span class="agent_profit"></span></td>
-                            </tr>
-                            <tr>
-                                <td class="bg-white text-white"></td>
-                                <td><span class=""></span></td>
-                                <td class="bg-white text-white"></td>
-                                <td><span class=""></span></td>
-                            </tr>
-                            <tr>
                                 <td class="bg-dark text-white">{{ __('messages.Callback URL') }}</td>
                                 <td style="width:290px;word-break:break-all;" class="callback_url"> </td>
                                 <td class="bg-dark text-white">{{ __('messages.Payment Product ID') }}</td>
                                 <td><span class="product_id"></span></td>
                             </tr>
                             <tr>
-                                <td class="bg-dark text-white">{{ __('messages.Payment Channel') }}</td>
-                                <td><span class="payment_channel"></span></td>
-                                <td class="bg-dark text-white">{{ __('messages.Payment Method') }}</td>
-                                <td><span class="payment_method"></span></td>
+                                <td class="bg-dark text-white">{{ __('messages.Merchant Name') }}</td>
+                                <td><span class="merchant_name"></span></td>
+                                <td class="bg-dark text-white">{{ __('messages.Merchant Code') }}</td>
+                                <td><span class="merchant_code"></span></td>
                             </tr>
+                            <tr>
+                                <td class="bg-dark text-white">{{ __('messages.Agent Name') }}</td>
+                                <td><span class="agent_name"></span></td>
+                                <td class="bg-dark text-white">{{ __('messages.Agent Code') }}</td>
+                                <td><span class="agent_code"></span></td>
+                            </tr>
+                            <tr>
+                                <td class="bg-dark text-white">{{ __('messages.Merchant Track No.') }}</td>
+                                <td><span class="transaction_id"></span></td>
+                                <td class="bg-dark text-white">{{ __('messages.Created Time') }}</td>
+                                <td><span class="created_date"></span></td>
+                            </tr>
+                            <tr>
+                                <td class="bg-dark text-white">{{ __('messages.Customer Name') }}</td>
+                                <td><span class="customer_name"></span></td>
+                                <td class="bg-dark text-white">{{ __('messages.Remark') }}</td>
+                                <td><span class="error_desc"></span></td>
+                            </tr>
+                            {{-- <tr>
+                                <td class="bg-white text-white"></td>
+                                <td><span class=""></span></td>
+                                <td class="bg-white text-white"></td>
+                                <td><span class=""></span></td>
+                            </tr> --}}
                         </table>
                     </div>
                 </div>
@@ -337,6 +297,8 @@
                     {data: 'transaction_id'},
                     {data: 'customer_name'},
                     {data: 'amount'},
+                    {data: 'mdr_fee_amount'},
+                    {data: 'net_amount'},
                     {data: 'Currency'},
                     {data: 'payment_status'},
                     {data: 'action', searchable: false, sortable: false},

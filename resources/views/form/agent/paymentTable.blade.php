@@ -96,6 +96,8 @@
                                             <th>{{ __('messages.Merchant Track No') }}</th>
                                             <th>{{ __('messages.Customer Name') }} </th>
                                             <th>{{ __('messages.Amount') }} </th>
+                                            <th>{{ __('messages.MDR') }} </th>
+                                            <th>{{ __('messages.Net') }} </th>
                                             <th>{{ __('messages.Currency') }}</th>
                                             <th >{{ __('messages.Status') }}</th>
                                         </tr>
@@ -151,6 +153,8 @@
                         {data: 'transaction_id'},
                         {data: 'customer_name'},
                         {data: 'amount'},
+                        {data: 'mdr_fee_amount'},
+                        {data: 'net_amount'},
                         {data: 'Currency'},
                         {data: 'payment_status'},
                     ],
