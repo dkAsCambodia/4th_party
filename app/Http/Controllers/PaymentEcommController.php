@@ -266,7 +266,7 @@ class PaymentEcommController extends Controller
         // for H2p deposit charge START
         if(!empty($amount)){
             $percentage = 3.5;
-            $totalWidth = 100;
+            $totalWidth = $amount;
             $mdr_fee_amount = ($percentage / 100) * $totalWidth;
             $net_amount= $totalWidth-$mdr_fee_amount;
         }
