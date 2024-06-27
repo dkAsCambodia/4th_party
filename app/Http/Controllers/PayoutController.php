@@ -166,7 +166,7 @@ class PayoutController extends Controller
     }
 
     public function depositchangeFun($totalDepositSum){
-        $percentage = 1.3;
+        $percentage = 3.5;
         // $totalDepositSum = 200;
         $new_width = ($percentage / 100) * $totalDepositSum;
         // echo $totalDepositSum-$new_width;
