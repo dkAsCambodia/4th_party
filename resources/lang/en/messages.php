@@ -698,4 +698,8 @@ return [
     'Transactions count' => 'Transactions count',
     'MDR' => 'MDR',
     'Net' => 'Net',
+    'Result:' => 'Result:',
+    'Total Amount:' => 'Total Amount:',
+    'Total MDR Fee:' => 'Total MDR Fee:',
+    'Total Net Amount:' => 'Total Net Amount:',
 ];

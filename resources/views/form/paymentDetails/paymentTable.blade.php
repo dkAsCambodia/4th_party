@@ -79,10 +79,11 @@
                             <form class="row g-1">
                                 <div class="mb-3 p-2 border bg-v-light">
                                     <ul class="list-inline right-bar-list mb-0">
-                                        <li class="list-inline-item">{{ __('messages.Order count:') }} <span id="payment_count"></span></li> <span class="d-none d-md-inline">|</span>
-                                        <li class="list-inline-item">{{ __('messages.Total order amount:') }} <span id="order_amount_sum"></span></li> <span class="d-none d-md-inline">|</span>
-                                        <li class="list-inline-item">{{ __('messages.Success order count:') }} <span id="order_success_count"></span></li> <span class="d-none d-md-inline">|</span>
-                                        <li class="list-inline-item">{{ __('messages.Success order amount:') }} <span id="order_success_sum"></span></li>
+                                        <li class="list-inline-item"><b>{{ __('messages.Result:') }}</b></li><span class="d-none d-md-inline fw-bold">--</span>
+                                        <li class="list-inline-item"><b>{{ __('messages.Order count:') }} <span id="payment_count" class="text text-success"></span></b></li> <span class="d-none d-md-inline">|</span>
+                                        <li class="list-inline-item"><b>{{ __('messages.Total order amount:') }} <span id="order_amount_sum" class="text text-primary"></span></b></li> <span class="d-none d-md-inline">|</span>
+                                        <li class="list-inline-item"><b>{{ __('messages.Success order count:') }} <span id="order_success_count" class="text text-success"></span></b></li> <span class="d-none d-md-inline">|</span>
+                                        <li class="list-inline-item"><b>{{ __('messages.Success order amount:') }} <span id="order_success_sum" class="text text-success"></span></b></li>
                                     </ul>
                                 </div>
                             </form>

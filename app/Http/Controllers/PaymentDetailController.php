@@ -219,12 +219,12 @@ class PaymentDetailController extends Controller
 
         if ($request->ajax()) {
             $merchant = Merchant::find(Auth()->user()->merchant_id);
-            $payment_count = PaymentDetail::where('merchant_code', $merchant->merchant_code)
+            $totalMDRfee = PaymentDetail::where('merchant_code', $merchant->merchant_code)
                 ->when($request->status, fn($q) => $q->where('payment_status', $request->status))
-                ->count();
-            $order_amount_sum = PaymentDetail::where('merchant_code', $merchant->merchant_code)
+                ->where('payment_status', 'success')->sum('mdr_fee_amount');
+            $total_net_amount = PaymentDetail::where('merchant_code', $merchant->merchant_code)
                 ->when($request->status, fn($q) => $q->where('payment_status', $request->status))
-                ->sum('amount');
+                ->where('payment_status', 'success')->sum('net_amount');
             $order_success_count = PaymentDetail::where('merchant_code', $merchant->merchant_code)
                 ->when($request->status, fn($q) => $q->where('payment_status', $request->status))
                 ->where('payment_status', 'success')->count();
@@ -296,8 +296,8 @@ class PaymentDetailController extends Controller
                 })
                 ->rawColumns(['payment_status'])
                 ->with([
-                    'payment_count' => $payment_count,
-                    'order_amount_sum' => number_format($order_amount_sum, 2),
+                    'payment_count' => number_format($totalMDRfee, 2),
+                    'order_amount_sum' => number_format($total_net_amount, 2),
                     'order_success_count' => $order_success_count,
                     'order_success_sum' => number_format($order_success_sum, 2),
                     'order_fail_count' => $order_fail_count,
@@ -319,13 +319,12 @@ class PaymentDetailController extends Controller
             foreach ($merchant as $merchantVal) {
                 array_push($merchantCode, $merchantVal->merchant_code);
             }
-
-            $payment_count = PaymentDetail::whereIn('merchant_code', $merchantCode)
+            $totalMDRfee = PaymentDetail::whereIn('merchant_code', $merchantCode)
                 ->when($request->status, fn($q) => $q->where('payment_status', $request->status))
-                ->count();
-            $order_amount_sum = PaymentDetail::whereIn('merchant_code', $merchantCode)
+                ->where('payment_status', 'success')->sum('mdr_fee_amount');
+            $total_net_amount = PaymentDetail::whereIn('merchant_code', $merchantCode)
                 ->when($request->status, fn($q) => $q->where('payment_status', $request->status))
-                ->sum('amount');
+                ->where('payment_status', 'success')->sum('net_amount');
             $order_success_count = PaymentDetail::whereIn('merchant_code', $merchantCode)
                 ->when($request->status, fn($q) => $q->where('payment_status', $request->status))
                 ->where('payment_status', '1')->count();
@@ -389,8 +388,8 @@ class PaymentDetailController extends Controller
                 })
                 ->rawColumns(['payment_status'])
                 ->with([
-                    'payment_count' => $payment_count,
-                    'order_amount_sum' => number_format($order_amount_sum, 2),
+                    'payment_count' => number_format($totalMDRfee, 2),
+                    'order_amount_sum' => number_format($total_net_amount, 2),
                     'order_success_count' => $order_success_count,
                     'order_success_sum' => number_format($order_success_sum, 2),
                 ])
