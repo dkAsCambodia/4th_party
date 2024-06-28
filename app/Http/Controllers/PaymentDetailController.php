@@ -472,7 +472,7 @@ class PaymentDetailController extends Controller
         }
     }
 
-    public function payment(PaymentFormRequest $request)
+    public function payment(PaymentFormRequest $request) 
     {
 
         // try {
