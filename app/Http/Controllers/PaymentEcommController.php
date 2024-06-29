@@ -276,7 +276,7 @@ class PaymentEcommController extends Controller
             'transaction_id' => $request->transaction_id,
             // 'fourth_party_transection' => "TR" . rand(100000, 999999),
             'fourth_party_transection' => $frtransaction,
-            'customer_name' => $request->customer_name,
+            'customer_name' => $request->customer_name, 
             'callback_url' => $request->callback_url,
             'amount' => $amount,
             'Currency' => $request->currency,

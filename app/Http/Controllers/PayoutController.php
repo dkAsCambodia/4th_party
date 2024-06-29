@@ -265,6 +265,14 @@ class PayoutController extends Controller
         } else {
             $ip = '0.0.0.0';
         }
+        // for H2p deposit charge START
+        if(!empty($amount)){
+            $percentage = 2.5;
+            $totalWidth = $amount;
+            $mdr_fee_amount = ($percentage / 100) * $totalWidth;
+            $net_amount= $totalWidth-$mdr_fee_amount;
+        }
+        // for H2p deposit charge END
 
         $merchentdata = Merchant::where('merchant_code', $request->merchant_code)->first();
         if(!empty($merchentdata)){
@@ -284,6 +292,8 @@ class PayoutController extends Controller
                 'payment_channel' => $gatewayPaymentChannel->id,
                 'payment_method' => $paymentMethod->method_name,
                 'api_response' => json_encode($res),
+                'net_amount' => $net_amount ?? '',
+                'mdr_fee_amount' => $mdr_fee_amount ?? '',
                 'customer_id' => ! empty($request->customer_id) ? $request->customer_id : 0,
                 'ip_address' => $ip,
                 'Currency' => $request->currency,
