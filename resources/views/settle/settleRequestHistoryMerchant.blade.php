@@ -55,7 +55,9 @@
                                             <th>{{ __('messages.Settlement Trans ID') }}</th>
                                             <th>{{ __('messages.Merchant Track No') }}</th>
                                             <th>{{ __('messages.Currency') }}</th>
-                                            <th>{{ __('messages.Net Amount') }}</th>
+                                            <th>{{ __('messages.Amount') }}</th>
+                                            <th>{{ __('messages.MDR') }} </th>
+                                            <th>{{ __('messages.Net') }} </th>
                                             <th>{{ __('messages.Status') }}</th>
                                             <th>{{ __('messages.Created Time') }}</th>
                                             <th>{{ __('messages.Action') }}</th>
@@ -107,6 +109,8 @@
                         {data: 'merchant_track_id'},
                         {data: 'Currency'},
                         {data: 'total'},
+                        {data: 'mdr_fee_amount'},
+                        {data: 'net_amount'},
                         {data: 'status'},
                         {data: 'created_at'},
                         {data: 'action', searchable: false, sortable: false},
