@@ -725,4 +725,8 @@ return [
     'Transactions count' => '交易数',
     'MDR' => '多重耐药',
     'Net' => '网',
+    'Result:' => '结果：',
+    'Total Amount:' => '总金额：',
+    'Total MDR Fee:' => 'MDR 费用总额：',
+    'Total Net Amount:' => '总净额：',
 ];

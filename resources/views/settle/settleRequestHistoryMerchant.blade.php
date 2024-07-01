@@ -29,7 +29,7 @@
                                     <option value="">{{ __('messages.All') }}</option>
                                     <option value="pending">{{ __('messages.pending') }}</option>
                                     <option value="success">{{ __('messages.success') }}</option>
-                                    <option value="failed">{{ __('messages.Failed') }}</option>
+                                    <option value="failed">{{ __('messages.Failed') }}</option>2
                                 </select>
                             </div>
 
@@ -43,6 +43,16 @@
                                 <div class="">
                                     <button type='button' id="reset" class="btn btn-danger text-white btn-xs">{{ __('messages.Reset') }}</button>
                                 </div>
+                            </div>
+                        </div>
+
+                        <div class="card-body" id="success">
+                            <div class="mb-3 p-2 border bg-light">
+                                <ul class="list-inline right-bar-list mb-0">
+                                    <li class="list-inline-item"><b>{{ __('messages.Result:') }}</b></li><span class="d-none d-md-inline fw-bold">--</span>
+                                    <li class="list-inline-item"><b>{{ __('messages.Total Amount:') }} <span id="order_success_sum" class="text text-primary"></span></b></li> <span class="d-none d-md-inline">|</span>
+                                    <li class="list-inline-item"><b>{{ __('messages.Total MDR Fee:') }} <span id="payment_count" class="text text-danger"></span></b></li> <span class="d-none d-md-inline">|</span>
+                                    <li class="list-inline-item"><b>{{ __('messages.Total Net Amount:') }} <span id="order_amount_sum" class="text text-success"></span></b></li> 
                             </div>
                         </div>
 
@@ -138,6 +148,13 @@
                     },
                     dom: 'rt<"bottom"ipl><"clear">',
                 });
+
+                table.on('draw.dt', function() {
+                    $('#payment_count').html(table.ajax.json().payment_count);
+                    $('#order_amount_sum').html(table.ajax.json().order_amount_sum);
+                    $('#order_success_sum').html(table.ajax.json().order_success_sum);
+                   
+                })
 
                 // filter by dropdown
                 $('.filterTable').change(function(){

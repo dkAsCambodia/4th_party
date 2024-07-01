@@ -306,7 +306,7 @@ class PaymentDetailController extends Controller
                 ->make(true);
         }
 
-        return view('form.merchant.paymentTable', compact('timezones'));
+        return view('form.merchant.paymentTable', compact('timezones')); 
     }
 
     public function indexAgent(Request $request)

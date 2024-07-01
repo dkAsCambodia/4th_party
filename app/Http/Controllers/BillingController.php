@@ -1562,6 +1562,13 @@ class BillingController extends Controller
     public function indexSettleHistoryMerchant(Request $request)
     {
         if ($request->ajax()) {
+
+
+            $merchant = Merchant::find(Auth()->user()->merchant_id);
+            $totalMDRfee = SettleRequest::where('merchant_code', $merchant->merchant_code)->where('status', 'success')->sum('mdr_fee_amount');
+            $total_net_amount = SettleRequest::where('merchant_code', $merchant->merchant_code)->where('status', 'success')->sum('net_amount');
+            $order_success_sum = SettleRequest::where('merchant_code', $merchant->merchant_code)->where('status', 'success')->sum('total');
+
             $data = SettleRequest::query()
                 ->where('merchant_id', auth()->user()->merchant_id)
                 ->with([
@@ -1602,6 +1609,14 @@ class BillingController extends Controller
                         return '<span class="text-danger fw-bold">' . trans('messages.Failed') . '</span>';
                     }
                 })
+
+                ->with([
+                    'payment_count' => number_format($totalMDRfee, 2),
+                    'order_amount_sum' => number_format($total_net_amount, 2),
+                    'order_success_sum' => number_format($order_success_sum, 2),
+                ])
+
+
                 ->addColumn('action', function ($data) use ($request) {
                     $action = '
                         <a class="btn btn-primary btn-sm" href="#" data-toggle="modal" data-target="#edit_user' . $data->id . '">' . trans("messages.View") . '</a>
@@ -1731,6 +1746,29 @@ class BillingController extends Controller
     public function indexSettleHistoryAgent(Request $request)
     {
         if ($request->ajax()) {
+
+            $merchant = Merchant::where('agent_id', Auth()->user()->agent_id)->get();
+            $merchantCode = [];
+            foreach ($merchant as $merchantVal) {
+                array_push($merchantCode, $merchantVal->merchant_code);
+            }
+            $totalMDRfee = SettleRequest::whereIn('merchant_code', $merchantCode)
+                ->when($request->status, fn($q) => $q->where('status', $request->status))
+                ->where('status', 'success')->sum('mdr_fee_amount');
+            // $total_net_amount = SettleRequest::whereIn('merchant_code', $merchantCode)
+            //     ->when($request->status, function ($query) use ($request) {
+            //         return $query->where('status', $request->status);
+            //     })
+            //     ->where('status', 'success')
+            //     ->sum('net_amount');
+
+            $total_net_amount = SettleRequest::whereIn('merchant_code', $merchantCode)
+                ->when($request->status, fn($q) => $q->where('status', $request->status))
+                ->where('status', 'success')->sum('net_amount');
+            $order_success_sum = SettleRequest::whereIn('merchant_code', $merchantCode)
+                ->when($request->status, fn($q) => $q->where('status', $request->status))
+                ->where('status', 'success')->sum('total');
+
             $data = SettleRequest::query()
                 ->where('agent_id', auth()->user()->agent_id)
                 ->with([
@@ -1771,6 +1809,11 @@ class BillingController extends Controller
                         return '<span class="text-danger fw-bold">' . trans('messages.Failed') . '</span>';
                     }
                 })
+                ->with([
+                    'payment_count' => number_format($totalMDRfee, 2),
+                    'order_amount_sum' => number_format($total_net_amount, 2),
+                    'order_success_sum' => number_format($order_success_sum, 2),
+                ])
                 ->addColumn('action', function ($data) use ($request) {
                     $action = '
                         <a class="btn btn-primary btn-sm" href="#" data-toggle="modal" data-target="#edit_user' . $data->id . '">' . trans("messages.View") . '</a>
