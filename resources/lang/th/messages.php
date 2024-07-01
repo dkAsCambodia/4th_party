@@ -693,5 +693,9 @@ return [
     'Transactions count' => 'นับธุรกรรม',
     'MDR' => 'มธ',
     'Net' => 'สุทธิ',
+    'Result:' => 'ผลลัพธ์:',
+    'Total Amount:' => 'จำนวนเงินทั้งหมด:',
+    'Total MDR Fee:' => 'ค่าธรรมเนียม MDR ทั้งหมด:',
+    'Total Net Amount:' => 'จำนวนเงินสุทธิทั้งหมด:',
 
 ];
