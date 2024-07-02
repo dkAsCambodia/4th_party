@@ -142,6 +142,10 @@ class HomeController extends Controller
             })
             ->sum('amount');
 
+
+
+
+
             $totalDepositCount = PaymentDetail::where('payment_status',  'success')
             ->when(auth()->user()->role_name == 'Merchant', function ($q) {
                 $merchantCode = Merchant::where('id', auth()->user()->merchant_id)->value('merchant_code');
@@ -187,21 +191,61 @@ class HomeController extends Controller
             })
             ->count('total');
 
-            // $transaction_charge =$totalDepositCount*20;
-            // $AvailableforPayout=$totalDepositSum-$transaction_charge;
-            // $finalAmount=$AvailableforPayout-$total_payout;
-            $payoutController = new PayoutController();
-            $transaction_charge =$payoutController->depositchangeFun($totalDepositSum);
-            $AvailableforPayout=$totalDepositSum-$transaction_charge;
 
-            $payout_charge = $total_payout_count*10;
-            $totalPayoutwithCharge = $payout_charge + $total_payout;
-            @$finalAmount=$AvailableforPayout-$totalPayoutwithCharge;
+            // this is for vizpay charge START
+            // $payoutController = new PayoutController();
+            // $transaction_charge =$payoutController->depositchangeFun($totalDepositSum);
+            // $AvailableforPayout=$totalDepositSum-$transaction_charge;
+          
+            // $payout_charge = $total_payout_count*10;
+            // $totalPayoutwithCharge = $payout_charge + $total_payout;
+            // @$finalAmount=$AvailableforPayout-$totalPayoutwithCharge;
+             // this is for vizpay charge ENd
+
+            //  Charge for h2p START
+            // $percentage = 2.5;
+            // $totalWidth = $AvailableforPayout;
+            // $new_width = ($percentage / 100) * $totalWidth;
+            // @$finalAmount = $totalWidth-$new_width;
+
+            $totalDepositFee = PaymentDetail::where('payment_status',  'success')
+            ->when(auth()->user()->role_name == 'Merchant', function ($q) {
+                $merchantCode = Merchant::where('id', auth()->user()->merchant_id)->value('merchant_code');
+                $q->where('merchant_code', $merchantCode);
+            })
+            ->when(auth()->user()->role_name == 'Agent', function ($q) {
+                $merchants = Merchant::where('agent_id', auth()->user()->agent_id)->get();
+                $merchantCode = [];
+                foreach ($merchants as $mer) {
+                    array_push($merchantCode, $mer->merchant_code);
+                }
+                $q->whereIn('merchant_code', $merchantCode);
+            })
+            ->sum('mdr_fee_amount');
+
+            $totalPayoutFee = SettleRequest::where('status',  'success')
+            ->when(auth()->user()->role_name == 'Merchant', function ($q) {
+                $merchantCode = Merchant::where('id', auth()->user()->merchant_id)->value('merchant_code');
+                $q->where('merchant_code', $merchantCode);
+            })
+            ->when(auth()->user()->role_name == 'Agent', function ($q) {
+                $merchants = Merchant::where('agent_id', auth()->user()->agent_id)->get();
+                $merchantCode = [];
+                foreach ($merchants as $mer) {
+                    array_push($merchantCode, $mer->merchant_code);
+                }
+                $q->whereIn('merchant_code', $merchantCode);
+            })
+            ->sum('mdr_fee_amount');
+
+            @$totalFee=$totalDepositFee+$totalPayoutFee;
+
+            //  Charge for h2p END
 
            
 
 
-        return view('dashboard.home', compact('data', 'finalAmount', 'totalDepositCount', 'totalDepositSum', 'total_payout', 'total_payout_count', 'total_transactions_today', 'total_transactions_amount_today', 'total_transactions_month', 'total_transactions_amount_month', 'total_agent', 'total_merchant', 'total_transactions_amount', 'total_transactions_count', 'billing', 'details'));
+        return view('dashboard.home', compact('data', 'totalFee', 'totalDepositCount', 'totalDepositSum', 'total_payout', 'total_payout_count', 'total_transactions_today', 'total_transactions_amount_today', 'total_transactions_month', 'total_transactions_amount_month', 'total_agent', 'total_merchant', 'total_transactions_amount', 'total_transactions_count', 'billing', 'details'));
     }
 
     public function dataByDate()

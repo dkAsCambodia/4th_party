@@ -20,25 +20,25 @@ class PayoutController extends Controller
     public function payoutRequest(Request $request)
     {
 
-        // $totalDepositSum = PaymentDetail::where('merchant_code', $request->merchant_code)->where('payment_status', 'success')->sum('amount');
-        // $totalDepositCount = PaymentDetail::where('merchant_code', $request->merchant_code)->where('payment_status', 'success')->count('amount');
-        // $transaction_charge =$totalDepositCount*20;
-        // $AvailableforPayout=$totalDepositSum-$transaction_charge;
-
-        // $totalPayoutSum = SettleRequest::where('merchant_code', $request->merchant_code)->where('status', 'success')->sum('total');
-        // $totalpayoutCount = SettleRequest::where('merchant_code', $request->merchant_code)->where('status', 'success')->count('total');
-        // @$finalAmount=$AvailableforPayout-$totalPayoutSum;
-
         $totalDepositSum = PaymentDetail::where('merchant_code', $request->merchant_code)->where('payment_status', 'success')->sum('amount');
         $totalDepositCount = PaymentDetail::where('merchant_code', $request->merchant_code)->where('payment_status', 'success')->count('amount');
         $transaction_charge = $this->depositchangeFun($totalDepositSum);
         $AvailableforPayout=$totalDepositSum-$transaction_charge;
 
-        $totalPayoutSum = SettleRequest::where('merchant_code', $request->merchant_code)->where('status', 'success')->sum('total');
-        $totalpayoutCount = SettleRequest::where('merchant_code', $request->merchant_code)->where('status', 'success')->count('total');
-        $payout_charge = ($totalpayoutCount*10)+10;
-        $totalPayoutwithCharge = $payout_charge + $totalPayoutSum;
-        @$finalAmount=$AvailableforPayout-$totalPayoutwithCharge;
+        // for vizpay charge START
+        // $totalPayoutSum = SettleRequest::where('merchant_code', $request->merchant_code)->where('status', 'success')->sum('total');
+        // $totalpayoutCount = SettleRequest::where('merchant_code', $request->merchant_code)->where('status', 'success')->count('total');
+        // $payout_charge = ($totalpayoutCount*10)+10;
+        // $totalPayoutwithCharge = $payout_charge + $totalPayoutSum;
+        // @$finalAmount=$AvailableforPayout-$totalPayoutwithCharge;
+         // for vizpay charge END
+
+        //  For H2p charge START
+        $percentage = 2.5;
+        $totalWidth = $AvailableforPayout;
+        $new_width = ($percentage / 100) * $totalWidth;
+        @$finalAmount = $totalWidth-$new_width;
+        //  For H2p charge END
 
         if($finalAmount < $request->amount){
             return "<h2 style='color:red'>Balance is not enough in Gateway Wallet!</h2>"; 
@@ -270,7 +270,7 @@ class PayoutController extends Controller
             $percentage = 2.5;
             $totalWidth = $amount;
             $mdr_fee_amount = ($percentage / 100) * $totalWidth;
-            $net_amount= $totalWidth-$mdr_fee_amount;
+            $net_amount= $totalWidth+$mdr_fee_amount;
         }
         // for H2p deposit charge END
 
