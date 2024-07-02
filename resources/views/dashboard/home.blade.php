@@ -103,7 +103,7 @@
                                 </svg>
                             </div>
                             <div >
-                                <h2 class="text-white invoice-num fw-bold"><?= number_format((int) $total_payout, 2) ?></h2>
+                                <h2 class="text-white invoice-num fw-bold"><?= $total_payout; ?></h2>
                                 <span class="text-white fs-16">{{__('messages.Total Payout')}} </span>
                             </div>
 
@@ -120,7 +120,7 @@
                                 </svg>
                             </div>
                             <div>
-                                <h2 class="text-white invoice-num fw-bold"><?= $totalDepositSum-$total_payout-$finalAmount; ?></h2>
+                                <h2 class="text-white invoice-num fw-bold"><?= $totalFee; ?></h2>
                                 <span class="text-white fs-16">{{__('messages.Total Fee')}} </span>
                             </div>
                         </div>
@@ -139,7 +139,7 @@
                             </div>
                             <div>
                             <h2 class="text-white invoice-num fw-bold">
-                                <?= number_format((int) $finalAmount, 2); ?>
+                                <?=  number_format((int) $totalDepositSum-($totalFee+$total_payout), 0); ?>
                                 </h2>
                                 <span class="text-white fs-16">{{__('messages.Total Available Balance For Payout')}} </span>
                             </div>
