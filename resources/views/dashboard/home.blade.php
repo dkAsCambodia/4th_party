@@ -139,7 +139,7 @@
                             </div>
                             <div>
                             <h2 class="text-white invoice-num fw-bold">
-                                <?=  number_format((int) $totalDepositSum-($totalFee+$total_payout), 0); ?>
+                                <?=  number_format((int) $totalDepositSum-($totalFee+$total_payout), 1); ?>
                                 </h2>
                                 <span class="text-white fs-16">{{__('messages.Total Available Balance For Payout')}} </span>
                             </div>
