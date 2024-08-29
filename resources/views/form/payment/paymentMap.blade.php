@@ -68,6 +68,7 @@
                                         <tr>
                                             <th>{{ __('messages.Product ID') }}</th>
                                             <th>{{ __('messages.Payment Method') }}</th>
+                                            <th>{{ __('messages.Channel') }}</th>
 
                                             <th>{{ __('messages.Min Value') }}</th>
                                             <th>{{ __('messages.Max Value') }}</th>
@@ -447,7 +448,7 @@
                     document.getElementById("channel-multiple-edit").innerHTML = this.responseText;
                 }
             }
-            xhttp.open("GET", "{{ url('admin/get-ChannelData') }}?id=" + id + "&m_id=" + m_id + "&mode=table");
+            xhttp.open("GET", "{{ url('admin/get-ChannelData') }}?id=" + id + "&m_id=" + m_id + "&mode=table"); 
             xhttp.send();
         }
 
@@ -510,6 +511,9 @@
                     },
                     {
                         data: 'payment_method_name'
+                    },
+                    {
+                        data: 'Channel'
                     },
                     {
                         data: 'min_value'

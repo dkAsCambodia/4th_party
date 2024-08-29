@@ -17,4 +17,9 @@ class PaymentMap extends Model implements Auditable
     {
         return $this->hasOne(PaymentMethod::class, 'id', 'payment_method_id');
     }
+
+    public function getGatewayPaymentChanneldata()
+    {
+        return $this->hasOne(GatewayPaymentChannel::class, 'id', 'gateway_payment_channel_id');
+    }
 }

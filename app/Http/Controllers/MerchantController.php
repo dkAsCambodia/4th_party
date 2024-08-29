@@ -362,11 +362,13 @@ class MerchantController extends Controller
         $merchantId = $merchant->id;
         $paymentUrl = PaymentUrl::where('status', 'Enable')->get();
         $paymentMethod = PaymentMethod::where('status', 'Enable')->get();
+        $GatewayPaymentChannel = GatewayPaymentChannel::where('status', 'Enable')->get();
         $merchantName = Merchant::where('id', $merchantId)->first()->merchant_name;
 
         if ($request->ajax()) {
             $data = PaymentMap::query()
                 ->with('methodPayment:id,method_name')
+                ->with('getGatewayPaymentChanneldata:id,channel_id')
                 ->where('merchant_id', $merchant->id)
                 ->select(
                     'id',
@@ -388,7 +390,13 @@ class MerchantController extends Controller
             return DataTables::of($data)
                 ->addColumn('payment_method_name', function ($data) {
                     return $data->methodPayment->method_name;
+                  
                 })
+                ->addColumn('Channel', function ($data) {
+                  
+                    return $data->getGatewayPaymentChanneldata->channel_id;
+                })
+                // 
                 ->addColumn('cny_range', function ($data) {
                     return number_format($data->cny_min, 2) . " - " . number_format($data->cny_max, 2);
                 })
@@ -480,7 +488,7 @@ class MerchantController extends Controller
                 ->make(true);
         }
 
-        return view('form.payment.paymentMap', compact('paymentUrl', 'merchantId', 'paymentMethod', 'merchantName'));
+        return view('form.payment.paymentMap', compact('paymentUrl', 'merchantId', 'paymentMethod', 'merchantName')); 
     }
 
     public function sowPaymentMapApi(Merchant $merchant)
@@ -614,16 +622,19 @@ class MerchantController extends Controller
 
     public function getChannelData(Request $request)
     {
+        
         $channel = GatewayPaymentChannel::leftJoin('payment_methods', 'payment_methods.id', '=', 'gateway_payment_channels.gateway_account_method_id')
             ->select('gateway_payment_channels.id', 'gateway_payment_channels.channel_id', 'gateway_payment_channels.channel_description')
             ->where('gateway_payment_channels.gateway_account_method_id', $request->id)->get();
-
 
         foreach ($channel as $value) {
             $selected = '';
             $checked = '';
             if (in_array($value->id, explode(',', $request->m_id))) {
                 $checked = 'checked';
+            }
+            if (in_array($value->id, explode(',', $request->m_id))) {
+                $selected = 'selected';
             }
 
             if ($request->mode == 'table') {
