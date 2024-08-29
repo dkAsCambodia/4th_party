@@ -25,6 +25,14 @@
             font-size: 40px;
             margin-bottom: 10px;
         }
+        
+        .h1-class-Processing {
+            color: rgb(0, 140, 255);
+            font-family: "Nunito Sans", "Helvetica Neue", sans-serif;
+            font-weight: 900;
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
 
         .p-class {
             color: #404F5E;
@@ -35,6 +43,13 @@
 
         .success {
             color: #9ABC66;
+            font-size: 100px;
+            line-height: 200px;
+            margin-left: -15px;
+        }
+
+        .Processing {
+            color: rgb(0, 140, 255);
             font-size: 100px;
             line-height: 200px;
             margin-left: -15px;
@@ -85,6 +100,17 @@
                 <button class="btn_custom" onclick="goBack()">Go Back</button>
             </div>
         </div>
+    @elseif ($postData['payment_status'] == 'processing')
+    <div style="text-align: center; padding: 40px 0;">
+        <div class="card card-class">
+            <div style="border-radius:200px; height:200px; width:200px; background: #F8FAF5; margin:0 auto;">
+                <i class="Processing">!</i>
+            </div>
+            <h1 class="h1-class-Processing">Processing...</h1>
+            <p class="p-class">Transaction has been sent to bank.<br />Processing From Bank!</p>
+            <button class="btn_custom" onclick="goBack()">Go Back</button>
+        </div>
+    </div>
     @else
         <div style="text-align: center; padding: 40px 0;">
             <div class="card card-class">
