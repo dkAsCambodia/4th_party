@@ -37,6 +37,7 @@
                                         <option value="">{{ __('messages.All') }}</option>
                                         <option value="pending">{{ __('messages.pending') }}</option>
                                         <option value="success">{{ __('messages.Success') }}</option>
+                                        <option value="processing">{{ __('messages.processing') }}</option>
                                         <option value="failed">{{ __('messages.Failed') }}</option>
                                     </select>
                                 </div>

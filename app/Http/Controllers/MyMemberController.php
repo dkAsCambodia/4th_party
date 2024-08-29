@@ -34,10 +34,12 @@ class MyMemberController extends Controller
     {
 
         $data = $request->all();
-        if ($data['payment_status'] == 'success' || $data['payment_status'] == 'Success' || $data['payment_status'] == 'SUCCESS') {
+        if ($data['payment_status'] == 'Successful' || $data['payment_status'] == 'success' || $data['payment_status'] == 'Success' || $data['payment_status'] == 'SUCCESS') {
             $paymentStatus = 'success';
         }elseif ($data['payment_status'] == 'pending' || $data['payment_status'] == 'Pending' || $data['payment_status'] == 'PENDING') {
             $paymentStatus = 'pending';
+        }elseif ($data['payment_status'] == 'processing' || $data['payment_status'] == 'Processing' ) {
+            $paymentStatus = 'processing';
         }else {
             $paymentStatus = 'failed';
         }
