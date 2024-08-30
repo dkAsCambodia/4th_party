@@ -58,6 +58,7 @@
                                     <option value="" selected>{{ __('messages.All') }}</option>
                                     {{-- <option value="approved">{{ __('messages.Approved') }}</option> --}}
                                     {{-- <option value="paid">{{ __('messages.Paid') }}</option> --}}
+                                    <option value="processing">{{ __('messages.processing') }}</option>
                                     <option value="pending">{{ __('messages.pending') }}</option>
                                     <option value="success">{{ __('messages.success') }}</option>
                                     <option value="failed">{{ __('messages.Failed') }}</option>

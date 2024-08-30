@@ -1421,7 +1421,7 @@ class BillingController extends Controller
                     return number_format($data->total, 2);
                 })
                 ->editColumn('status', function ($data) {
-                    if ($data->status == 'success' || $data->status == 'Success' || $data->status == 'SUCCESS') {
+                    if ($data->status == 'success' || $data->status == 'Success' || $data->status == 'SUCCESS') { 
                         return '<span class="text-success fw-bold">' . trans('messages.Success') . '</span>';
                     }elseif ($data->status == 'approved' || $data->status == 'Approved' || $data->status == 'APPROVED') {
                             return '<span class="text-success fw-bold">' . trans('messages.Approved') . '</span>';
@@ -1429,6 +1429,8 @@ class BillingController extends Controller
                             return '<span class="text-success fw-bold">' . trans('messages.Paid') . '</span>';
                     } elseif ($data->status == 'pending' || $data->status == 'Pending' || $data->status == 'PENDING') {
                         return '<span class="text-primary fw-bold">' . trans('messages.pending') . '</span>';
+                    } elseif ($data->status == 'processing') {
+                        return '<span class="text-warning fw-bold">' . trans('messages.processing') . '</span>';
                     } else {
                         return '<span class="text-danger fw-bold">' . trans('messages.Failed') . '</span>';
                     }
@@ -1605,6 +1607,8 @@ class BillingController extends Controller
                             return '<span class="text-success fw-bold">' . trans('messages.Success') . '</span>';
                     } elseif ($data->status == 'pending' || $data->status == 'Pending' || $data->status == 'PENDING') {
                         return '<span class="text-primary fw-bold">' . trans('messages.pending') . '</span>';
+                    } elseif ($data->status == 'processing') {
+                        return '<span class="text-warning fw-bold">' . trans('messages.processing') . '</span>';
                     } else {
                         return '<span class="text-danger fw-bold">' . trans('messages.Failed') . '</span>';
                     }
@@ -1805,6 +1809,8 @@ class BillingController extends Controller
                             return '<span class="text-success fw-bold">' . trans('messages.Success') . '</span>';
                     } elseif ($data->status == 'pending' || $data->status == 'Pending' || $data->status == 'PENDING') {
                         return '<span class="text-primary fw-bold">' . trans('messages.pending') . '</span>';
+                    } elseif ($data->status == 'processing') {
+                        return '<span class="text-warning fw-bold">' . trans('messages.processing') . '</span>';
                     } else {
                         return '<span class="text-danger fw-bold">' . trans('messages.Failed') . '</span>';
                     }
