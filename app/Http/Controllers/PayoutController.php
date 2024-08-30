@@ -162,7 +162,7 @@ class PayoutController extends Controller
         );
         // dd($res);
 
-        return view('payout.payout-form', compact('res'));
+        return view('payout.payout-form', compact('res')); 
     }
 
     public function depositchangeFun($totalDepositSum){
@@ -345,14 +345,16 @@ class PayoutController extends Controller
     {
        
         $data = $request->all();
-        if ($data['payment_status'] == 'success' || $data['payment_status'] == 'Success' || $data['payment_status'] == 'SUCCESS') {
+        if ($data['payment_status'] == 'Successful' || $data['payment_status'] == 'success' || $data['payment_status'] == 'Success' || $data['payment_status'] == 'SUCCESS') {
             $paymentStatus = 'success';
         }elseif ($data['payment_status'] == 'pending' || $data['payment_status'] == 'Pending' || $data['payment_status'] == 'PENDING') {
             $paymentStatus = 'pending';
+        }elseif ($data['payment_status'] == 'processing' || $data['payment_status'] == 'Processing' ) {
+            $paymentStatus = 'processing';
         }else {
             $paymentStatus = 'failed';
         }
-      
+       
         SettleRequest::where('fourth_party_transection', $data['transaction_id'])->update([
             'settlement_trans_id' => $data['settlement_trans_id'],
             'status' => $paymentStatus,
