@@ -729,4 +729,10 @@ return [
     'Total Amount:' => '总金额：',
     'Total MDR Fee:' => 'MDR 费用总额：',
     'Total Net Amount:' => '总净额：',
+    'Customer Details' => '客户详情',
+    'ID' => 'ID',
+    'Bank Account Name' => '银行账户名称',
+    'Bank Account No.' => '银行帐号',
+    'Bank Code' => '银行代码',
+    'All Customer' => '所有客户',
 ];

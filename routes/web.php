@@ -36,6 +36,7 @@ use App\Http\Controllers\TypeFormController;
 use App\Http\Controllers\UserManagementController;
 use App\Http\Controllers\WhitelistIPController;
 use App\Http\Controllers\PayoutController;
+use App\Http\Controllers\AllCustomerController;
 use App\Models\CurrencyExchangeRate;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -379,11 +380,11 @@ Route::get('/payment_status', [MyMemberController::class, 'payment_status']);
 
 
 // ------------------------------ Gtech DK START ---------------------------------//
-// Route::get('/gtechz/payin', [PayinController::class, 'payinform']);
-// Route::post('/fetch_bank_code', [PayinController::class, 'fetch_bank_list']);
-// Route::post('/payincode', [PayinController::class, 'payincode'])->name('payincode');
 Route::controller(PayoutController::class)->group(function () {
     Route::get('payout_status', 'payout_status');
+});
+Route::controller(AllCustomerController::class)->group(function () {
+    Route::get('allCustomer', 'getCustomerViaAPI')->name('Customer: Get All Customer');
 });
 // ------------------------------ Gtech DK END ---------------------------------//
 

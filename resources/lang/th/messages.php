@@ -697,5 +697,11 @@ return [
     'Total Amount:' => 'จำนวนเงินทั้งหมด:',
     'Total MDR Fee:' => 'ค่าธรรมเนียม MDR ทั้งหมด:',
     'Total Net Amount:' => 'จำนวนเงินสุทธิทั้งหมด:',
+    'Customer Details' => 'รายละเอียดลูกค้า',
+    'ID' => 'ID',
+    'Bank Account Name' => 'ชื่อบัญชีธนาคาร',
+    'Bank Account No.' => 'เลขที่บัญชีธนาคาร',
+    'Bank Code' => 'รหัสธนาคาร',
+    'All Customer' => 'ลูกค้าทุกๆท่าน',
 
 ];

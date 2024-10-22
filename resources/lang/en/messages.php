@@ -702,4 +702,12 @@ return [
     'Total Amount:' => 'Total Amount:',
     'Total MDR Fee:' => 'Total MDR Fee:',
     'Total Net Amount:' => 'Total Net Amount:',
+    'Customer Details' => 'Customer Details',
+    'ID' => 'ID',
+    'Bank Account Name' => 'Bank Account Name',
+    'Bank Account No.' => 'Bank Account No.',
+    'Bank Code' => 'Bank Code',
+    'All Customer' => 'All Customer',
+    
+
 ];
