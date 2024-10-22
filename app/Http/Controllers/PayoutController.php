@@ -305,40 +305,7 @@ class PayoutController extends Controller
         }
         
 
-        // $paymentUrl = PaymentUrl::where('channel_id', $paymentChannel->id)
-        //     ->where('method_id', $paymentMethod->id)
-        //     ->select('payment_urls.url', 'payment_urls.merchant_key', 'payment_urls.merchant_code', 'payment_urls.sign_pre as pre_sign')
-        //     ->first();
-
-        // if ($paymentChannel->channel_name == 'iPay88' && $paymentMethod->method_name == 'alipay') {
-        //     $paymentUrl['payment_id'] = 233;
-        // }
-        // if ($paymentChannel->channel_name == 'iPay88' && $paymentMethod->method_name == 'WeChat') {
-        //     $paymentUrl['payment_id'] = 240;
-        // }
-        // if ($paymentChannel->channel_name == 'iPay88' && $paymentMethod->method_name == 'unipay') {
-        //     $paymentUrl['payment_id'] = 15;
-        // }
-        // if ($paymentChannel->channel_name == 'iPay88' && $paymentMethod->method_name == 'card') {
-        //     $paymentUrl['payment_id'] = 1;
-        // }
-
-        // $paymentUrl['channel_name'] = $paymentChannel->channel_name;
-        // $paymentUrl['method_name'] = $paymentMethod->method_name;
-
-        // $paymentUrl['customer_id'] = $request->customer_id;
-        // $paymentUrl['transaction_id'] = $request->transaction_id;
-        // $paymentUrl['customer_name'] = $request->customer_name;
-        // $paymentUrl['amount'] = $amountTemp;
-        // $paymentUrl['min_amount'] = $paymentMap->min_value;
-        // $paymentUrl['max_amount'] = $paymentMap->max_value;
-        // $paymentUrl['call_backUrl'] = "sushil.html";
-
-        // $result['message'] = 'Payment Details';
-        // $result['data'] = $paymentUrl;
-        // $result['statusCode'] = 400;
-
-        // return view('form.paymentDetails.autoSubmitForm', compact('paymentUrl'));
+       
     }
 
     public function payout_status(Request $request)
@@ -382,43 +349,6 @@ class PayoutController extends Controller
 
         return view('payout.payout_status', compact('request', 'postData', 'callbackUrl'));
     }
-
-    // public function api_payout_status(Request $request)
-    // {
-       
-    //     $data = $request->all();
-    //     if ($data['payment_status'] == 'success' || $data['payment_status'] == 'Success' || $data['payment_status'] == 'SUCCESS') {
-    //         $paymentStatus = 'success';
-    //     }elseif ($data['payment_status'] == 'pending' || $data['payment_status'] == 'Pending' || $data['payment_status'] == 'PENDING') {
-    //         $paymentStatus = 'pending';
-    //     }else {
-    //         $paymentStatus = 'failed';
-    //     }
-    //     // echo $data['orderremarks'];
-    //      echo "<pre>"; print_r($data); die;
-    //     SettleRequest::where('fourth_party_transection', $data['transaction_id'])->update([
-    //         'settlement_trans_id' => $data['settlement_trans_id'],
-    //         // 'status' => $paymentStatus,
-    //         // 'api_response' => json_encode($data, true),
-    //         'message' => $data['orderremarks']
-    //     ]);
-       
-      
-    //     $paymentDetail = SettleRequest::where('fourth_party_transection', $data['transaction_id'])->first();
-    //     $callbackUrl = $paymentDetail->callback_url;
-    //     $postData = [
-    //         'merchant_code' => $paymentDetail->merchant_code,
-    //         'transaction_id' => $paymentDetail->fourth_party_transection,
-    //         'amount' => $paymentDetail->total,
-    //         'Currency' => $paymentDetail->Currency,
-    //         'customer_name' => $paymentDetail->customer_name,
-    //         'status' => $paymentDetail->status,
-    //         'created_at' => $paymentDetail->created_at,
-    //         'orderremarks' => $paymentDetail->message,
-    //     ];
-
-    //     return view('payout.payout_status', compact('request', 'postData', 'callbackUrl'));
-    // }
 
 
 }

@@ -241,6 +241,12 @@
                         </ul>
                     </li>
                     <li>
+                        <a class="ai-icon" href="{{ route('Customer: Get All Customer') }}" aria-expanded="false">
+                            <i class="fa fa-user"></i>
+                            <span class="nav-text">{{ __('messages.All Customer') }}</span>
+                        </a>
+                    </li>
+                    <li>
                         <a class="has-arrow ai-icon" href="{{ route('setting.account.list') }}"
                             aria-expanded="false">
                             <i class="flaticon-025-dashboard"></i>
