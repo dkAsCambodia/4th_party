@@ -87,6 +87,7 @@
                                             <th>{{ __('messages.Bank Account No.') }}</th>
                                             <th>{{ __('messages.Bank Account No.') }}</th>
                                             <th>{{ __('messages.Bank Code') }}</th>
+                                            <th>{{ __('messages.Balance') }}</th>
                                             <th>{{ __('messages.Created Time') }}</th>
                                             <th>{{ __('messages.Action') }}</th>
                                         </tr>
@@ -141,6 +142,7 @@
                         {data: 'bank_account_no', searchable: false, sortable: false},
                         {data: 'bank_account_no', searchable: false, sortable: false},
                         {data: 'bank_code'},
+                        {data: 'balance'},
                         {data: 'create_date'},
                         {data: 'action', searchable: false, sortable: false},
                 ],
