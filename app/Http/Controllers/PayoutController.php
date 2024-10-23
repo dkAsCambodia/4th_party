@@ -14,6 +14,7 @@ use App\Models\PaymentMethod;
 use App\Models\User;
 use App\Models\PaymentDetail;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Http;
 
 class PayoutController extends Controller
 {
@@ -327,7 +328,7 @@ class PayoutController extends Controller
             'api_response' => json_encode($data),
             'message' => $data['orderremarks']
         ]);
-        // echo "<pre>"; print_r($data); die;
+       
         $paymentDetail = SettleRequest::where('fourth_party_transection', $data['transaction_id'])->first();
         $callbackUrl = $paymentDetail->callback_url;
         $postData = [
@@ -341,10 +342,20 @@ class PayoutController extends Controller
             'orderremarks' => $paymentDetail->message,
         ];
 
-        // dd($paymentDetail, $paymentDetailUpdate);
         // if ($paymentDetail->callback_url != null) {
         //     return Http::post($paymentDetail->callback_url, $postData);
         // }
+
+        print_r($paymentDetail->callback_url); 
+         echo "<pre>"; print_r($paymentDetail); die;
+        // Check if callback URL is not null
+        if ($callbackUrl != null) {
+            $response = Http::post($callbackUrl, $postData);
+            if ($response->failed()) {
+                throw new Exception('Failed to send callback request: ' . $response->body());
+            }
+            return $response->json(); 
+        }
 
         return view('payout.payout_status', compact('request', 'postData', 'callbackUrl'));
     }
