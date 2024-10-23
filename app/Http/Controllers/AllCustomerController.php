@@ -76,7 +76,6 @@ class AllCustomerController extends Controller
                 ->editColumn('bank_code', function ($data) {
                     return $data->bank_code;
                 })
-                
                 ->addColumn('action', function ($data) use ($request) {
                     $action = '
                         <a class="btn btn-primary btn-sm" href="#" data-toggle="modal" data-target="#edit_user' . $data->id . '">' . trans("messages.View") . '</a>

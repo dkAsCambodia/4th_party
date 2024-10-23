@@ -703,5 +703,6 @@ return [
     'Bank Account No.' => 'เลขที่บัญชีธนาคาร',
     'Bank Code' => 'รหัสธนาคาร',
     'All Customer' => 'ลูกค้าทุกๆท่าน',
+    'Balance' => 'สมดุล',
 
 ];

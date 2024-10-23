@@ -708,6 +708,11 @@ return [
     'Bank Account No.' => 'Bank Account No.',
     'Bank Code' => 'Bank Code',
     'All Customer' => 'All Customer',
+    'Balance' => 'Balance',
+    'ID' => 'ID',
+    'ID' => 'ID',
+
+    
     
 
 ];
