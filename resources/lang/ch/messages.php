@@ -735,4 +735,5 @@ return [
     'Bank Account No.' => '银行帐号',
     'Bank Code' => '银行代码',
     'All Customer' => '所有客户',
+    'Balance' => '平衡',
 ];
