@@ -20,10 +20,9 @@ class PayoutController extends Controller
     public function payoutRequest(Request $request)
     {
 
-        $totalDepositSum = PaymentDetail::where('merchant_code', $request->merchant_code)->where('payment_status', 'success')->sum('amount');
-        $totalDepositCount = PaymentDetail::where('merchant_code', $request->merchant_code)->where('payment_status', 'success')->count('amount');
-        $transaction_charge = $this->depositchangeFun($totalDepositSum);
-        $AvailableforPayout=$totalDepositSum-$transaction_charge;
+        $totalDepositSumAfterCharge = PaymentDetail::where('merchant_code', $request->merchant_code)->where('payment_status', 'success')->sum('net_amount');
+        $totalPayoutSumAfterCharge = SettleRequest::where('merchant_code', $request->merchant_code)->where('status', 'success')->sum('net_amount');
+        $AvailableforPayout=$totalDepositSumAfterCharge-$totalPayoutSumAfterCharge;
 
         // for vizpay charge START
         // $totalPayoutSum = SettleRequest::where('merchant_code', $request->merchant_code)->where('status', 'success')->sum('total');
@@ -33,12 +32,12 @@ class PayoutController extends Controller
         // @$finalAmount=$AvailableforPayout-$totalPayoutwithCharge;
          // for vizpay charge END
 
-        //  For H2p charge START
-        $percentage = 2.5;
+        //  For speedpay charge START
+        $percentage = 0.7;
         $totalWidth = $AvailableforPayout;
         $new_width = ($percentage / 100) * $totalWidth;
         @$finalAmount = $totalWidth-$new_width;
-        //  For H2p charge END
+        //  For speedpay charge END
 
         if($finalAmount < $request->amount){
             return "<h2 style='color:red'>Balance is not enough in Gateway Wallet!</h2>"; 
@@ -165,14 +164,14 @@ class PayoutController extends Controller
         return view('payout.payout-form', compact('res')); 
     }
 
-    public function depositchangeFun($totalDepositSum){
-        $percentage = 3.5;
-        // $totalDepositSum = 200;
-        $new_width = ($percentage / 100) * $totalDepositSum;
-        // echo $totalDepositSum-$new_width;
-        return $new_width;
+    // public function depositchangeFun($totalDepositSum){
+    //     $percentage = 2.3;
+    //     // $totalDepositSum = 200;
+    //     $new_width = ($percentage / 100) * $totalDepositSum;
+    //     // echo $totalDepositSum-$new_width;
+    //     return $new_width;
 
-    }
+    // }
 
     public function checkLimitationRiskMode($gatewayPaymentChannel, $paymentMap)
     {
@@ -265,14 +264,14 @@ class PayoutController extends Controller
         } else {
             $ip = '0.0.0.0';
         }
-        // for H2p deposit charge START
+        // for speedpay payout charge START
         if(!empty($amount)){
-            $percentage = 2.5;
+            $percentage = 0.7;
             $totalWidth = $amount;
             $mdr_fee_amount = ($percentage / 100) * $totalWidth;
             $net_amount= $totalWidth+$mdr_fee_amount;
         }
-        // for H2p deposit charge END
+        // for H2p speedpay charge END
 
         $merchentdata = Merchant::where('merchant_code', $request->merchant_code)->first();
         if(!empty($merchentdata)){
