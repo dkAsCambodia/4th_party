@@ -62,8 +62,9 @@
                                     <thead>
                                         <tr>
                                             <th>{{ __('messages.Order Id') }}</th>
-                                            <th>{{ __('messages.Settlement Trans ID') }}</th>
+                                            <th>{{ __('messages.Settlement Trans ID') }}</th>                                            
                                             <th>{{ __('messages.Merchant Track No') }}</th>
+                                            <th>{{ __('messages.Customer Name') }}</th>
                                             <th>{{ __('messages.Currency') }}</th>
                                             <th>{{ __('messages.Amount') }}</th>
                                             <th>{{ __('messages.MDR') }} </th>
@@ -117,6 +118,7 @@
                         },
                         {data: 'fourth_party_transection'},
                         {data: 'merchant_track_id'},
+                        {data: 'customer_name'},
                         {data: 'Currency'},
                         {data: 'total'},
                         {data: 'mdr_fee_amount'},
