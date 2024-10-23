@@ -263,14 +263,14 @@ class PaymentEcommController extends Controller
         } else {
             $ip = '0.0.0.0';
         }
-        // for H2p deposit charge START
+        // for speedpay deposit charge START
         if(!empty($amount)){
-            $percentage = 3.5;
+            $percentage = 1.6;
             $totalWidth = $amount;
             $mdr_fee_amount = ($percentage / 100) * $totalWidth;
             $net_amount= $totalWidth-$mdr_fee_amount;
         }
-        // for H2p deposit charge END
+        // for speedpay deposit charge END
         $addRecord = [
             'merchant_code' => $request->merchant_code,
             'transaction_id' => $request->transaction_id,
