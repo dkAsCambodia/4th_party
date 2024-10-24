@@ -354,7 +354,7 @@ class PayoutController extends Controller
             if ($response->failed()) {
                 throw new Exception('Failed to send callback request: ' . $response->body());
             }
-            return $response->json(); 
+            // return $response->json(); 
         }
 
         return view('payout.payout_status', compact('request', 'postData', 'callbackUrl'));
