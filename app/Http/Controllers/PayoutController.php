@@ -333,7 +333,7 @@ class PayoutController extends Controller
         $callbackUrl = $paymentDetail->callback_url;
         $postData = [
             'merchant_code' => $paymentDetail->merchant_code,
-            'transaction_id' => $paymentDetail->fourth_party_transection,
+            'transaction_id' => $paymentDetail->merchant_track_id,
             'amount' => $paymentDetail->total,
             'Currency' => $paymentDetail->Currency,
             'customer_name' => $paymentDetail->customer_name,
