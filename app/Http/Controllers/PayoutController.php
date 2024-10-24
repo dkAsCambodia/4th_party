@@ -350,7 +350,7 @@ class PayoutController extends Controller
         //  echo "<pre>"; print_r($paymentDetail); die;
         // Check if callback URL is not null
         if ($callbackUrl != null) {
-            $response = Http::post($callbackUrl, $postData);
+            $response = Http::post($callbackUrl, $postData); 
             if ($response->failed()) {
                 throw new Exception('Failed to send callback request: ' . $response->body());
             }
