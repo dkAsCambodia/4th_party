@@ -7,14 +7,14 @@
             <div class="row page-titles">
                 <ol class="col-md-6 breadcrumb">
                     <li class="breadcrumb-item active"><a href="{{ route('home') }}">{{ __('messages.Home') }}</a></li>
-                    <li class="breadcrumb-item"> {{ __('messages.Settlement Records') }} </li>
+                    <li class="breadcrumb-item"> {{ __('messages.Withdraw Transactions') }} </li>
                 </ol>
             </div>
             <div class="row">
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4 class="card-title">{{ __('messages.Settlement Records') }}</h4>
+                            <h4 class="card-title">{{ __('messages.Withdraw Transactions') }}</h4>
                         </div>
 
                         <div class="card-body row">
@@ -62,8 +62,8 @@
                                     <thead>
                                         <tr>
                                             <th>{{ __('messages.Order Id') }}</th>
-                                            <th>{{ __('messages.Settlement Trans ID') }}</th>                                            
-                                            <th>{{ __('messages.Merchant Track No') }}</th>
+                                            <th>{{ __('messages.Transaction ID') }}</th>                                            
+                                            <th>{{ __('messages.Reference ID') }}</th>
                                             <th>{{ __('messages.Customer Name') }}</th>
                                             <th>{{ __('messages.Currency') }}</th>
                                             <th>{{ __('messages.Amount') }}</th>

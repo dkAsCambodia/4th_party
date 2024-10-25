@@ -24,24 +24,14 @@
                 <li>
                     <a class=" ai-payments" href="{{ route('details-payment/list-agent') }}" aria-expanded="false">
                         <i class="flaticon-072-paymentdetails"></i>
-                        <span class="nav-text">{{ __('messages.Payment Details') }}</span>
+                        <span class="nav-text">{{ __('messages.Deposit Transactions') }}</span>
                     </a>
                 </li>
                 <li>
-                    <a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
-                        <i class="flaticon-072-settlements"></i>
-                        <span class="nav-text">{{ __('messages.Settlement Management') }}</span>
+                    <a class=" ai-payments" href="{{ route('view/settledHistory-agent') }}" aria-expanded="false">
+                        <i class="flaticon-072-paymentdetails"></i>
+                        <span class="nav-text">{{ __('messages.Withdraw Transactions') }}</span>
                     </a>
-                    <ul aria-expanded="false">
-                        <li><a href="{{ route('view/unsettled-agent') }}">{{ __('messages.Unsettled Request') }}</a>
-                        </li>
-
-                        <li><a href="{{ route('view/settleRequest-agent') }}">{{ __('messages.Settled Request') }}</a>
-                        </li>
-                        <li><a
-                                href="{{ route('view/settledHistory-agent') }}">{{ __('messages.Settlement Records') }}</a>
-                        </li>
-                    </ul>
                 </li>
             @endif
             @if (Auth()->user()->role_name === 'Merchant')
@@ -59,28 +49,15 @@
                 </li> --}}
                 <li>
                     <a class=" ai-payments" href="{{ route('details-payment/list-merchant') }}" aria-expanded="false">
-                        <i class="flaticon-072-paymentdetails"></i>
-                        <span class="nav-text">{{ __('messages.Payment Details') }}</span>
+                        <i class="flaticon-072-settlements"></i>
+                        <span class="nav-text">{{ __('messages.Deposit Transactions') }}</span>
                     </a>
                 </li>
                 <li>
-                    <a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
-                        <i class="flaticon-072-settlements"></i>
-                        <span class="nav-text">{{ __('messages.Settlement Management') }}</span>
+                    <a class=" ai-payments" href="{{ route('view/settledHistory-merchant') }}" aria-expanded="false">
+                        <i class="flaticon-072-paymentdetails"></i>
+                        <span class="nav-text">{{ __('messages.Withdraw Transactions') }}</span>
                     </a>
-                    <ul aria-expanded="false">
-                        <li><a
-                                href="{{ route('view/unsettled-merchant') }}">{{ __('messages.Unsettled Request') }}</a>
-                        </li>
-                        <li><a
-                                href="{{ route('view/settleRequest-merchant') }}">{{ __('messages.Settled Request') }}</a>
-                        </li>
-
-                        <li><a
-                                href="{{ route('view/settledHistory-merchant') }}">{{ __('messages.Settlement Records') }}</a>
-                        </li>
-
-                    </ul>
                 </li>
                 <li>
                     <a class=" ai-payments" href="{{ route('merchant-summary-report') }}" aria-expanded="false">

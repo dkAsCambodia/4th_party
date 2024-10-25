@@ -708,5 +708,8 @@ return [
     'Click here to send Notification' => 'คลิกที่นี่เพื่อส่งการแจ้งเตือน',
     'Notification send Successfully' => 'การแจ้งเตือนส่งสำเร็จ',
     'Go Back' => 'กลับไป',
+    'Deposit Transactions' => 'ธุรกรรมการฝากเงิน',
+    'Withdraw Transactions' => 'ถอนธุรกรรม',
+    'Reference ID' => 'รหัสอ้างอิง',
 
 ];

@@ -740,4 +740,7 @@ return [
     'Click here to send Notification' => '单击此处发送通知',
     'Notification send Successfully' => '通知发送成功',
     'Go Back' => '回去',
+    'Deposit Transactions' => '存款交易',
+    'Withdraw Transactions' => '提现交易',
+    'Reference ID' => '参考编号',
 ];

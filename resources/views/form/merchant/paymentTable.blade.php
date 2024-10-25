@@ -13,14 +13,14 @@
             <div class="row page-titles">
                 <ol class="col-md-6 breadcrumb">
                     <li class="breadcrumb-item active"><a href="{{ route('home') }}">{{ __('messages.Home') }}</a></li>
-                    <li class="breadcrumb-item"> {{ __('messages.Payment Details') }} </li>
+                    <li class="breadcrumb-item"> {{ __('messages.Deposit Transactions') }} </li>
                 </ol>
             </div>
             <div class="row">
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4 class="card-title">{{ __('messages.Payment Details') }}</h4>
+                            <h4 class="card-title">{{ __('messages.Deposit Transactions') }}</h4>
                             <a href="#" id="exportMerchantPaymentDetails" class="btn btn-success btn-sm border-none rounded-1">{{ trans('messages.Export') }}</a>
                         </div>
                         <div class="card-body">
