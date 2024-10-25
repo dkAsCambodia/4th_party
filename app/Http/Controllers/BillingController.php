@@ -1681,8 +1681,9 @@ class BillingController extends Controller
                                                     
                                                 </tr>
                                                 <tr>
-                                                    <td style="width: 25%; background-color: #6c6c70 !important; color: white;">' . trans("messages.Callback URL") . '</td>
-                                                    <td>' . $data->callback_url . '</td>
+                                                    <td style="width: 25%; background-color: #6c6c70 !important; color: white;">' . trans("messages.Account Number") . '</td>
+                                                    <td>' . $data->customer_account_number . '</td>
+                                                    
                                                     <td style="width: 25%; background-color: #6c6c70 !important; color: white;">' . trans("messages.Account Name") . '</td>
                                                     <td>' . $data->customer_name . '</td>
                                                 </tr>
@@ -1693,10 +1694,16 @@ class BillingController extends Controller
                                                     <td>' . $data->customer_bank_name . '</td>
                                                 </tr>
                                                 <tr>
-                                                    <td style="width: 25%; background-color: #6c6c70 !important; color: white;">' . trans("messages.Account Number") . '</td>
-                                                    <td>' . $data->customer_account_number . '</td>
                                                     <td style="width: 25%; background-color: #6c6c70 !important; color: white;">' . trans("messages.Status") . '</td>
                                                     <td>' . $data->status . '</td>
+                                                    <td style="width: 25%; background-color: #6c6c70 !important; color: white;">' . trans("messages.Callback URL") . '</td>
+                                                    <td>' . $data->callback_url . '</td>
+                                                </tr>
+                                                <tr>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td style="width: 25%; background-color: #6c6c70 !important; color: white;">' . trans("messages.Send Notification") . '</td>
+                                                    <td><a class="btn btn-danger btn-sm" href="/sendWithdrawNotification/' . base64_encode($data->id) . '" target="_blank">' . trans("messages.Click here to send Notification") . '</a></td>
                                                 </tr>
                                             </table>
                                         </div>
@@ -1874,8 +1881,8 @@ class BillingController extends Controller
                                                     
                                                 </tr>
                                                 <tr>
-                                                    <td style="width: 25%; background-color: #6c6c70 !important; color: white;">' . trans("messages.Callback URL") . '</td>
-                                                    <td>' . $data->callback_url . '</td>
+                                                    <td style="width: 25%; background-color: #6c6c70 !important; color: white;">' . trans("messages.Account Number") . '</td>
+                                                    <td>' . $data->customer_account_number . '</td>
                                                     <td style="width: 25%; background-color: #6c6c70 !important; color: white;">' . trans("messages.Account Name") . '</td>
                                                     <td>' . $data->customer_name . '</td>
                                                 </tr>
@@ -1886,10 +1893,16 @@ class BillingController extends Controller
                                                     <td>' . $data->customer_bank_name . '</td>
                                                 </tr>
                                                 <tr>
-                                                    <td style="width: 25%; background-color: #6c6c70 !important; color: white;">' . trans("messages.Account Number") . '</td>
-                                                    <td>' . $data->customer_account_number . '</td>
                                                     <td style="width: 25%; background-color: #6c6c70 !important; color: white;">' . trans("messages.Status") . '</td>
                                                     <td>' . $data->status . '</td>
+                                                    <td style="width: 25%; background-color: #6c6c70 !important; color: white;">' . trans("messages.Callback URL") . '</td>
+                                                    <td>' . $data->callback_url . '</td>
+                                                </tr>
+                                                <tr>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td style="width: 25%; background-color: #6c6c70 !important; color: white;">' . trans("messages.Send Notification") . '</td>
+                                                    <td><a class="btn btn-danger btn-sm" href="/sendWithdrawNotification/' . base64_encode($data->id) . '" target="_blank">' . trans("messages.Click here to send Notification") . '</a></td>
                                                 </tr>
                                             </table>
                                         </div>
