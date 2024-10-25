@@ -713,6 +713,11 @@ return [
     'Click here to send Notification' => 'Click here to send Notification',
     'Notification send Successfully' => 'Notification send Successfully',
     'Go Back' => 'Go Back',
+    'Deposit Transactions' => 'Deposit Transactions',
+    'Withdraw Transactions' => 'Withdraw Transactions',
+    'Reference ID' => 'Reference ID',
+    'ID' => 'ID',
+    'ID' => 'ID',
     'ID' => 'ID',
     'ID' => 'ID',
 
