@@ -704,5 +704,9 @@ return [
     'Bank Code' => 'รหัสธนาคาร',
     'All Customer' => 'ลูกค้าทุกๆท่าน',
     'Balance' => 'สมดุล',
+    'Send Notification' => 'ส่งการแจ้งเตือน',
+    'Click here to send Notification' => 'คลิกที่นี่เพื่อส่งการแจ้งเตือน',
+    'Notification send Successfully' => 'การแจ้งเตือนส่งสำเร็จ',
+    'Go Back' => 'กลับไป',
 
 ];

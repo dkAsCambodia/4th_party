@@ -736,4 +736,8 @@ return [
     'Bank Code' => '银行代码',
     'All Customer' => '所有客户',
     'Balance' => '平衡',
+    'Send Notification' => '发送通知',
+    'Click here to send Notification' => '单击此处发送通知',
+    'Notification send Successfully' => '通知发送成功',
+    'Go Back' => '回去',
 ];

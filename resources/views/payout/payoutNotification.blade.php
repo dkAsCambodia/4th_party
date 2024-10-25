@@ -82,8 +82,8 @@
                 <div style="border-radius:200px; height:200px; width:200px; background: #F8FAF5; margin:0 auto;">
                     <i class="success">✓</i>
                 </div>
-                <h1 class="h1-class-success">Success</h1>
-                <p class="p-class">We received your purchase request;<br /> we'll be in touch shortly!</p>
+                <h1 class="h1-class-success">Status : Success</h1>
+                <p class="p-class">{{ __('messages.Notification send Successfully') }}!</p>
                 <button class="btn_custom" onclick="goBack()">{{ __('messages.Go Back') }}</button>
             </div>
         </div>
@@ -93,8 +93,8 @@
                 <div style="border-radius:200px; height:200px; width:200px; background: #F8FAF5; margin:0 auto;">
                     <i class="fail">!</i>
                 </div>
-                <h1 class="h1-class-fail">Pending</h1>
-                <p class="p-class">Transaction has been sent to bank.<br />Pending From Bank!</p>
+                <h1 class="h1-class-fail">Status : Pending</h1>
+                <p class="p-class">{{ __('messages.Notification send Successfully') }}</p>
                 <button class="btn_custom" onclick="goBack()">{{ __('messages.Go Back') }}</button>
             </div>
         </div>
@@ -104,8 +104,8 @@
                 <div style="border-radius:200px; height:200px; width:200px; background: #F8FAF5; margin:0 auto;">
                     <i class="Processing">!</i>
                 </div>
-                <h1 class="h1-class-Processing">Processing...</h1>
-                <p class="p-class">Transaction has been sent to bank.<br />Processing From Bank!</p>
+                <h1 class="h1-class-Processing">Status : Processing...</h1>
+                <p class="p-class">{{ __('messages.Notification send Successfully') }}</p>
                 <button class="btn_custom" onclick="goBack()">{{ __('messages.Go Back') }}</button>
             </div>
         </div>
@@ -115,8 +115,8 @@
                 <div style="border-radius:200px; height:200px; width:200px; background: #F8FAF5; margin:0 auto;">
                     <i class="fail">!</i>
                 </div>
-                <h1 class="h1-class-fail">Fail</h1>
-                <p class="p-class">{{ !empty($postData['orderremarks']) ? $postData['orderremarks'] : 'Something went wrong Please try again'}}<br /></p>
+                <h1 class="h1-class-fail">Status : Fail</h1>
+                <p class="p-class">{{ __('messages.Notification send Successfully') }}</p>
                 <button class="btn_custom" onclick="goBack()">{{ __('messages.Go Back') }}</button>
             </div>
         </div>

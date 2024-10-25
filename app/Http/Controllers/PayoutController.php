@@ -360,5 +360,23 @@ class PayoutController extends Controller
         return view('payout.payout_status', compact('request', 'postData', 'callbackUrl'));
     }
 
+    public function sendWithdrawNotification($id)
+    {
+        $paymentDetail = SettleRequest::where('id', base64_decode($id))->first();
+        $callbackUrl = $paymentDetail->callback_url;
+        $postData = [
+            'merchant_code' => $paymentDetail->merchant_code,
+            'transaction_id' => $paymentDetail->merchant_track_id,
+            'amount' => $paymentDetail->total,
+            'Currency' => $paymentDetail->Currency,
+            'customer_name' => $paymentDetail->customer_name,
+            'status' => $paymentDetail->status,
+            'created_at' => $paymentDetail->created_at,
+            'orderremarks' => $paymentDetail->message,
+        ];
+
+        return view('payout.payoutNotification', compact('postData', 'callbackUrl'));
+    }
+
 
 }

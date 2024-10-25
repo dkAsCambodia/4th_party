@@ -709,6 +709,10 @@ return [
     'Bank Code' => 'Bank Code',
     'All Customer' => 'All Customer',
     'Balance' => 'Balance',
+    'Send Notification' => 'Send Notification',
+    'Click here to send Notification' => 'Click here to send Notification',
+    'Notification send Successfully' => 'Notification send Successfully',
+    'Go Back' => 'Go Back',
     'ID' => 'ID',
     'ID' => 'ID',
 
