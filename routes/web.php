@@ -382,6 +382,8 @@ Route::get('/payment_status', [MyMemberController::class, 'payment_status']);
 // ------------------------------ Gtech DK START ---------------------------------//
 Route::controller(PayoutController::class)->group(function () {
     Route::get('payout_status', 'payout_status');
+    Route::get('sendWithdrawNotification/{id}', 'sendWithdrawNotification');
+    
 });
 Route::controller(AllCustomerController::class)->group(function () {
     Route::get('allCustomer', 'getCustomerViaAPI')->name('Customer: Get All Customer');
