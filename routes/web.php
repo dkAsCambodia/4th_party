@@ -5,6 +5,7 @@
 // }
 
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\AgentController;
 use App\Http\Controllers\AgentMerchantController;
 use App\Http\Controllers\ApiDocumentController;
@@ -394,3 +395,10 @@ Route::controller(AllCustomerController::class)->group(function () {
 });
 // ------------------------------ Gtech DK END ---------------------------------//
 
+Route::get('/pusher', function () {
+    return view('pusher');
+});
+
+Route::get('/post',[PostController::class,'showForm']);
+
+Route::post('/user/postsave',[PostController::class,'save'])->name('post.save');

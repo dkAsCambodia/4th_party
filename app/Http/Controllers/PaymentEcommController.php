@@ -19,6 +19,8 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
+use App\Events\DepositCreated;
+
 class PaymentEcommController extends Controller
 {
     public function paymentNewNew(Request $request)
@@ -292,6 +294,16 @@ class PaymentEcommController extends Controller
         ];
 
         PaymentDetail::create($addRecord);
+
+        // Broadcast the event
+        $data = [
+            'transaction_id' => $request->transaction_id,
+            'amount' => $amount,
+            'Currency' => $request->currency,
+        ];
+        event(new DepositCreated($data));
+
+        return redirect()->back()->with('success', 'Post submitted successfully!');
 
         // $paymentUrl = PaymentUrl::where('channel_id', $paymentChannel->id)
         //     ->where('method_id', $paymentMethod->id)
