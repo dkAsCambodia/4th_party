@@ -243,7 +243,8 @@ class PaymentDetailController extends Controller
             $data = PaymentDetail::query()
                 ->leftJoin('payment_maps', 'payment_maps.id', '=', 'payment_details.product_id')
                 ->where('payment_details.merchant_code', $merchant->merchant_code)
-                ->select('payment_details.created_at', 'payment_details.fourth_party_transection', 'payment_details.transaction_id', 'payment_details.amount', 'payment_details.customer_name', 'payment_details.payment_status', 'payment_maps.cny_min', 'payment_maps.cny_max', 'payment_details.Currency', 'payment_details.mdr_fee_amount', 'payment_details.net_amount')->orderBy('payment_details.id', 'desc');
+                ->select('payment_details.id','payment_details.created_at', 'payment_details.fourth_party_transection', 'payment_details.transaction_id', 'payment_details.amount', 'payment_details.customer_name', 'payment_details.payment_status', 'payment_maps.cny_min', 'payment_maps.cny_max', 'payment_details.Currency', 'payment_details.mdr_fee_amount', 'payment_details.net_amount',
+                 'payment_details.product_id', 'payment_details.merchant_code', 'payment_details.callback_url')->orderBy('payment_details.id', 'desc');
             // ->select('created_at', 'fourth_party_transection', 'transaction_id', 'amount', 'order_status', 'payment_status', 'customer_name');
 
             $tz = Timezone::where('id', $request->timezone)->value('timezone');
@@ -268,6 +269,67 @@ class PaymentDetailController extends Controller
                 })
                 ->editColumn('Currency', function ($data) {
                     return $data->Currency ?? '';
+                })
+                ->addColumn('action', function ($data) use ($request) {
+                    $action = '
+                        <a class="btn btn-primary btn-sm" href="#" data-toggle="modal" data-target="#edit_user' . $data->id . '">' . trans("messages.View") . '</a>
+                    ';
+
+                    $action .= '
+                        <div id="edit_user' . $data->id . '" class="modal custom-modal fade" role="dialog">
+                            <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">' . trans("messages.Transaction") . '</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+
+                                    <div class="modal-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered test" style="padding: 7px 10px; !important">
+                                            <tr>
+                                                <td style="width: 25%; background-color: #6c6c70 !important; color: white;">' . trans("messages.Transaction ID") . '</td>
+                                                <td>' . $data->fourth_party_transection . '</td>
+                                                <td style="width: 25%; background-color: #6c6c70 !important; color: white;">' . trans("messages.Reference ID") . '</td>
+                                                <td>' . $data?->transaction_id . '</td>
+                                            </tr>
+                                                <tr>
+                                                    <td style="width: 25%; background-color: #6c6c70 !important; color: white;">' . trans("messages.Product ID") . '</td>
+                                                    <td>' . $data->product_id . '</td>
+                                                    <td style="width: 25%; background-color: #6c6c70 !important; color: white;">' . trans("messages.Merchant Code") . '</td>
+                                                    <td>' . $data->merchant_code . '</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="width: 25%; background-color: #6c6c70 !important; color: white;">' . trans("messages.Amount") . '</td>
+                                                    <td>' . number_format($data->amount, 2) . '</td>
+                                                    <td style="width: 25%; background-color: #6c6c70 !important; color: white;">' . trans("messages.Created Time") . '</td>
+                                                    <td>' . $data?->created_at . '</td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                    <td style="width: 25%; background-color: #6c6c70 !important; color: white;">' . trans("messages.Status") . '</td>
+                                                    <td>' . $data->payment_status . '</td>
+                                                    <td style="width: 25%; background-color: #6c6c70 !important; color: white;">' . trans("messages.Callback URL") . '</td>
+                                                    <td>' . $data->callback_url . '</td>
+                                                </tr>
+                                                <tr>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td style="width: 25%; background-color: #6c6c70 !important; color: white;">' . trans("messages.Send Notification") . '</td>
+                                                    <td><a class="btn btn-danger btn-sm" href="/sendDepositNotification/' . base64_encode($data->id) . '" target="_blank">' . trans("messages.Click here to send Notification") . '</a></td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    ';
+
+                    return $action;
                 })
                 ->filter(function ($data) use ($request) {
                     if ($request->status) {
@@ -298,7 +360,7 @@ class PaymentDetailController extends Controller
                         });
                     }
                 })
-                ->rawColumns(['payment_status'])
+                ->rawColumns(['action', 'payment_status'])
                 ->with([
                     'payment_count' => number_format($totalMDRfee, 2),
                     'order_amount_sum' => number_format($total_net_amount, 2),

@@ -375,8 +375,7 @@ Route::get('/payment', function () {
 
     return view('payment.index', compact('currency'));
 });
-Route::post('/payment/store', [MyMemberController::class, 'store']);
-Route::get('/payment_status', [MyMemberController::class, 'payment_status']);
+
 
 
 // ------------------------------ Gtech DK START ---------------------------------//
@@ -384,6 +383,11 @@ Route::controller(PayoutController::class)->group(function () {
     Route::get('payout_status', 'payout_status');
     Route::get('sendWithdrawNotification/{id}', 'sendWithdrawNotification');
     
+});
+Route::controller(MyMemberController::class)->group(function () {
+    Route::post('/payment/store', 'store');
+    Route::get('/payment_status', 'payment_status');
+    Route::get('sendDepositNotification/{id}', 'sendDepositNotification');
 });
 Route::controller(AllCustomerController::class)->group(function () {
     Route::get('allCustomer', 'getCustomerViaAPI')->name('Customer: Get All Customer');

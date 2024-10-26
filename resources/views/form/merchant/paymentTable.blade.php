@@ -103,13 +103,14 @@
                                             <th>{{ __('messages.Order Id') }}</th>
                                             <th>{{ __('messages.Created Time') }}</th>
                                             <th>{{ __('messages.Transaction ID') }}</th>
-                                            <th>{{ __('messages.Merchant Track No') }}</th>
+                                            <th>{{ __('messages.Reference ID') }}</th>
                                             <th>{{ __('messages.Customer Name') }} </th>
                                             <th>{{ __('messages.Amount') }} </th>
                                             <th>{{ __('messages.MDR') }} </th>
                                             <th>{{ __('messages.Net') }} </th>
                                             <th>{{ __('messages.Currency') }}</th>
                                             <th >{{ __('messages.Status') }}</th>
+                                            <th>{{ __('messages.Action') }}</th>
                                         </tr>
                                     </thead>
                                     <tbody></tbody>
@@ -173,6 +174,7 @@
                     {data: 'net_amount'},
                     {data: 'Currency'},
                     {data: 'payment_status'},
+                    {data: 'action'},
                 ],
                 columnDefs: [
                     { className: "dt-right", targets: [  4, 5 ] },
