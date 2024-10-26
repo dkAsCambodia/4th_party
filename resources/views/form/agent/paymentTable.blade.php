@@ -103,6 +103,7 @@
                                             <th>{{ __('messages.Net') }} </th>
                                             <th>{{ __('messages.Currency') }}</th>
                                             <th >{{ __('messages.Status') }}</th>
+                                            <th>{{ __('messages.Action') }}</th>
                                         </tr>
                                     </thead>
                                     <tbody></tbody>
@@ -160,6 +161,7 @@
                         {data: 'net_amount'},
                         {data: 'Currency'},
                         {data: 'payment_status'},
+                        {data: 'action'},
                     ],
                     columnDefs: [
                         { className: "dt-right", targets: [  4, 5 ] },
