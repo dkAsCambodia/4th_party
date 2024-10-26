@@ -70,4 +70,23 @@ class MyMemberController extends Controller
 
         return view('payment.payment_status', compact('request', 'postData', 'callbackUrl'));
     }
+
+    public function sendDepositNotification($id)
+    {
+        $paymentDetail = PaymentDetail::where('id', base64_decode($id))->first();
+        
+        $callbackUrl = $paymentDetail->callback_url;
+        $postData = [
+            'merchant_code' => $paymentDetail->merchant_code,
+            'transaction_id' => $paymentDetail->transaction_id,
+            'amount' => $paymentDetail->amount,
+            'Currency' => $paymentDetail->Currency,
+            'customer_name' => $paymentDetail->customer_name,
+            'payment_status' => $paymentDetail->payment_status,
+            'created_at' => $paymentDetail->created_at,
+        ];
+   
+
+        return view('payment.depositNotification', compact('postData', 'callbackUrl'));
+    }
 }
