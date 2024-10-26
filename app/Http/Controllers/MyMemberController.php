@@ -74,7 +74,6 @@ class MyMemberController extends Controller
     public function sendDepositNotification($id)
     {
         $paymentDetail = PaymentDetail::where('id', base64_decode($id))->first();
-        
         $callbackUrl = $paymentDetail->callback_url;
         $postData = [
             'merchant_code' => $paymentDetail->merchant_code,

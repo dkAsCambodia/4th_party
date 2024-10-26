@@ -175,12 +175,12 @@
                                 <td class="bg-dark text-white">{{ __('messages.Remark') }}</td>
                                 <td><span class="error_desc"></span></td>
                             </tr>
-                            {{-- <tr>
-                                <td class="bg-white text-white"></td>
-                                <td><span class=""></span></td>
-                                <td class="bg-white text-white"></td>
-                                <td><span class=""></span></td>
-                            </tr> --}}
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td class="bg-dark text-white">{{ __('messages.Send Notification') }}</td>
+                                <td><span class="sendbutton"></span></td>
+                            </tr>
                         </table>
                     </div>
                 </div>
@@ -223,6 +223,12 @@
                     $('span.Gateway_Ref_ID').text(data.data.TransId);
                     $('span.error_desc').text(data.data.ErrDesc);
                     $('td.callback_url').text(data.data.callback_url);
+                    $('span.sendbutton').html(
+                        '<a class="btn btn-danger btn-sm" href="/sendDepositNotification/' + btoa(data.data.id) + '" target="_blank">' +
+                        '{{ __('messages.Click here to send Notification') }}' +
+                        '</a>'
+                    );
+
                     // $('span.product_name').text(data.data.payment_maps.payment_url.url_name);
 
 
