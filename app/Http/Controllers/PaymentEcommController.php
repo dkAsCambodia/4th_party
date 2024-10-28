@@ -295,13 +295,17 @@ class PaymentEcommController extends Controller
 
         PaymentDetail::create($addRecord);
 
-        // Broadcast the event
+        // Broadcast the event Notification code START
         $data = [
+            'type' => 'Deposit',
             'transaction_id' => $request->transaction_id,
             'amount' => $amount,
             'Currency' => $request->currency,
+            'status' => 'pending',
+            'msg' => 'New Deposit Transaction Created!',
         ];
         event(new DepositCreated($data));
+        // Broadcast the event Notification code START
 
         return redirect()->back()->with('success', 'Post submitted successfully!');
 
