@@ -276,7 +276,8 @@ class HomeController extends Controller
 
     public function unreadNoti()
     {
-        return response()->json(auth()->user()->unreadNotifications);
+        // return response()->json(auth()->user()->unreadNotifications);
+        return 4;
     }
 
     public function markAsRead()
