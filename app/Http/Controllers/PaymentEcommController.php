@@ -20,6 +20,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
 use App\Events\DepositCreated;
+use Session;
 
 class PaymentEcommController extends Controller
 {
@@ -295,6 +296,10 @@ class PaymentEcommController extends Controller
 
         PaymentDetail::create($addRecord);
 
+        // update session
+        $todayDepositCount = Session::get('todayDepositCount');
+        $todayDepositCount++;
+        Session::put('todayDepositCount', $todayDepositCount);
         // Broadcast the event Notification code START
         $data = [
             'type' => 'Deposit',
