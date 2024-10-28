@@ -42,6 +42,6 @@ import './bootstrap';
                 console.error('Notification audio element not found.'); exit;
             }
 
-             toastr.success(`Author: ${data.post.author}<br>Title: ${data.post.title}`, 'New Post Created');
+             toastr.success(`Type : ${data.post.type}<br> TransactionId : ${data.post.transaction_id}<br>Amount: ${data.post.amount}<br>Currency: ${data.post.Currency}<br>Status: ${data.post.status}`, `${data.post.msg}`);
         });
 }

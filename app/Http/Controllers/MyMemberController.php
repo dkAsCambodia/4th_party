@@ -8,6 +8,8 @@ use App\Models\PaymentDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
+use App\Events\DepositCreated;
+
 class MyMemberController extends Controller
 {
     public function __construct()
@@ -63,6 +65,18 @@ class MyMemberController extends Controller
             'created_at' => $paymentDetail->created_at,
         ];
 
+        // Broadcast the event Notification code START
+        $data = [
+            'type' => 'Deposit',
+            'transaction_id' => $paymentDetail->transaction_id,
+            'amount' => $paymentDetail->amount,
+            'Currency' => $paymentDetail->Currency,
+            'status' => $paymentDetail->payment_status,
+            'msg' => 'One Deposit Transaction Updated!',
+        ];
+        event(new DepositCreated($data));
+        // Broadcast the event Notification code START
+
         // dd($paymentDetail, $paymentDetailUpdate);
         // if ($paymentDetail->callback_url != null) {
         //     return Http::post($paymentDetail->callback_url, $postData);
@@ -85,6 +99,17 @@ class MyMemberController extends Controller
             'created_at' => $paymentDetail->created_at,
         ];
    
+            // Broadcast the event Notification code START
+        $data = [
+            'type' => 'Deposit',
+            'transaction_id' => $paymentDetail->transaction_id,
+            'amount' => $paymentDetail->amount,
+            'Currency' => $paymentDetail->Currency,
+            'status' => $paymentDetail->payment_status,
+            'msg' => 'One Transaction notified!',
+        ];
+        event(new DepositCreated($data));
+        // Broadcast the event Notification code START
 
         return view('payment.depositNotification', compact('postData', 'callbackUrl'));
     }

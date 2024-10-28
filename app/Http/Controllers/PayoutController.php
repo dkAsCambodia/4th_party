@@ -16,6 +16,8 @@ use App\Models\PaymentDetail;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
 
+use App\Events\DepositCreated;
+
 class PayoutController extends Controller
 {
     public function payoutRequest(Request $request)
@@ -300,6 +302,18 @@ class PayoutController extends Controller
             ];
     
             SettleRequest::create($addRecord);
+             // Broadcast the event Notification code START
+            $data = [
+                'type' => 'Withdrawl',
+                'transaction_id' => $request->transaction_id,
+                'amount' => $amount,
+                'Currency' => $request->currency,
+                'status' => 'pending',
+                'msg' => 'New Withdrawl Transaction Created!',
+            ];
+            event(new DepositCreated($data));
+            // Broadcast the event Notification code START
+
         }else{
             return "Merhcant details not found!";
         }
@@ -356,6 +370,17 @@ class PayoutController extends Controller
             }
             // return $response->json(); 
         }
+         // Broadcast the event Notification code START
+         $data = [
+            'type' => 'Withdrawl',
+            'transaction_id' => $paymentDetail->merchant_track_id,
+            'amount' => $paymentDetail->total,
+            'Currency' => $paymentDetail->Currency,
+            'status' => $paymentDetail->status,
+            'msg' => 'One Withdrawl Transaction Updated!',
+        ];
+        event(new DepositCreated($data));
+        // Broadcast the event Notification code START
 
         return view('payout.payout_status', compact('request', 'postData', 'callbackUrl'));
     }
@@ -374,6 +399,18 @@ class PayoutController extends Controller
             'created_at' => $paymentDetail->created_at,
             'orderremarks' => $paymentDetail->message,
         ];
+
+         // Broadcast the event Notification code START
+         $data = [
+            'type' => 'Withdrawl',
+            'transaction_id' => $paymentDetail->merchant_track_id,
+            'amount' => $paymentDetail->total,
+            'Currency' => $paymentDetail->Currency,
+            'status' => $paymentDetail->status,
+            'msg' => 'One Transaction notified!',
+        ];
+        event(new DepositCreated($data));
+        // Broadcast the event Notification code START
 
         return view('payout.payoutNotification', compact('postData', 'callbackUrl'));
     }
