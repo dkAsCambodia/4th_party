@@ -17,6 +17,11 @@ use Illuminate\Support\Facades\Http;
 use App\Models\LoginLog;
 use Illuminate\Support\Facades\Log;
 
+use App\Models\PaymentDetail;
+use App\Models\SettleRequest;
+use App\Models\Merchant;
+use App\Models\Agent;
+
 class LoginController extends Controller
 {
     /*
@@ -101,10 +106,27 @@ class LoginController extends Controller
                     Session::put('agent_id', $user->agent_id);
                     Session::put('locale', 'en');
                    // Toastr::success('Login successfully :)','Success');
+
+                   
+
+                    
+
                     DB::commit();
                     if(Auth::User()->role_name == 'Merchant'){
+                        $user->merchant_id;
+                        $merchant=Merchant::where('id', $user->merchant_id)->first();
+                        $todayDepositCount = PaymentDetail::where('merchant_code', $merchant->merchant_code)->whereDate('created_at', Carbon::today())->count();
+                        Session::put('todayDepositCount', $todayDepositCount);
+                        $todayWithdrawCount = SettleRequest::where('merchant_code', $merchant->merchant_code)->whereDate('created_at', Carbon::today())->count();
+                        Session::put('todayWithdrawCount', $todayWithdrawCount);
                        // return redirect()->route('details-payment/list-merchant');
                        return redirect()->intended('home');
+                    }elseif(Auth::User()->role_name == 'Admin'){
+                        $todayDepositCount = PaymentDetail::whereDate('created_at', Carbon::today())->count();
+                        Session::put('todayDepositCount', $todayDepositCount);
+                        $todayWithdrawCount = SettleRequest::whereDate('created_at', Carbon::today())->count();
+                        Session::put('todayWithdrawCount', $todayWithdrawCount);
+                        return redirect()->intended('home');
                     }else{
                         return redirect()->intended('home');
                     }

@@ -101,7 +101,7 @@
                                     <source src="{{ asset('/audio/notifcation.mp3') }}" type="audio/mpeg">
                                     Your browser does not support the audio element.
                                 </audio>
-                                <button onclick="document.getElementById('notificationAudio').play()">$</button>
+                                <button onclick="document.getElementById('notificationAudio').play()"></button>
 
                                 <!-- Include jQuery -->
                                 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -109,12 +109,12 @@
                                 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
                                 
                                 <!-- Your app.js or bootstrap.js script -->
-                                <script src="{{ asset('/build/assets/app.39aecc54.js') }}"></script>
+                                <script src="{{ asset('/build/assets/app.56402d86.js') }}"></script>
                                 {{-- // for Pusher code END --}}
 
                             <li class="nav-item dropdown notification_dropdown" id="notiDiv">
                                 <a class="nav-link ai-icon" href="javascript:void(0);"
-                                    {{ auth()->user()->unreadNotifications->count() > 0? 'data-toggle=dropdown aria-haspopup=true aria-expanded=false': '' }}
+                                    {{ 2 > 0? 'data-toggle=dropdown aria-haspopup=true aria-expanded=false': '' }}
                                     id="notiBell">
                                     <svg width="28" height="28" viewBox="0 0 28 28" fill="none"
                                         xmlns="http://www.w3.org/2000/svg">
@@ -123,9 +123,9 @@
                                             fill="#4f7086"></path>
                                     </svg>
                                     <span
-                                        class="badge light text-white bg-primary rounded-circle {{ auth()->user()->unreadNotifications->count() > 0? '': 'd-none' }}"
+                                        class="badge light text-white bg-primary rounded-circle {{ 2 > 0? '': 'd-none' }}"
                                         id="notificationCount">
-                                        {{ auth()->user()->unreadNotifications->count() }}
+                                        {{ 2 }}
                                     </span>
                                 </a>
 
@@ -133,6 +133,34 @@
                                     <div id="dlab_W_Notification1" class="widget-media dlab-scroll p-3 ps"
                                         style="height: 200px; overflow-y: auto !important;">
                                         <ul class="timeline" id="notiContent">
+                                            <li>
+                                                <div class="timeline-panel">
+                                                    <div class="media-body">
+                                                        <h5 class="mb-1">{{ trans('messages.Payment Success') }}
+                                                            THB
+                                                            500</h5>
+                                                        <p class="mb-2">{{ trans('messages.Trans ID') }}:
+                                                            TTTTTTTTTTTTT</p>
+                                                        <small
+                                                            class="d-block">12
+                                                            {{ trans('messages.minutes ago') }}</small>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="timeline-panel">
+                                                    <div class="media-body">
+                                                        <h5 class="mb-1">{{ trans('messages.Payment Success') }}
+                                                            THB
+                                                            500</h5>
+                                                        <p class="mb-2"><a href="/{{strtolower(auth()->user()->role_name)}}/payment-list-details">{{ trans('messages.Trans ID') }}:
+                                                            TTTTTTTTTTTTT</a></p>
+                                                        <small
+                                                            class="d-block">12
+                                                            {{ trans('messages.minutes ago') }}</small>
+                                                    </div>
+                                                </div>
+                                            </li>
                                             @foreach (auth()->user()->unreadNotifications as $unread)
                                                 <li>
                                                     <div class="timeline-panel">

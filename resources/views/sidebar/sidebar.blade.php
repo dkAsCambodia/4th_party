@@ -50,13 +50,15 @@
                 <li>
                     <a class=" ai-payments" href="{{ route('details-payment/list-merchant') }}" aria-expanded="false">
                         <i class="flaticon-072-settlements"></i>
-                        <span class="nav-text">{{ __('messages.Deposit Transactions') }}</span>
+                        <span class="nav-text">{{ __('messages.Deposit Transactions') }} <b>{{ Session::get('todayDepositCount') > 0 ? '(' . Session::get('todayDepositCount') . ')' : '' }}
+                        </b></span>
                     </a>
                 </li>
                 <li>
                     <a class=" ai-payments" href="{{ route('view/settledHistory-merchant') }}" aria-expanded="false">
                         <i class="flaticon-072-paymentdetails"></i>
-                        <span class="nav-text">{{ __('messages.Withdraw Transactions') }}</span>
+                        <span class="nav-text">{{ __('messages.Withdraw Transactions') }} <b>{{ Session::get('todayWithdrawCount') > 0 ? '(' . Session::get('todayWithdrawCount') . ')' : '' }}
+                        </b></span>
                     </a>
                 </li>
                 <li>
@@ -145,7 +147,8 @@
                         <a class=" ai-payments" href="{{ route('PaymentDetails: View PaymentDetails') }}"
                             aria-expanded="false">
                             <i class="flaticon-072-paymentdetails"></i>
-                            <span class="nav-text">{{ __('messages.Payment Details') }}</span>
+                            <span class="nav-text">{{ __('messages.Payment Details') }} <b>{{ Session::get('todayDepositCount') > 0 ? '(' . Session::get('todayDepositCount') . ')' : '' }}
+                            </b></span>
                         </a>
                     </li>
                 @endif
@@ -157,7 +160,8 @@
                     <li>
                         <a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
                             <i class="flaticon-072-settlements"></i>
-                            <span class="nav-text">{{ __('messages.Settlement Management') }}</span>
+                            <span class="nav-text">{{ __('messages.Settlement Management') }} <b>{{ Session::get('todayWithdrawCount') > 0 ? '(' . Session::get('todayWithdrawCount') . ')' : '' }}
+                            </b></span>
                         </a>
                         <ul aria-expanded="false">
                             @if (auth()->user()->can('Settlement: Settle Request View Settlement'))
