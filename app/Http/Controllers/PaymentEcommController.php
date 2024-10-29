@@ -30,9 +30,7 @@ class PaymentEcommController extends Controller
 
         $getGatewayParameters = [];
 
-        $paymentMap = PaymentMap::where('id', $request->product_id)
-            ->first();
-
+        $paymentMap = PaymentMap::where('id', $request->product_id)->first();
         if (! $paymentMap) {
             return 'product not exist';
         }
@@ -40,7 +38,10 @@ class PaymentEcommController extends Controller
         if ($paymentMap->status == 'Disable') {
             return 'product is Disable';
         }
-
+        $merchantData=Merchant::where('merchant_code', $request->merchant_code)->first();
+        if (empty($merchantData)) {
+            return 'Invalid Merchants!';
+        }
         if ($paymentMap->channel_mode == 'single') {
             $gatewayPaymentChannel = GatewayPaymentChannel::where('id', $paymentMap->gateway_payment_channel_id)
                 ->first();
@@ -116,7 +117,7 @@ class PaymentEcommController extends Controller
         // $res['SecurityCode'] = 'zSAIDEPVZLyuc4ESXKO2';  //4thparty
         // $res['Merchant'] = 'PA020';  //4thparty
         // product_id  // 4thparty
-
+        $res['agent_id'] = $merchantData->agent_id;
         $res['merchant_code'] = $request->merchant_code;
         $res['currency'] = $request->currency;
         $res['amount'] = $request->amount;
@@ -135,7 +136,7 @@ class PaymentEcommController extends Controller
         $res['customer_zip'] = $request->customer_zip; 
         $res['customer_country'] = $request->customer_country; 
         $res['customer_city'] = $request->customer_city; 
-
+        // dd($res);
         $this->storePayamentDetails(
             $paymentMap,
             $request,
@@ -146,7 +147,7 @@ class PaymentEcommController extends Controller
             $frtransaction,
             $res['amount']
         );
-        // dd($res);
+        
 
         return view('payment-form.payment-page', compact('res'));
     }
@@ -274,7 +275,10 @@ class PaymentEcommController extends Controller
             $net_amount= $totalWidth-$mdr_fee_amount;
         }
         // for speedpay deposit charge END
+
+        // dd($res['agent_id']);
         $addRecord = [
+            'agent_id' => $res['agent_id'],
             'merchant_code' => $request->merchant_code,
             'transaction_id' => $request->transaction_id,
             // 'fourth_party_transection' => "TR" . rand(100000, 999999),
@@ -296,10 +300,6 @@ class PaymentEcommController extends Controller
 
         PaymentDetail::create($addRecord);
 
-        // update session
-        $todayDepositCount = Session::get('todayDepositCount');
-        $todayDepositCount++;
-        Session::put('todayDepositCount', $todayDepositCount);
         // Broadcast the event Notification code START
         $data = [
             'type' => 'Deposit',
