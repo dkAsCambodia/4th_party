@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Http;
 
 use App\Events\DepositCreated;
 use Session;
+use App\Models\TransactionNotification;
 
 class PaymentEcommController extends Controller
 {
@@ -275,8 +276,7 @@ class PaymentEcommController extends Controller
             $net_amount= $totalWidth-$mdr_fee_amount;
         }
         // for speedpay deposit charge END
-
-        // dd($res['agent_id']);
+     
         $addRecord = [
             'agent_id' => $res['agent_id'],
             'merchant_code' => $request->merchant_code,
@@ -297,7 +297,6 @@ class PaymentEcommController extends Controller
             'mdr_fee_amount' => $mdr_fee_amount ?? '',
         
         ];
-
         PaymentDetail::create($addRecord);
 
         // Broadcast the event Notification code START
@@ -311,43 +310,20 @@ class PaymentEcommController extends Controller
         ];
         event(new DepositCreated($data));
         // Broadcast the event Notification code START
+        // Insert data in Notification table Code START
+        $merchant=Merchant::where('merchant_code', $request->merchant_code)->first();
+        $addNotificationRecord = [
+            'notifiable_type' => 'Deposit',
+            'agent_id' => $res['agent_id'],
+            'merchant_id' => $merchant->id,
+            'data' => json_encode($data,true),
+            'msg' => 'New Deposit Transaction Created!',
+        ];
+        TransactionNotification::create($addNotificationRecord);
+        // Insert data in Notification table Code END
 
         return redirect()->back()->with('success', 'Post submitted successfully!');
 
-        // $paymentUrl = PaymentUrl::where('channel_id', $paymentChannel->id)
-        //     ->where('method_id', $paymentMethod->id)
-        //     ->select('payment_urls.url', 'payment_urls.merchant_key', 'payment_urls.merchant_code', 'payment_urls.sign_pre as pre_sign')
-        //     ->first();
-
-        // if ($paymentChannel->channel_name == 'iPay88' && $paymentMethod->method_name == 'alipay') {
-        //     $paymentUrl['payment_id'] = 233;
-        // }
-        // if ($paymentChannel->channel_name == 'iPay88' && $paymentMethod->method_name == 'WeChat') {
-        //     $paymentUrl['payment_id'] = 240;
-        // }
-        // if ($paymentChannel->channel_name == 'iPay88' && $paymentMethod->method_name == 'unipay') {
-        //     $paymentUrl['payment_id'] = 15;
-        // }
-        // if ($paymentChannel->channel_name == 'iPay88' && $paymentMethod->method_name == 'card') {
-        //     $paymentUrl['payment_id'] = 1;
-        // }
-
-        // $paymentUrl['channel_name'] = $paymentChannel->channel_name;
-        // $paymentUrl['method_name'] = $paymentMethod->method_name;
-
-        // $paymentUrl['customer_id'] = $request->customer_id;
-        // $paymentUrl['transaction_id'] = $request->transaction_id;
-        // $paymentUrl['customer_name'] = $request->customer_name;
-        // $paymentUrl['amount'] = $amountTemp;
-        // $paymentUrl['min_amount'] = $paymentMap->min_value;
-        // $paymentUrl['max_amount'] = $paymentMap->max_value;
-        // $paymentUrl['call_backUrl'] = "sushil.html";
-
-        // $result['message'] = 'Payment Details';
-        // $result['data'] = $paymentUrl;
-        // $result['statusCode'] = 400;
-
-        // return view('form.paymentDetails.autoSubmitForm', compact('paymentUrl'));
     }
 
     public function generateUniqueCode()

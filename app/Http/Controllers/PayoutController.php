@@ -313,6 +313,16 @@ class PayoutController extends Controller
             ];
             event(new DepositCreated($data));
             // Broadcast the event Notification code START
+             // Insert data in Notification table Code START
+            $addNotificationRecord = [
+                'notifiable_type' => 'Withdrawl',
+                'agent_id' => $merchentdata->agent_id,
+                'merchant_id' => $merchentdata->id,
+                'data' => json_encode($data,true),
+                'msg' => 'New Withdrawl Transaction Created!',
+            ];
+            TransactionNotification::create($addNotificationRecord);
+            // Insert data in Notification table Code END
 
         }else{
             return "Merhcant details not found!";
@@ -381,6 +391,16 @@ class PayoutController extends Controller
         ];
         event(new DepositCreated($data));
         // Broadcast the event Notification code START
+          // Insert data in Notification table Code START
+          $addNotificationRecord = [
+            'notifiable_type' => 'Withdrawl',
+            'agent_id' => $paymentDetail->agent_id,
+            'merchant_id' => $paymentDetail->merchant_id,
+            'data' => json_encode($data,true),
+            'msg' => 'One Withdrawl Transaction Updated!',
+        ];
+        TransactionNotification::create($addNotificationRecord);
+        // Insert data in Notification table Code END
 
         return view('payout.payout_status', compact('request', 'postData', 'callbackUrl'));
     }

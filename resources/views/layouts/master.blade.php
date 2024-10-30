@@ -114,7 +114,7 @@
 
                             <li class="nav-item dropdown notification_dropdown" id="notiDiv">
                                 <a class="nav-link ai-icon" href="javascript:void(0);"
-                                    {{ 2 > 0? 'data-toggle=dropdown aria-haspopup=true aria-expanded=false': '' }}
+                                    {{ getNotificationTransactions()['NotificationCount']  > 0? 'data-toggle=dropdown aria-haspopup=true aria-expanded=false': '' }}
                                     id="notiBell">
                                     <svg width="28" height="28" viewBox="0 0 28 28" fill="none"
                                         xmlns="http://www.w3.org/2000/svg">
@@ -123,9 +123,9 @@
                                             fill="#4f7086"></path>
                                     </svg>
                                     <span
-                                        class="badge light text-white bg-primary rounded-circle {{ 2 > 0? '': 'd-none' }}"
+                                        class="badge light text-white bg-primary rounded-circle {{ getNotificationTransactions()['NotificationCount'] > 0? '': 'd-none' }}"
                                         id="notificationCount">
-                                        {{ 2 }}
+                                        {{ getNotificationTransactions()['NotificationCount'] ?? '' }}
                                     </span>
                                 </a>
 
@@ -133,35 +133,22 @@
                                     <div id="dlab_W_Notification1" class="widget-media dlab-scroll p-3 ps"
                                         style="height: 200px; overflow-y: auto !important;">
                                         <ul class="timeline" id="notiContent">
+                                            @foreach (getNotificationTransactions()['NotificationData'] as $unread)
+                                                @php
+                                                    $notificationData = json_decode($unread->data, true); 
+                                                @endphp
                                             <li>
                                                 <div class="timeline-panel">
                                                     <div class="media-body">
-                                                        <h5 class="mb-1">{{ trans('messages.Payment Success') }}
-                                                            THB
-                                                            500</h5>
-                                                        <p class="mb-2">{{ trans('messages.Trans ID') }}:
-                                                            TTTTTTTTTTTTT</p>
-                                                        <small
-                                                            class="d-block">12
-                                                            {{ trans('messages.minutes ago') }}</small>
+                                                        <h5 class="mb-1">{{ $unread->msg ?? '' }}</h5>
+                                                        <p class="mb-2 text text-success">{{ trans('messages.Trans ID') }}: {{ $notificationData['transaction_id'] ?? '' }}</p>
+                                                        <p class="mb-2 text text-danger">{{ trans('messages.Status') }}: {{ $notificationData['status'] ?? '' }}</p>
+                                                        <small class="d-block">{{ $unread->created_at->diffForHumans() }}</small>
                                                     </div>
                                                 </div>
                                             </li>
-                                            <li>
-                                                <div class="timeline-panel">
-                                                    <div class="media-body">
-                                                        <h5 class="mb-1">{{ trans('messages.Payment Success') }}
-                                                            THB
-                                                            500</h5>
-                                                        <p class="mb-2"><a href="/{{strtolower(auth()->user()->role_name)}}/payment-list-details">{{ trans('messages.Trans ID') }}:
-                                                            TTTTTTTTTTTTT</a></p>
-                                                        <small
-                                                            class="d-block">12
-                                                            {{ trans('messages.minutes ago') }}</small>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            @foreach (auth()->user()->unreadNotifications as $unread)
+                                            @endforeach
+                                            {{-- @foreach (auth()->user()->unreadNotifications as $unread)
                                                 <li>
                                                     <div class="timeline-panel">
                                                         <div class="media-body">
@@ -176,11 +163,11 @@
                                                         </div>
                                                     </div>
                                                 </li>
-                                            @endforeach
+                                            @endforeach --}}
                                         </ul>
                                     </div>
                                     <a class="all-notification"
-                                        href="{{ route('mark-all-as-read') }}">{{ trans('messages.mark all as read') }}</a>
+                                        href="{{ route('markReadTransaction') }}">{{ trans('messages.mark all as read') }}</a>
                                 </div>
                             </li>
 

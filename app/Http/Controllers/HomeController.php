@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Agent;
 use App\Models\Merchant;
+use App\Models\TransactionNotification;
 use App\Models\SettleRequest;
 use App\Models\Billing;
 use App\Models\PaymentDetail;
@@ -283,6 +284,28 @@ class HomeController extends Controller
     public function markAsRead()
     {
         auth()->user()->unreadNotifications->markAsRead();
+        return back();
+    }
+
+    public function markReadTransaction()
+    {
+        if(Auth::User()->role_name == 'Merchant'){
+            $merchant=Merchant::where('id', Auth::User()->merchant_id)->first();
+            TransactionNotification::where('merchant_id', $merchant->id)->update(['readby_merchant' => '1']);
+
+        }elseif(Auth::User()->role_name == 'Admin'){
+            TransactionNotification::select('*')->update(['readby_admin' => '1']);  
+
+        }elseif(Auth::User()->role_name == 'Agent'){
+            TransactionNotification::where('agent_id', Auth::User()->agent_id)->update(['readby_agent' => '1']);
+            
+        }else{
+        }
+        TransactionNotification::where([
+            'readby_merchant' => '1',
+            'readby_agent' => '1',
+            'readby_admin' => '1'
+        ])->delete();
         return back();
     }
 }
