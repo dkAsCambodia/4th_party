@@ -76,6 +76,17 @@ class MyMemberController extends Controller
         ];
         event(new DepositCreated($data));
         // Broadcast the event Notification code START
+         // Insert data in Notification table Code START
+         $merchant=Merchant::where('merchant_code', $paymentDetail->merchant_code)->first();
+         $addNotificationRecord = [
+             'notifiable_type' => 'Deposit',
+             'agent_id' => $merchant->agent_id,
+             'merchant_id' => $merchant->id,
+             'data' => json_encode($data,true),
+             'msg' => 'One Deposit Transaction Updated!',
+         ];
+         TransactionNotification::create($addNotificationRecord);
+         // Insert data in Notification table Code END
 
         // dd($paymentDetail, $paymentDetailUpdate);
         // if ($paymentDetail->callback_url != null) {

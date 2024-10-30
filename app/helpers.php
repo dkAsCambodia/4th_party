@@ -8,6 +8,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xls;
 use App\Models\PaymentDetail;
 use App\Models\SettleRequest;
 use App\Models\Merchant;
+use App\Models\TransactionNotification;
 use App\Models\Agent;
 use Carbon\Carbon;
 
@@ -57,13 +58,35 @@ function getTodayTransactionCount()
     }elseif(Auth::User()->role_name == 'Agent'){
         $todayDepositCount = PaymentDetail::where('agent_id', Auth::User()->agent_id)->whereDate('created_at', Carbon::today())->count();
         $todayWithdrawCount = SettleRequest::where('agent_id', Auth::User()->agent_id)->whereDate('created_at', Carbon::today())->count();
-    }else{
-        
+    }else{ 
     }
-
     $data = [
         "todayDepositCount" => $todayDepositCount,
         "todayWithdrawCount" => $todayWithdrawCount,
+    ];
+    return $data;
+}
+
+function getNotificationTransactions()
+{
+    $NotificationCount = 0;
+  
+    // return Auth::User()->merchant_id;
+    if(Auth::User()->role_name == 'Merchant'){
+         $merchant=Merchant::where('id', Auth::User()->merchant_id)->first();
+         $NotificationCount = TransactionNotification::where('merchant_id', $merchant->id)->where('readby_merchant', '0')->orderBy('created_at','DESC')->count();
+         $NotificationData = TransactionNotification::where('merchant_id', $merchant->id)->where('readby_merchant', '0')->orderBy('created_at','DESC')->get();
+    }elseif(Auth::User()->role_name == 'Admin'){
+        $NotificationCount = TransactionNotification::where('readby_admin', '0')->orderBy('created_at','DESC')->count();
+        $NotificationData = TransactionNotification::where('readby_admin', '0')->orderBy('created_at','DESC')->get();
+    }elseif(Auth::User()->role_name == 'Agent'){
+        $NotificationCount = TransactionNotification::where('agent_id', Auth::User()->agent_id)->where('readby_agent', '0')->orderBy('created_at','DESC')->count();
+        $NotificationData = TransactionNotification::where('agent_id', Auth::User()->agent_id)->where('readby_agent', '0')->orderBy('created_at','DESC')->get();
+    }else{  
+    }
+    $data = [
+        "NotificationCount" => $NotificationCount,
+        "NotificationData" => $NotificationData,
     ];
     return $data;
 }

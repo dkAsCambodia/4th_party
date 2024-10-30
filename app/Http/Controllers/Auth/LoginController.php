@@ -105,31 +105,14 @@ class LoginController extends Controller
                     Session::put('position', $user->position);
                     Session::put('agent_id', $user->agent_id);
                     Session::put('locale', 'en');
-                   // Toastr::success('Login successfully :)','Success');
-
-                   
-
-                    
-
+                   Toastr::success('Login successfully!','Success');
                     DB::commit();
                     if(Auth::User()->role_name == 'Merchant'){
-                        $user->merchant_id;
-                        $merchant=Merchant::where('id', $user->merchant_id)->first();
-                        $todayDepositCount = PaymentDetail::where('merchant_code', $merchant->merchant_code)->whereDate('created_at', Carbon::today())->count();
-                        Session::put('todayDepositCount', $todayDepositCount);
-                        $todayWithdrawCount = SettleRequest::where('merchant_code', $merchant->merchant_code)->whereDate('created_at', Carbon::today())->count();
-                        Session::put('todayWithdrawCount', $todayWithdrawCount);
-                       // return redirect()->route('details-payment/list-merchant');
-                       return redirect()->intended('home');
-                    }elseif(Auth::User()->role_name == 'Admin'){
-                        $todayDepositCount = PaymentDetail::whereDate('created_at', Carbon::today())->count();
-                        Session::put('todayDepositCount', $todayDepositCount);
-                        $todayWithdrawCount = SettleRequest::whereDate('created_at', Carbon::today())->count();
-                        Session::put('todayWithdrawCount', $todayWithdrawCount);
+                        // return redirect()->route('details-payment/list-merchant');
                         return redirect()->intended('home');
-                    }else{
-                        return redirect()->intended('home');
-                    }
+                     }else{
+                         return redirect()->intended('home');
+                     }
 
                 } else {
 
@@ -164,7 +147,7 @@ class LoginController extends Controller
         $request->session()->forget('agent_id');
         $request->session()->flush();
 
-       // Toastr::success('Logout successfully :)','Success');
+       Toastr::warning('Logout successfully!','Success');
         return redirect('login');
     }
 

@@ -64,6 +64,8 @@ use Illuminate\Support\Facades\Route;
 // });
 
 Route::get('/get-unread-notification', [HomeController::class, 'unreadNoti'])->name('get-unread-notification');
+Route::get('/markReadTransaction', [HomeController::class, 'markReadTransaction'])->name('markReadTransaction');
+
 
 Route::get('lang/home', [LangController::class, 'index']);
 Route::get('lang/change', [LangController::class, 'change'])->name('changeLang');
