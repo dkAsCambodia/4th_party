@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\CurrencyExchangeRate;
 use App\Models\MyMember;
+use App\Models\Merchant;
 use App\Models\PaymentDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
