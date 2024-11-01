@@ -6,6 +6,7 @@ use App\Models\GatewayAccount;
 use App\Models\GatewayAccountMethod;
 use App\Models\GatewayPaymentChannel;
 use App\Models\Merchant;
+use App\Models\TransactionNotification;
 use App\Models\ParameterSetting;
 use App\Models\ParameterValue;
 use App\Models\SettleRequest;

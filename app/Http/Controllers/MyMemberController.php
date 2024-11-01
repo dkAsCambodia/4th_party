@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
 use App\Events\DepositCreated;
+use App\Models\TransactionNotification;
 
 class MyMemberController extends Controller
 {
