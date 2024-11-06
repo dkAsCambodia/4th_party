@@ -114,7 +114,7 @@ class PaymentEcommController extends Controller
         $res = array_merge($arrayData, $getGatewayParameters);
 
         $frtransaction = $this->generateUniqueCode();
-
+        // echo"<pre>"; print_r($request->all()); die;
         // $res['SecurityCode'] = 'zSAIDEPVZLyuc4ESXKO2';  //4thparty
         // $res['Merchant'] = 'PA020';  //4thparty
         // product_id  // 4thparty
@@ -122,16 +122,26 @@ class PaymentEcommController extends Controller
         $res['merchant_code'] = $request->merchant_code;
         $res['currency'] = $request->currency;
         $res['amount'] = $request->amount;
-
-        $res['payin_api_token'] = $request->payin_api_token;
+        if(isset($request->payin_api_token) && !empty($request->payin_api_token)){
+            $res['payin_api_token'] = $request->payin_api_token; 
+        }
         $res['transaction_id'] = $frtransaction; // 4th party
         $res['callback_url'] = url('payment_status');
         $res['customer_name'] = $request->customer_name;
         $res['customer_email'] = $request->customer_email;  
         $res['customer_phone'] = $request->customer_phone;  
-        $res['customer_bank_name'] = $request->customer_bank_name; 
+        if(isset($request->customer_bank_name) && !empty($request->customer_bank_name)){
+            $res['customer_bank_name'] = $request->customer_bank_name; 
+        }
         if(isset($request->customer_account_number) && !empty($request->customer_account_number)){
             $res['customer_account_number'] = $request->customer_account_number; 
+        }
+
+        if(isset($request->card_number) && !empty($request->card_number)){
+            $res['card_number'] = $request->card_number; 
+            $res['expiryMonth'] = $request->expiryMonth; 
+            $res['expiryYear'] = $request->expiryYear; 
+            $res['cvv'] = $request->cvv; 
         }
         $res['customer_addressline_1'] = $request->customer_addressline_1; 
         $res['customer_zip'] = $request->customer_zip; 
