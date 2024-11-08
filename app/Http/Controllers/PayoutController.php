@@ -140,14 +140,23 @@ class PayoutController extends Controller
         $res['merchant_code'] = $request->merchant_code;
         $res['currency'] = $request->currency;
         $res['amount'] = $request->amount;
-
-        $res['customer_account_number'] = $request->customer_account_number;
         $res['transaction_id'] = $frtransaction; // 4th party
         $res['callback_url'] = url('payout_status');
         $res['customer_name'] = $request->customer_name;
         $res['customer_email'] = $request->customer_email;  //optional
         $res['customer_phone'] = $request->customer_phone;  //optional
-        $res['customer_bank_name'] = $request->customer_bank_name; //optional
+        if(isset($request->customer_bank_name) && !empty($request->customer_bank_name)){
+            $res['customer_bank_name'] = $request->customer_bank_name; 
+        }
+        if(isset($request->customer_account_number) && !empty($request->customer_account_number)){
+            $res['customer_account_number'] = $request->customer_account_number; 
+        }
+        if(isset($request->card_number) && !empty($request->card_number)){
+            $res['card_number'] = $request->card_number; 
+            $res['expiryMonth'] = $request->expiryMonth; 
+            $res['expiryYear'] = $request->expiryYear; 
+            $res['cvv'] = $request->cvv; 
+        }
         $res['customer_addressline_1'] = $request->customer_addressline_1; //optional
         $res['customer_zip'] = $request->customer_zip; //optional
         $res['customer_country'] = $request->customer_country; //optional

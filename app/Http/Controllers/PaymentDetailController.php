@@ -244,7 +244,7 @@ class PaymentDetailController extends Controller
                 ->leftJoin('payment_maps', 'payment_maps.id', '=', 'payment_details.product_id')
                 ->where('payment_details.merchant_code', $merchant->merchant_code)
                 ->select('payment_details.id','payment_details.created_at', 'payment_details.fourth_party_transection', 'payment_details.transaction_id', 'payment_details.amount', 'payment_details.customer_name', 'payment_details.payment_status', 'payment_maps.cny_min', 'payment_maps.cny_max', 'payment_details.Currency', 'payment_details.mdr_fee_amount', 'payment_details.net_amount',
-                 'payment_details.product_id', 'payment_details.merchant_code', 'payment_details.callback_url')->orderBy('payment_details.id', 'desc');
+                 'payment_details.product_id', 'payment_details.merchant_code', 'payment_details.callback_url', 'payment_details.payment_method')->orderBy('payment_details.id', 'desc');
 
             $tz = Timezone::where('id', $request->timezone)->value('timezone');
 
@@ -314,8 +314,8 @@ class PaymentDetailController extends Controller
                                                     <td>' . $data->callback_url . '</td>
                                                 </tr>
                                                 <tr>
-                                                    <td></td>
-                                                    <td></td>
+                                                    <td style="width: 25%; background-color: #6c6c70 !important; color: white;">' . trans("messages.Payment method") . '</td>
+                                                    <td>' . $data->payment_method . '</td>
                                                     <td style="width: 25%; background-color: #6c6c70 !important; color: white;">' . trans("messages.Send Notification") . '</td>
                                                     <td><a class="btn btn-danger btn-sm" href="/sendDepositNotification/' . base64_encode($data->id) . '" target="_blank">' . trans("messages.Click here to send Notification") . '</a></td>
                                                 </tr>
@@ -400,7 +400,7 @@ class PaymentDetailController extends Controller
             $data = PaymentDetail::query()
                 ->whereIn('merchant_code', $merchantCode)
                 ->select('payment_details.id', 'payment_details.created_at', 'payment_details.fourth_party_transection', 'payment_details.transaction_id', 'payment_details.amount', 'payment_details.customer_name', 'payment_details.payment_status', 'payment_details.Currency', 'payment_details.mdr_fee_amount', 'payment_details.net_amount',
-                'payment_details.product_id', 'payment_details.merchant_code', 'payment_details.callback_url'
+                'payment_details.product_id', 'payment_details.merchant_code', 'payment_details.callback_url', 'payment_details.payment_method'
                 )->orderBy('payment_details.id', 'desc');
                 
             $tz = Timezone::where('id', $request->timezone)->value('timezone');
@@ -471,8 +471,8 @@ class PaymentDetailController extends Controller
                                                     <td>' . $data->callback_url . '</td>
                                                 </tr>
                                                 <tr>
-                                                    <td></td>
-                                                    <td></td>
+                                                    <td style="width: 25%; background-color: #6c6c70 !important; color: white;">' . trans("messages.Payment method") . '</td>
+                                                    <td>' . $data->payment_method . '</td>
                                                     <td style="width: 25%; background-color: #6c6c70 !important; color: white;">' . trans("messages.Send Notification") . '</td>
                                                     <td><a class="btn btn-danger btn-sm" href="/sendDepositNotification/' . base64_encode($data->id) . '" target="_blank">' . trans("messages.Click here to send Notification") . '</a></td>
                                                 </tr>
