@@ -176,8 +176,8 @@
                                 <td><span class="error_desc"></span></td>
                             </tr>
                             <tr>
-                                <td></td>
-                                <td></td>
+                                <td class="bg-dark text-white">{{ __('messages.Payment method') }}</td>
+                                <td><span class="payment_method"></span></td>
                                 <td class="bg-dark text-white">{{ __('messages.Send Notification') }}</td>
                                 <td><span class="sendbutton"></span></td>
                             </tr>
@@ -211,6 +211,7 @@
                     $('span.fourth_transaction_id').text(data.data.fourth_party_transection);
                     $('span.amount').text(data.data.amount);
                     $('span.customer_name').text(data.data.customer_name);
+                    $('span.payment_method').text(data.data.payment_method);
                     $('span.order_id').text(data.data.order_id);
                     $('span.order_date').text(data.data.order_date);
                     $('span.order_status').text(data.data.payment_status);
