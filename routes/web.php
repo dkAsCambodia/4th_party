@@ -38,6 +38,7 @@ use App\Http\Controllers\UserManagementController;
 use App\Http\Controllers\WhitelistIPController;
 use App\Http\Controllers\PayoutController;
 use App\Http\Controllers\AllCustomerController;
+use App\Http\Controllers\QRCodeController;
 use App\Models\CurrencyExchangeRate;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -402,5 +403,9 @@ Route::get('/pusher', function () {
 });
 
 Route::get('/post',[PostController::class,'showForm']);
-
 Route::post('/user/postsave',[PostController::class,'save'])->name('post.save');
+// For Generate QR code 
+Route::controller(QRCodeController::class)->group(function () {
+    Route::get('/generate/FCQR', 'index');
+    Route::post('/saveqrcode', 'generateQRCode')->name('saveqrcode');
+});
