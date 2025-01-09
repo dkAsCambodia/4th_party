@@ -25,6 +25,7 @@
         "phpoffice/phpspreadsheet": "^1.28",
         "pusher/pusher-php-server": "^7.2",
         "renatomarinho/laravel-page-speed": "^2.1",
+        "simplesoftwareio/simple-qrcode": "^4.2",
         "spatie/laravel-permission": "^5.5",
         "yajra/laravel-datatables-oracle": "~9.0"
     },
