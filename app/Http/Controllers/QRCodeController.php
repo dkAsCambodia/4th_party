@@ -4,7 +4,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Validator;
-// use SimpleSoftwareIO\QrCode\Facades\QrCode;
 class QRCodeController extends Controller
 {
     public function index(Request $request)
@@ -30,8 +29,9 @@ class QRCodeController extends Controller
         }
         $amount=$request->amount;
         $invoice_number=$request->invoice_number;
-        // $url = 'http://localhost/payin/FCdeposit/'.base64_encode($amount).'/'.base64_encode($invoice_number); 
-        $url = 'https://payin.implogix.com/FCdeposit/'.base64_encode($amount).'/'.base64_encode($invoice_number); 
+
+        $url = 'http://localhost/payin/FCdeposit/deposit.php?aa='.base64_encode($amount).'&in='.base64_encode($invoice_number); 
+        // $url = 'https://payin.implogix.com/FCdeposit/deposit.php?aa='.base64_encode($amount).'&in='.base64_encode($invoice_number); 
 
         return view('showQR', compact('url','amount','invoice_number'));
     }
