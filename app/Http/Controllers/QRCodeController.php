@@ -30,8 +30,8 @@ class QRCodeController extends Controller
         $amount=$request->amount;
         $invoice_number=$request->invoice_number;
 
-        $url = 'http://localhost/payin/FCdeposit/deposit.php?aa='.base64_encode($amount).'&in='.base64_encode($invoice_number); 
-        // $url = 'https://payin.implogix.com/FCdeposit/deposit.php?aa='.base64_encode($amount).'&in='.base64_encode($invoice_number); 
+        // $url = 'http://localhost/payin/FCdeposit/deposit.php?aa='.base64_encode($amount).'&in='.base64_encode($invoice_number); 
+        $url = 'https://payin.implogix.com/FCdeposit/deposit.php?aa='.base64_encode($amount).'&in='.base64_encode($invoice_number); 
 
         return view('showQR', compact('url','amount','invoice_number'));
     }
