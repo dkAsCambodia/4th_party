@@ -9,9 +9,18 @@
             <div class="row no-gutters">
                 <div class="col-xl-12">
                     <div class="auth-form">
-                        <h4 class="text-center mb-4">Generate QR Code</h4>
+                        <h4 class="text-center mb-4"><b>Generate QR Code</b></h4>
                         <form action="{{ route('saveqrcode') }}" method="POST">
                             @csrf
+                            <div class="mb-3">
+                                <label class="mb-1"><strong>Enter Customer Name</strong></label>
+                                <input type="text" class="form-control @error('customer_name') is-invalid @enderror" name="customer_name" value="{{ old('customer_name') }}" placeholder="Enter customer name">
+                                @error('customer_name')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
                             <div class="mb-3">
                                 <label class="mb-1"><strong>Enter Amount</strong></label>
                                 <input type="text" class="form-control @error('amount') is-invalid @enderror" name="amount" value="{{ old('amount') }}" placeholder="Enter amount should be in decimal such as 300.00">

@@ -34,6 +34,7 @@
                         <center>
                             
                             <a href="{{$url}}" target="_blank">{{$url}}</a>
+                            <p><b>{{ $invoice_number }}-{{$amount}}.png</b></p>
                             <button class="qr-btn" id="downloadQR" 
                                     data-invoice-number="{{ $invoice_number }}" 
                                     data-amount="{{ $amount }}">
