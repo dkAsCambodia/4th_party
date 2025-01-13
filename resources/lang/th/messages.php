@@ -711,5 +711,6 @@ return [
     'Deposit Transactions' => 'ธุรกรรมการฝากเงิน',
     'Withdraw Transactions' => 'ถอนธุรกรรม',
     'Reference ID' => 'รหัสอ้างอิง',
+    'Invoice Number' => 'หมายเลขใบแจ้งหนี้',
 
 ];

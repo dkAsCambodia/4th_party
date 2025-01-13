@@ -716,7 +716,7 @@ return [
     'Deposit Transactions' => 'Deposit Transactions',
     'Withdraw Transactions' => 'Withdraw Transactions',
     'Reference ID' => 'Reference ID',
-    'ID' => 'ID',
+    'Invoice Number' => 'Invoice Number',
     'ID' => 'ID',
     'ID' => 'ID',
     'ID' => 'ID',
