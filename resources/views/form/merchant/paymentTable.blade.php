@@ -103,7 +103,11 @@
                                             <th>{{ __('messages.Order Id') }}</th>
                                             <th>{{ __('messages.Created Time') }}</th>
                                             <th>{{ __('messages.Transaction ID') }}</th>
+                                            @if(Auth()->user()->merchant_id=='9')       
+                                             <th>{{ __('messages.Invoice Number') }}</th>     {{-- For FC Department --}}
+                                            @else
                                             <th>{{ __('messages.Reference ID') }}</th>
+                                            @endif
                                             <th>{{ __('messages.Customer Name') }} </th>
                                             <th>{{ __('messages.Amount') }} </th>
                                             <th>{{ __('messages.MDR') }} </th>
@@ -129,7 +133,7 @@
             $("#fail").hide();
         });
     </script>
-
+ 
     <script>
         $(function () {
             var table = $('#paymentDataTable').DataTable({

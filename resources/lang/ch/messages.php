@@ -743,4 +743,5 @@ return [
     'Deposit Transactions' => '存款交易',
     'Withdraw Transactions' => '提现交易',
     'Reference ID' => '参考编号',
+    'Invoice Number' => '发票号码',
 ];
