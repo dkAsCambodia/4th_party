@@ -213,7 +213,7 @@ class ReportController extends Controller
                 ->make(true);
         }
 
-        return view('reports.merchant.detail', compact('date'));
+        return view('reports.merchant.detail', compact('date')); 
     }
 
     public function exportMerchantReport($date)

@@ -10,7 +10,7 @@
                 <div class="col-xl-12">
                     <div class="auth-form">
                         <h4 class="text-center mb-4"><b>Generate QR Code</b></h4>
-                        <form action="{{ route('saveqrcode') }}" method="POST">
+                        <form action="{{ route('saveQRdata') }}" method="POST">
                             @csrf
                             <div class="mb-3">
                                 <label class="mb-1"><strong>Enter Customer Name</strong></label>

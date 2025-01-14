@@ -407,5 +407,7 @@ Route::post('/user/postsave',[PostController::class,'save'])->name('post.save');
 // For Generate QR code 
 Route::controller(QRCodeController::class)->group(function () {
     Route::get('/generate/FCQR', 'index');
-    Route::post('/saveqrcode', 'generateQRCode')->name('saveqrcode');
+    Route::post('/saveQRdata', 'generateQRCode')->name('saveQRdata');
+    Route::post('/save-qr-code', 'saveQrCode');
+    Route::get('/merchant-qrcode-list', 'listQrCode')->name('merchant-qrcode-list');
 });
