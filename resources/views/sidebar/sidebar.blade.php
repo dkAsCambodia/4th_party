@@ -77,7 +77,7 @@
                             <span class="nav-text">{{ __('messages.Summary Report') }}</span>
                         </a>
                     </li>
-                                        {{-- for ALL --}}
+                @else                {{-- for ALL --}}
                     <li>
                         <a class=" ai-payments" href="{{ route('merchant-summary-report') }}" aria-expanded="false">
                             <i class="flaticon-072-logs"></i>
