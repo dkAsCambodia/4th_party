@@ -69,18 +69,28 @@
                         </span>
                     </a>
                 </li>
-                <li>
-                    <a class=" ai-payments" href="{{ route('merchant-summary-report') }}" aria-expanded="false">
-                        <i class="flaticon-072-logs"></i>
-                        <span class="nav-text">{{ __('messages.Summary Report') }}</span>
-                    </a>
-                </li>
-                <li>
-                    <a class=" ai-payments" href="{{ route('show/api-documentation') }}" aria-expanded="false">
-                        <i class="flaticon-028-download"></i>
-                        <span class="nav-text">{{ __('messages.Api Documentation') }}</span>
-                    </a>
-                </li>
+                
+                @if(Auth()->user()->merchant_id=='7')      {{-- for FC department --}}
+                    <li>
+                        <a class=" ai-payments" href="{{ route('merchant-qrcode-list') }}" aria-expanded="false">
+                            <i class="flaticon-072-logs"></i>
+                            <span class="nav-text">{{ __('messages.Summary Report') }}</span>
+                        </a>
+                    </li>
+                                        {{-- for ALL --}}
+                    <li>
+                        <a class=" ai-payments" href="{{ route('merchant-summary-report') }}" aria-expanded="false">
+                            <i class="flaticon-072-logs"></i>
+                            <span class="nav-text">{{ __('messages.Summary Report') }}</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class=" ai-payments" href="{{ route('show/api-documentation') }}" aria-expanded="false">
+                            <i class="flaticon-028-download"></i>
+                            <span class="nav-text">{{ __('messages.Api Documentation') }}</span>
+                        </a>
+                    </li>
+                @endif
             @endif
             @if (Auth()->user()->role_name === 'Admin')
                 {{-- @if (auth()->user()->can('Account: View Account'))

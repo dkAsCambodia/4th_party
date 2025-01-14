@@ -1554,8 +1554,10 @@ class BillingController extends Controller
                     if (!empty($request->search)) {
                         $data->where(function ($q) use ($request) {
                             $q->orWhere('settlement_trans_id', 'LIKE', '%' . $request->search . '%')
-                            ->orWhere('sub_total', 'LIKE', '%' . $request->search . '%')
+                            ->orWhere('fourth_party_transection', 'LIKE', '%' . $request->search . '%')
+                            ->orWhere('merchant_track_id', 'LIKE', '%' . $request->search . '%')
                             ->orWhere('total', 'LIKE', '%' . $request->search . '%')
+                            ->orWhere('Currency', 'LIKE', '%' . $request->search . '%')
                             ->orWhere('status', 'LIKE', '%' . $request->search . '%')
                             ->orWhere('created_at', 'LIKE', '%' . $request->search . '%');
                         });
@@ -1747,8 +1749,10 @@ class BillingController extends Controller
                     if (!empty($request->search)) {
                         $data->where(function ($q) use ($request) {
                             $q->orWhere('settlement_trans_id', 'LIKE', '%' . $request->search . '%')
-                            ->orWhere('sub_total', 'LIKE', '%' . $request->search . '%')
+                            ->orWhere('fourth_party_transection', 'LIKE', '%' . $request->search . '%')
+                            ->orWhere('merchant_track_id', 'LIKE', '%' . $request->search . '%')
                             ->orWhere('total', 'LIKE', '%' . $request->search . '%')
+                            ->orWhere('Currency', 'LIKE', '%' . $request->search . '%')
                             ->orWhere('status', 'LIKE', '%' . $request->search . '%')
                             ->orWhere('created_at', 'LIKE', '%' . $request->search . '%');
                         });
@@ -1946,8 +1950,10 @@ class BillingController extends Controller
                     if (!empty($request->search)) {
                         $data->where(function ($q) use ($request) {
                             $q->orWhere('settlement_trans_id', 'LIKE', '%' . $request->search . '%')
-                            ->orWhere('sub_total', 'LIKE', '%' . $request->search . '%')
+                            ->orWhere('fourth_party_transection', 'LIKE', '%' . $request->search . '%')
+                            ->orWhere('merchant_track_id', 'LIKE', '%' . $request->search . '%')
                             ->orWhere('total', 'LIKE', '%' . $request->search . '%')
+                            ->orWhere('Currency', 'LIKE', '%' . $request->search . '%')
                             ->orWhere('status', 'LIKE', '%' . $request->search . '%')
                             ->orWhere('created_at', 'LIKE', '%' . $request->search . '%');
                         });

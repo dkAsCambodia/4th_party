@@ -28,21 +28,70 @@
         <div class="authincation-content">
             <div class="row no-gutters">
                 <div class="col-xl-12">
+                    
                     <div class="qr-container">
                         <!-- Display QR Code as SVG -->
                         {!! QrCode::size(300)->generate($url) !!}
                         <center>
-                            
                             <a href="{{$url}}" target="_blank">{{$url}}</a>
                             <p><b>{{ $invoice_number }}-{{$amount}}.png</b></p>
                             <button class="qr-btn" id="downloadQR" 
                                     data-invoice-number="{{ $invoice_number }}" 
                                     data-amount="{{ $amount }}">
-                                    <i class="fa fa-download"></i> Download QR Code
+                                <i class="fa fa-download"></i> Download QR Code
                             </button>
                         </center><br/>
                     </div>
                     
+                    <script>
+                        // Function to convert SVG to PNG and send it to the server
+                        function saveQrCode() {
+                            var qrCodeSvg = document.querySelector('svg');
+                            var svgData = new XMLSerializer().serializeToString(qrCodeSvg);
+                            var svgBlob = new Blob([svgData], { type: 'image/svg+xml' });
+                            var svgUrl = URL.createObjectURL(svgBlob);
+                            var img = new Image();
+                            img.src = svgUrl;
+                    
+                            // Get dynamic name values
+                            var invoiceNumber = "{{ $invoice_number }}";
+                            var amount = "{{ $amount }}";
+                    
+                            var canvas = document.createElement('canvas');
+                            var ctx = canvas.getContext('2d');
+                            img.onload = function () {
+                                canvas.width = img.width;
+                                canvas.height = img.height;
+                                ctx.drawImage(img, 0, 0);
+                    
+                                // Convert the canvas to PNG
+                                var imgData = canvas.toDataURL('image/png');
+                    
+                                // Send the image to the server via an AJAX POST request
+                                fetch('/save-qr-code', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'X-CSRF-TOKEN': '{{ csrf_token() }}' // Include the CSRF token for Laravel
+                                    },
+                                    body: JSON.stringify({
+                                        image: imgData,
+                                        fileName: `${invoiceNumber}-${amount}.png`
+                                    })
+                                })
+                                .then(response => response.json())
+                                .then(data => {
+                                    console.log('QR Code saved successfully:', data);
+                                })
+                                .catch(error => {
+                                    console.error('Error saving QR Code:', error);
+                                });
+                            };
+                        }
+                    
+                        // Automatically save QR code on page load
+                        window.onload = saveQrCode;
+                    </script>
                     <script>
                         document.getElementById('downloadQR').addEventListener('click', function () {
                             var qrCodeSvg = document.querySelector('svg');
