@@ -70,7 +70,7 @@
                     </a>
                 </li>
                 
-                @if(Auth()->user()->merchant_id=='7')      {{-- for FC department --}}
+                @if(Auth()->user()->merchant_id=='9')      {{-- for FC department --}}
                     <li>
                         <a class=" ai-payments" href="{{ route('merchant-qrcode-list') }}" aria-expanded="false">
                             <i class="flaticon-072-logs"></i>
