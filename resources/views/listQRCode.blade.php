@@ -44,6 +44,13 @@
                                     <button type='button' id="reset" class="btn btn-danger text-white btn-xs">{{ __('messages.Reset') }}</button>
                                 </div>
                             </div>
+                            <div class="d-md-flex justify-content-between text-black">
+                                <h5>{{ trans('messages.Date') }}: </h5>
+                                <span>
+                                    <a href="{{ route('merchant-export-invoice') }}" class="btn btn-success btn-sm border-none rounded-1">{{ trans('messages.Export Report') }}</a>
+                                    
+                                </span>
+                            </div>
                         </div>
 
                         {{-- <div class="card-body" id="success">
