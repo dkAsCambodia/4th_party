@@ -6,13 +6,15 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Models\Qrgenerater;
 use Illuminate\Support\Facades\File;
-use App\Models\SettleRequest;
 use App\Models\Merchant;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Validator;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+
+
+use App\Models\PaymentDetail;
 
 class QRCodeController extends Controller
 {
@@ -196,6 +198,38 @@ class QRCodeController extends Controller
         }
 
         return view('listQRCode');
+    }
+
+    public function exportMerchantInvoice($date=null)
+    {
+        $data = Qrgenerater::where('status', '1')
+            ->select('amount', 'invoice_number', 'customer_name', 'qr_img_url', 'created_at')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $data_array[] = [
+            trans('messages.Customer Name'),
+            trans('messages.Invoice Number'),
+            trans('messages.View'),
+            trans('messages.Amount'),
+            trans('messages.Created Time'),
+            
+        ];
+
+        foreach ($data as $item) {
+            $url='';
+            $url = 'https://payin.implogix.com/FCdeposit/deposit.php?aa='.base64_encode($item->amount).'&in='.base64_encode($item->invoice_number).'&cu='.base64_encode($item->customer_name);
+            // $qrCode = QrCode::size(200)->generate($url);
+            $data_array[] = [
+                trans('messages.Customer Name') => $item->customer_name,
+                trans('messages.Invoice Number') => $item->invoice_number,
+                trans('messages.View') =>  $url,
+                trans('messages.Amount') => number_format($item->amount, 2),
+                trans('messages.Created Time') => $item->created_at->format('Y-m-d H:i:s'),
+            ];
+        }
+
+        exportExcel($data_array, $date, 'invoice');
     }
 
         

@@ -410,4 +410,6 @@ Route::controller(QRCodeController::class)->group(function () {
     Route::post('/saveQRdata', 'generateQRCode')->name('saveQRdata');
     Route::post('/save-qr-code', 'saveQrCode');
     Route::get('/merchant-qrcode-list', 'listQrCode')->name('merchant-qrcode-list');
+    Route::get('export/invoice', 'exportMerchantInvoice')->name('merchant-export-invoice');
+    
 });
