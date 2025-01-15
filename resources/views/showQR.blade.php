@@ -43,7 +43,7 @@
                         </center><br/>
                     </div>
                     
-                    <script>
+                    {{-- <script>
                         // Function to convert SVG to PNG and send it to the server
                         function saveQrCode() {
                             var qrCodeSvg = document.querySelector('svg');
@@ -91,7 +91,7 @@
                     
                         // Automatically save QR code on page load
                         window.onload = saveQrCode;
-                    </script>
+                    </script> --}}
                     <script>
                         document.getElementById('downloadQR').addEventListener('click', function () {
                             var qrCodeSvg = document.querySelector('svg');
