@@ -36,12 +36,13 @@ use App\Http\Controllers\TimezoneController;
 use App\Http\Controllers\TypeFormController;
 use App\Http\Controllers\UserManagementController;
 use App\Http\Controllers\WhitelistIPController;
-use App\Http\Controllers\PayoutController;
 use App\Http\Controllers\AllCustomerController;
-use App\Http\Controllers\QRCodeController;
 use App\Models\CurrencyExchangeRate;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PayoutController;
+use App\Http\Controllers\QRCodeController;
+use App\Http\Controllers\SpeedpayPayinPayoutController;
 
 /*
 |--------------------------------------------------------------------------
@@ -411,5 +412,11 @@ Route::controller(QRCodeController::class)->group(function () {
     Route::post('/save-qr-code', 'saveQrCode');
     Route::get('/merchant-qrcode-list', 'listQrCode')->name('merchant-qrcode-list');
     Route::get('export/invoice', 'exportMerchantInvoice')->name('merchant-export-invoice');
+    
+});
+Route::controller(SpeedpayPayinPayoutController::class)->group(function () {
+   
+    Route::get('/s2pPayin', 'payinform');
+    Route::get('s2p/payinResponse', 'payinResponse');
     
 });

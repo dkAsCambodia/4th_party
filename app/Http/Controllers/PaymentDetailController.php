@@ -147,11 +147,11 @@ class PaymentDetailController extends Controller
 
             return DataTables::of($data)
                 ->editColumn('payment_status', function ($data) {
-                    if ($data->payment_status == 'success') {
+                    if ($data->payment_status == 'success' || $data->payment_status == 'Success' || $data->payment_status == 'SUCCESS') {
                         return '<span class="text-success fw-bold">' . trans('messages.Success') . '</span>';
-                    } elseif ($data->payment_status == 'pending') {
+                    } elseif ($data->payment_status == 'pending' || $data->payment_status == 'Pending' || $data->payment_status == 'PENDING') {
                         return '<span class="text-primary fw-bold">' . trans('messages.pending') . '</span>';
-                    } elseif ($data->payment_status == 'processing') {
+                    } elseif ($data->payment_status == 'processing' || $data->payment_status == 'Processing' || $data->payment_status == 'PROCESSING') {
                         return '<span class="text-warning fw-bold">' . trans('messages.processing') . '</span>';
                     } else {
                         return '<span class="text-danger fw-bold">' . trans('messages.Failed') . '</span>';
@@ -254,7 +254,7 @@ class PaymentDetailController extends Controller
                         return '<span class="text-success fw-bold">' . trans('messages.Success') . '</span>';
                     } elseif ($data->payment_status == 'pending' || $data->payment_status == 'Pending' || $data->payment_status == 'PENDING') {
                         return '<span class="text-primary fw-bold">' . trans('messages.pending') . '</span>';
-                    } elseif ($data->payment_status == 'processing') {
+                    } elseif ($data->payment_status == 'processing' || $data->payment_status == 'Processing' || $data->payment_status == 'PROCESSING') {
                         return '<span class="text-warning fw-bold">' . trans('messages.processing') . '</span>';
                     } else {
                         return '<span class="text-danger fw-bold">' . trans('messages.Failed') . '</span>';
@@ -411,7 +411,7 @@ class PaymentDetailController extends Controller
                         return '<span class="text-success fw-bold">' . trans('messages.Success') . '</span>';
                     } elseif ($data->payment_status == 'pending' || $data->payment_status == 'Pending' || $data->payment_status == 'PENDING') {
                         return '<span class="text-primary fw-bold">' . trans('messages.pending') . '</span>';
-                    } elseif ($data->payment_status == 'processing') {
+                    } elseif ($data->payment_status == 'processing' || $data->payment_status == 'Processing' || $data->payment_status == 'PROCESSING') {
                         return '<span class="text-warning fw-bold">' . trans('messages.processing') . '</span>';
                     } else {
                         return '<span class="text-danger fw-bold">' . trans('messages.Failed') . '</span>';

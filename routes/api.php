@@ -9,6 +9,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PaymentEcommController;
 use App\Http\Controllers\PaymentMapController;
 use App\Http\Controllers\PayoutController;
+use App\Http\Controllers\SpeedpayPayinPayoutController;
 
 /*
 |--------------------------------------------------------------------------
@@ -69,3 +70,9 @@ Route::controller(PayoutController::class)->group(function () {
     // Route::get('api_payout_status', 'api_payout_status');     //for webhook callback
 });
 // ------------------------------ Gtech DK END ---------------------------------//
+Route::controller(SpeedpayPayinPayoutController::class)->group(function () {
+    Route::get('s2p/payin', 'payin')->name('apiroute.s2p.payin');                      // For call API
+    Route::post('s2p/payin/callbackURL', 's2pPayinCallbackURL')->name('apiroute.s2pPayincallbackURL');    // For sending callback on frontend
+    Route::post('/s2pDepositNotifiication', 's2pDepositNotifiication');                // For sending callback on Backend
+    
+});

@@ -78,7 +78,7 @@
 </head>
 
 <body>
-    @if ($postData['payment_status'] == 'success')
+    @if ($postData['payment_status'] == 'success' || $postData['payment_status'] == 'Success' || $postData['payment_status'] == 'SUCCESS')
         <div style="text-align: center; padding: 40px 0;">
             <div class="card card-class">
                 <div style="border-radius:200px; height:200px; width:200px; background: #F8FAF5; margin:0 auto;">
@@ -89,7 +89,7 @@
                 <button class="btn_custom" onclick="goBack()">Go Back</button>
             </div>
         </div>
-    @elseif ($postData['payment_status'] == 'pending')
+    @elseif ($postData['payment_status'] == 'pending' || $postData['payment_status'] == 'Pending' || $postData['payment_status'] == 'PENDING')
         <div style="text-align: center; padding: 40px 0;">
             <div class="card card-class">
                 <div style="border-radius:200px; height:200px; width:200px; background: #F8FAF5; margin:0 auto;">
@@ -100,7 +100,7 @@
                 <button class="btn_custom" onclick="goBack()">Go Back</button>
             </div>
         </div>
-    @elseif ($postData['payment_status'] == 'processing')
+    @elseif ($postData['payment_status'] == 'processing' || $postData['payment_status'] == 'Processing' || $postData['payment_status'] == 'PROCESSING')
     <div style="text-align: center; padding: 40px 0;">
         <div class="card card-class">
             <div style="border-radius:200px; height:200px; width:200px; background: #F8FAF5; margin:0 auto;">
