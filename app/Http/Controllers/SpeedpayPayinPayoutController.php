@@ -117,7 +117,7 @@ class SpeedpayPayinPayoutController extends Controller
             'Amount' => $request->amount,
             'TransactionDateTime' => $TransactionDateTime,
             'Remark' => 'payment',
-            'CustomerFullName' => $request->customer_name,
+            'CustomerFullName' => $request->bank_account_name ?? $request->customer_name,
             'BankCode' => 'THAIQR',
             'UrlFront' => url('s2p/payinResponse'), 
             'CustomerAccountNumber' => $request->customer_account_number,
@@ -153,6 +153,9 @@ class SpeedpayPayinPayoutController extends Controller
                 'amount' => $request->amount,
                 'Currency' => $request->currency,
                 'product_id' => $request->product_id,
+                'bank_account_name' => $request->bank_account_name ?? $request->customer_name,
+                'bank_code' => $request->bank_code,
+                'bank_account_number' => $request->customer_account_number,
                 'payment_channel' => $gatewayPaymentChannel->id,
                 'payment_method' => $paymentMethod->method_name,
                 'request_data' => json_encode($res),
@@ -205,6 +208,7 @@ class SpeedpayPayinPayoutController extends Controller
         echo "Transaction Information as follows" . '<br/>' .
             "ReferenceId : " . $data['referenceId'] . '<br/>' .
             "TransactionId : " . $data['transaction_id'] . '<br/>' .
+            "Type : Deposit" .'<br/>' .
             "Currency : " . $data['Currency'] . '<br/>' .
             "Amount : " . $data['amount'] . '<br/>' .
             "customer_name : " . $data['customer_name'] . '<br/>' .

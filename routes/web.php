@@ -409,10 +409,10 @@ Route::post('/user/postsave',[PostController::class,'save'])->name('post.save');
 Route::controller(QRCodeController::class)->group(function () {
     Route::get('/generate/FCQR', 'index');
     Route::post('/saveQRdata', 'generateQRCode')->name('saveQRdata');
-    Route::post('/save-qr-code', 'saveQrCode');
+    // Route::post('/save-qr-code', 'saveQrCode');
     Route::get('/merchant-qrcode-list', 'listQrCode')->name('merchant-qrcode-list');
     Route::get('export/invoice', 'exportMerchantInvoice')->name('merchant-export-invoice');
-    
+    Route::get('fc/s2pdeposit/{amount}/{invoice_number}/{customer_name}', 'fcs2pDeposit')->name('fc.s2p.Deposit');
 });
 Route::controller(SpeedpayPayinPayoutController::class)->group(function () {
    
