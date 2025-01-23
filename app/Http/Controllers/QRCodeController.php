@@ -20,7 +20,7 @@ class QRCodeController extends Controller
 {
     public function index(Request $request)
     {
-        return view('fcqrgenerate');
+        return view('fc.fcqrgenerate');
     }
 
     public function generateQRCode(Request $request)
@@ -45,21 +45,27 @@ class QRCodeController extends Controller
         $customer_name=$request->customer_name;
         $amount=$request->amount;
         $invoice_number=$request->invoice_number;
-        // $url = 'http://localhost/payin/FCdeposit/deposit.php?aa='.base64_encode($amount).'&in='.base64_encode($invoice_number).'&cu='.base64_encode($customer_name); 
-        $url = 'https://payin.implogix.com/FCdeposit/deposit.php?aa='.base64_encode($amount).'&in='.base64_encode($invoice_number).'&cu='.base64_encode($customer_name);
-        
+        $url = url('/fc/s2pdeposit/'.base64_encode($amount).'/'.base64_encode($invoice_number).'/'.base64_encode($customer_name));
+
         // $path = 'assets/images/qrcode/'.$invoice_number.'-'.$amount.'.png';
+        // $addRecord = [
+        //     'customer_name' => $customer_name,
+        //     'amount' => $amount,
+        //     'invoice_number' => $invoice_number,
+        //     'qr_img_url' => $url,
+        //     'status' => '1',
+        // ];
+        // Qrgenerater::create($addRecord);
+        return view('fc.showQR', compact('url','amount','invoice_number'));
+    }
 
-        $addRecord = [
-            'customer_name' => $customer_name,
-            'amount' => $amount,
-            'invoice_number' => $invoice_number,
-            'qr_img_url' => $url,
-            'status' => '1',
-        ];
-        Qrgenerater::create($addRecord);
-
-        return view('showQR', compact('url','amount','invoice_number'));
+    
+    public function fcs2pDeposit($amount, $invoice_number, $customer_name)
+    {
+        $amount=base64_decode($amount);
+        $invoice_number=base64_decode($invoice_number);
+        $customer_name=base64_decode($customer_name);
+        return view('fc.deposit-form', compact('amount','invoice_number','customer_name'));
     }
 
     // public function saveQrCode(Request $request)
@@ -197,7 +203,7 @@ class QRCodeController extends Controller
                 ->make(true);
         }
 
-        return view('listQRCode');
+        return view('fc.listQRCode');
     }
 
     public function exportMerchantInvoice($date=null)
