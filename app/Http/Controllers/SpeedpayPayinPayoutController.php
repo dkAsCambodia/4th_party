@@ -134,6 +134,14 @@ class SpeedpayPayinPayoutController extends Controller
         // Redirect to the payment link
         if (isset($jsonData['RedirectionUrl'])) {
             //Insert data into DB
+             // for speedpay deposit charge START
+            if(!empty($request->amount)){
+                $percentage = 1.6;
+                $totalWidth = $request->amount;
+                $mdr_fee_amount = ($percentage / 100) * $totalWidth;
+                $net_amount= $totalWidth-$mdr_fee_amount;
+            }
+            // for speedpay deposit charge END
             $addRecord = [
                 'agent_id' => $merchantData->agent_id,
                 'merchant_id' => $merchantData->id,
@@ -154,7 +162,8 @@ class SpeedpayPayinPayoutController extends Controller
                 'payin_arr' => json_encode($jsonData),
                 'receipt_url' => $jsonData['RedirectionUrl'],
                 'ip_address' => $client_ip,
-                
+                'net_amount' => $net_amount ?? '',
+                'mdr_fee_amount' => $mdr_fee_amount ?? '',
             ];
             //   echo "<pre>";  print_r($addRecord); die;
             PaymentDetail::create($addRecord);
@@ -204,9 +213,60 @@ class SpeedpayPayinPayoutController extends Controller
          die;
     }
 
+    public function s2pDepositNotifiication(Request $request)
+    {
+        // Decode the JSON payload automatically
+        $results = $request->json()->all();
+        if(!empty($results)) {
+            // Extract data
+            $RefID = $results['RefID'] ?? null;
+            // date_default_timezone_set('Asia/Phnom_Penh');
+            // $ptTimestamp = now()->format('Y-m-d h:i:sA');
+            $status = $results['Status'] ?? null;
+            // if ($status == 'success') {
+            //     $orderStatus = 'success';
+            // } elseif (in_array($status, ['awaiting', 'pending'])) {
+            //     $orderStatus = 'processing';
+            // } else {
+            //     $orderStatus = 'failed';
+            // }
+            // Simulate delay
+            // sleep(20);
+            $updateData = [
+                'payment_status' => $status,
+                'response_data' => $results,
+            ];
+            PaymentDetail::where('transaction_id', $RefID)->update($updateData);
+            echo "Transaction updated successfully!";
 
+            //Call webhook API START
+            $paymentDetail = PaymentDetail::where('transaction_id', $RefID)->first();
+            $callbackUrl = $paymentDetail->callback_url;
+            $postData = [
+                'merchant_code' => $paymentDetail->merchant_code,
+                'referenceId' => $paymentDetail->transaction_id,
+                'transaction_id' => $paymentDetail->fourth_party_transection,
+                'amount' => $paymentDetail->amount,
+                'Currency' => $paymentDetail->Currency,
+                'customer_name' => $paymentDetail->customer_name,
+                'payment_status' => $paymentDetail->payment_status,
+                'created_at' => $paymentDetail->created_at,
+            ];
+            // echo "<pre>";  print_r($postData); die;
+            try {
+                if ($paymentDetail->callback_url != null) {
+                    $response = Http::post($paymentDetail->callback_url, $postData);
+                    echo $response->body(); die;
+                }
+            } catch (\Exception $e) {
+                return response()->json(['error' => 'Failed to call webhook','message' => $e->getMessage()], 500);
+            }
+             //Call webhook API START
 
-
+        }else{
+            return response()->json(['error' => 'Data Not Found or Invalid Request!'], 400);
+        }
+    }
 
     public function getGatewayParameters($gatewayPaymentChannel): array
     {
