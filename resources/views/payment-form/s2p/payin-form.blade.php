@@ -56,7 +56,7 @@
                             <div class="row mb-4">
                                 <label for="Reference" class="col-md-4 form-label">Currency</label>
                                 <div class="col-md-8">
-								<input class="form-control" name="currency" value="THB" required readonly type="text">
+								<input class="form-control" name="Currency" value="THB" required readonly type="text">
                                 </div>
                             </div>
                             <div class="row mb-4">

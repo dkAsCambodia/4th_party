@@ -103,7 +103,7 @@ class SpeedpayPayinPayoutController extends Controller
             }
         }
         $res = array_merge($arrayData, $getGatewayParameters);
-        //   echo "<pre>";  print_r($res);
+        //   echo "<pre>";  print_r($res);die;
         $frtransaction = $this->generateUniqueCode();
         $client_ip = (isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : $_SERVER['REMOTE_ADDR']);
         date_default_timezone_set('Asia/Phnom_Penh');
@@ -113,7 +113,7 @@ class SpeedpayPayinPayoutController extends Controller
             'ClientIp' => $client_ip,
             'RefID' => $frtransaction,
             'CustomerID' => 'ZCUST1001',
-            'CurrencyCode' => $request->currency,
+            'CurrencyCode' => $request->Currency,
             'Amount' => $request->amount,
             'TransactionDateTime' => $TransactionDateTime,
             'Remark' => 'payment',
@@ -130,7 +130,7 @@ class SpeedpayPayinPayoutController extends Controller
             'API-AGENT-USER-NAME' => $res['api_agent_username'],
         ])->asForm()->post($res['api_url'], $postData);
         $jsonData = $response->json();
-        // echo "<pre>";  print_r($jsonData); die;
+        // echo "<pre>";  print_r($postData); die;
         // Redirect to the payment link
         if (isset($jsonData['RedirectionUrl'])) {
             //Insert data into DB
@@ -151,7 +151,7 @@ class SpeedpayPayinPayoutController extends Controller
                 'TransId' => $jsonData['DepositID'],
                 'callback_url' => $request->callback_url,
                 'amount' => $request->amount,
-                'Currency' => $request->currency,
+                'Currency' => $request->Currency,
                 'product_id' => $request->product_id,
                 'bank_account_name' => $request->bank_account_name ?? $request->customer_name,
                 'bank_code' => $request->bank_code,
@@ -223,28 +223,26 @@ class SpeedpayPayinPayoutController extends Controller
         $results = $request->json()->all();
         if(!empty($results)) {
             // Extract data
-            $RefID = $results['RefID'] ?? null;
-            // date_default_timezone_set('Asia/Phnom_Penh');
-            // $ptTimestamp = now()->format('Y-m-d h:i:sA');
-            $status = $results['Status'] ?? null;
-            // if ($status == 'success') {
-            //     $orderStatus = 'success';
-            // } elseif (in_array($status, ['awaiting', 'pending'])) {
-            //     $orderStatus = 'processing';
-            // } else {
-            //     $orderStatus = 'failed';
-            // }
+            $RefID = $results['RefID'];
+            $status = $results['Status'];
+            if ( in_array($status, ['Successful', 'Approved']) ) {
+                $orderStatus = 'success';
+            } elseif (in_array($status, ['Pending', 'Processing', 'Created'])) {
+                $orderStatus = 'processing';
+            } else {
+                $orderStatus = 'failed';
+            }
             // Simulate delay
             // sleep(20);
             $updateData = [
-                'payment_status' => $status,
-                'response_data' => $results,
+                'payment_status' => $orderStatus,
+                'response_data' => json_encode($results),
             ];
-            PaymentDetail::where('transaction_id', $RefID)->update($updateData);
+            // echo "<pre>";  print_r($updateData); die;
+            PaymentDetail::where('fourth_party_transection', $RefID)->update($updateData);
             echo "Transaction updated successfully!";
-
             //Call webhook API START
-            $paymentDetail = PaymentDetail::where('transaction_id', $RefID)->first();
+            $paymentDetail = PaymentDetail::where('fourth_party_transection', $RefID)->first();
             $callbackUrl = $paymentDetail->callback_url;
             $postData = [
                 'merchant_code' => $paymentDetail->merchant_code,
@@ -256,7 +254,6 @@ class SpeedpayPayinPayoutController extends Controller
                 'payment_status' => $paymentDetail->payment_status,
                 'created_at' => $paymentDetail->created_at,
             ];
-            // echo "<pre>";  print_r($postData); die;
             try {
                 if ($paymentDetail->callback_url != null) {
                     $response = Http::post($paymentDetail->callback_url, $postData);
