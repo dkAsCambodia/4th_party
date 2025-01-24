@@ -415,8 +415,9 @@ Route::controller(QRCodeController::class)->group(function () {
     Route::get('fc/s2pdeposit/{amount}/{invoice_number}/{customer_name}', 'fcs2pDeposit')->name('fc.s2p.Deposit');
 });
 Route::controller(SpeedpayPayinPayoutController::class)->group(function () {
-   
     Route::get('/s2pPayin', 'payinform');
     Route::get('s2p/payinResponse', 'payinResponse');
-    
+});
+Route::get('/s2p/payintest', function () {
+    return view('payment-form.s2p.payintest');
 });

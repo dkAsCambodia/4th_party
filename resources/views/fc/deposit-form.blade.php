@@ -39,11 +39,11 @@
                     <div class="auth-form">
                         <h3 class="text-center mb-4"><b>Grand Diamond Poipet Resort</b></h3>
                         <form class="form-horizontal" action="{{ route('apiroute.s2p.payin') }}" method="GET" id="paymentForm">
-                            <input type="hidden" name="merchant_code" value="testmerchant005">
-                            <input type="hidden" name="product_id" value="19">
+                            <input type="hidden" name="merchant_code" value="FCmerchant001">
+                            <input type="hidden" name="product_id" value="24">
                             <input type="hidden" name="callback_url" value="{{ route('apiroute.s2pPayincallbackURL') }}">
                             <input type="hidden" name="amount" value="{{ $amount ?? '' }}">
-                            <input type="hidden" name="currency" value="THB">
+                            <input type="hidden" name="Currency" value="THB">
 							<div class="row mb-4">
                                 <label for="Reference" class="col-md-4 form-label">Customer Number</label>
                                 <div class="col-md-8">
@@ -59,7 +59,10 @@
                             <div class="row mb-4">
                                 <label for="customer_name" class="col-md-4 form-label">Bank Account Name</label>
                                 <div class="col-md-8">
-								<input  class="form-control" required name="bank_account_name" placeholder="Enter Bank account name" type="text">
+								<input list="browsers" id="browser" class="form-control" required name="bank_account_name" placeholder="Enter Bank account name" type="text">
+                                <datalist id="browsers">
+                                    <option value="{{ $customer_name ?? '' }}">
+                                </datalist>
                                 </div>
                             </div>
                             <div class="row mb-4">
