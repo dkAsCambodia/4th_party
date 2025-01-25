@@ -34,7 +34,7 @@ class GatewayAccountController extends Controller
                     'gateway_accounts.created_at',
                     'gateway_accounts.status',
                     'payment_channels.channel_name as gateway_name'
-                );
+                )->orderBy('id', 'DESC');
             // dd($data);
             return DataTables::of($data)
                 ->addIndexColumn()

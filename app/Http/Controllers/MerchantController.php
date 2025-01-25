@@ -385,7 +385,7 @@ class MerchantController extends Controller
                     'channel_mode',
                     'gateway_payment_channel_id',
                     'payment_method_id'
-                );
+                )->orderBy('id', 'DESC');
             // dd($data->get());
             return DataTables::of($data)
                 ->addColumn('payment_method_name', function ($data) {
