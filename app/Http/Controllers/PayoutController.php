@@ -24,8 +24,8 @@ class PayoutController extends Controller
     public function payoutRequest(Request $request)
     {
 
-        $totalDepositSumAfterCharge = PaymentDetail::where('merchant_code', $request->merchant_code)->where('payment_status', 'success')->sum('net_amount');
-        $totalPayoutSumAfterCharge = SettleRequest::where('merchant_code', $request->merchant_code)->where('status', 'success')->sum('net_amount');
+        $totalDepositSumAfterCharge = PaymentDetail::where('merchant_code', $request->merchant_code)->where('Currency', $request->currency)->where('payment_status', 'success')->sum('net_amount');
+        $totalPayoutSumAfterCharge = SettleRequest::where('merchant_code', $request->merchant_code)->where('Currency', $request->currency)->where('status', 'success')->sum('net_amount');
         $AvailableforPayout=$totalDepositSumAfterCharge-$totalPayoutSumAfterCharge;
 
         // for vizpay charge START
