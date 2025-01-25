@@ -42,7 +42,7 @@ class GatewayPaymentChannelController extends Controller
                     'gateway_payment_channels.risk_control',
                     'gateway_payment_channels.created_at',
                     'gateway_payment_channels.gateway_account_id'
-                );
+                )->orderBy('id', 'DESC');
             //dd($data->get());
             return DataTables::of($data)
                 ->addIndexColumn()
