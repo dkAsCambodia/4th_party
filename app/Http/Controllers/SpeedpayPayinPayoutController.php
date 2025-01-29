@@ -205,16 +205,18 @@ class SpeedpayPayinPayoutController extends Controller
     public function s2pPayinCallbackURL(Request $request)
     {
         $data = $request->all();
-        echo "Transaction Information as follows" . '<br/>' .
-            "ReferenceId : " . $data['referenceId'] . '<br/>' .
-            "TransactionId : " . $data['transaction_id'] . '<br/>' .
-            "Type : Deposit" .'<br/>' .
+        echo "Transaction Information as follows" . '<br/>';
+        if (isset($data['referenceId'])) {
+            echo "ReferenceId : " . $data['referenceId'] . '<br/>';
+        }
+        echo "TransactionId : " . $data['transaction_id'] . '<br/>' .
+            "Type : Deposit" . '<br/>' .
             "Currency : " . $data['Currency'] . '<br/>' .
             "Amount : " . $data['amount'] . '<br/>' .
             "customer_name : " . $data['customer_name'] . '<br/>' .
             "Datetime : " . $data['created_at'] . '<br/>' .
             "Status : " . $data['payment_status'];
-         die;
+        die();
     }
 
     public function s2pDepositNotifiication(Request $request)

@@ -104,10 +104,11 @@ class MyMemberController extends Controller
         $callbackUrl = $paymentDetail->callback_url;
         $postData = [
             'merchant_code' => $paymentDetail->merchant_code,
-            'transaction_id' => $paymentDetail->transaction_id,
+            'referenceId' => $paymentDetail->transaction_id,
+            'transaction_id' => $paymentDetail->fourth_party_transection,
             'amount' => $paymentDetail->amount,
             'Currency' => $paymentDetail->Currency,
-            'customer_name' => $paymentDetail->customer_name,
+            'customer_name' => $paymentDetail->customer_name, 
             'payment_status' => $paymentDetail->payment_status,
             'created_at' => $paymentDetail->created_at,
         ];
@@ -115,7 +116,7 @@ class MyMemberController extends Controller
             // Broadcast the event Notification code START
         $data = [
             'type' => 'Deposit',
-            'transaction_id' => $paymentDetail->transaction_id,
+            'transaction_id' => $paymentDetail->fourth_party_transection,
             'amount' => $paymentDetail->amount,
             'Currency' => $paymentDetail->Currency,
             'status' => $paymentDetail->payment_status,
