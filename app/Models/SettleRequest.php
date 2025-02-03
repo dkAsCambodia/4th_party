@@ -13,10 +13,10 @@ class SettleRequest extends Model implements Auditable
     use \OwenIt\Auditing\Auditable;
     protected $guarded = ['id'];
 
-    public function SettleRequestTrans()
-    {
-        return $this->hasMany(SettleRequestTrans::class)->with('paymentDetails');
-    }
+    // public function SettleRequestTrans()
+    // {
+    //     return $this->hasMany(SettleRequestTrans::class)->with('paymentDetails');
+    // }
 
     public function merchant()
     {
