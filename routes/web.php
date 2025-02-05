@@ -417,7 +417,12 @@ Route::controller(QRCodeController::class)->group(function () {
 Route::controller(SpeedpayPayinPayoutController::class)->group(function () {
     Route::get('/s2pPayin', 'payinform');
     Route::get('s2p/payinResponse', 'payinResponse');
+
+    Route::get('/s2pPayout', 's2pPayoutform'); 
 });
 Route::get('/s2p/payintest', function () {
     return view('payment-form.s2p.payintest');
+});
+Route::get('/s2p/payouttest', function () {
+    return view('payment-form.s2p.payouttest');
 });
