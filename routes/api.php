@@ -74,5 +74,9 @@ Route::controller(SpeedpayPayinPayoutController::class)->group(function () {
     Route::get('s2p/payin', 'payin')->name('apiroute.s2p.payin');                      // For call API
     Route::post('s2p/payin/callbackURL', 's2pPayinCallbackURL')->name('apiroute.s2pPayincallbackURL');    // For sending callback on frontend
     Route::post('/s2pDepositNotifiication', 's2pDepositNotifiication');                // For sending callback on Backend
+
+    Route::get('s2p/payout', 'payout')->name('apiroute.s2p.payout');                      // For call API
+    Route::post('s2p/payout/callbackURL', 's2pPayoutcallbackURL')->name('apiroute.s2pPayoutcallbackURL');    // For sending callback on frontend
+    Route::post('/s2pWithdrawNotifiication', 's2pWithdrawNotifiication');     
     
 });

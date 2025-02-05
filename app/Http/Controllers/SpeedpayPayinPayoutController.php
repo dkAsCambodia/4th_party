@@ -12,6 +12,7 @@ use App\Models\ParameterValue;
 use App\Models\PaymentDetail;
 use App\Models\PaymentMap;
 use App\Models\PaymentMethod;
+use App\Models\SettleRequest;
 use Illuminate\Support\Facades\Http;
 use Carbon\Carbon;
 use Session;
@@ -205,18 +206,16 @@ class SpeedpayPayinPayoutController extends Controller
     public function s2pPayinCallbackURL(Request $request)
     {
         $data = $request->all();
-        echo "Transaction Information as follows" . '<br/>';
-        if (isset($data['referenceId'])) {
-            echo "ReferenceId : " . $data['referenceId'] . '<br/>';
-        }
-        echo "TransactionId : " . $data['transaction_id'] . '<br/>' .
-            "Type : Deposit" . '<br/>' .
+        echo "Transaction Information as follows" . '<br/>' .
+            "ReferenceId : " . $data['referenceId'] . '<br/>' .
+            "TransactionId : " . $data['transaction_id'] . '<br/>' .
+            "Type : Deposit" .'<br/>' .
             "Currency : " . $data['Currency'] . '<br/>' .
             "Amount : " . $data['amount'] . '<br/>' .
             "customer_name : " . $data['customer_name'] . '<br/>' .
             "Datetime : " . $data['created_at'] . '<br/>' .
             "Status : " . $data['payment_status'];
-        die();
+         die;
     }
 
     public function s2pDepositNotifiication(Request $request)
@@ -269,6 +268,196 @@ class SpeedpayPayinPayoutController extends Controller
         }else{
             return response()->json(['error' => 'Data Not Found or Invalid Request!'], 400);
         }
+    }
+
+    public function s2pPayoutform(Request $request)
+    {
+        return view('payment-form.s2p.payout-form');
+    }
+
+    public function payout(Request $request)
+    {
+        // echo "<pre>";  print_r($request->all()); die;
+        $arrayData = [];
+        $getGatewayParameters = [];
+        $paymentMap = PaymentMap::where('id', $request->product_id)->first();
+        if (! $paymentMap) {
+            return 'product not exist';
+        }
+        if ($paymentMap->status == 'Disable') {
+            return 'product is Disable';
+        }
+        $merchantData=Merchant::where('merchant_code', $request->merchant_code)->first();
+        if (empty($merchantData)) {
+            return 'Invalid Merchants!';
+        }
+
+        if ($paymentMap->channel_mode == 'single') {
+            $gatewayPaymentChannel = GatewayPaymentChannel::where('id', $paymentMap->gateway_payment_channel_id)->first();
+            if (! $gatewayPaymentChannel) {
+                return 'gatewayPaymentChannel not exist';
+            }
+            if ($gatewayPaymentChannel->status == 'Disable') {
+                return 'gatewayPaymentChannel is Disable';
+            }
+            $paymentMethod = PaymentMethod::where('id', $gatewayPaymentChannel->gateway_account_method_id)->first();
+            $arrayData['method_name'] = $paymentMethod->method_name;
+            if (! $paymentMethod) {
+                return 'paymentMethod not exist';
+            }
+            if ($paymentMethod->status == 'Disable') {
+                return 'paymentMethod is Disable';
+            }
+           
+            if ($gatewayPaymentChannel->risk_control == 1) {
+                // daily transection limit checking
+                $checkLimitationRiskMode = $this->checkLimitationRiskMode($gatewayPaymentChannel, $paymentMap);
+                if ($checkLimitationRiskMode) {
+                    $getGatewayParameters = $this->getGatewayParameters($gatewayPaymentChannel);
+                } else {
+                    return $checkLimitationRiskMode;
+                }
+                // daily transection limit checking
+            } else {
+                $getGatewayParameters = $this->getGatewayParameters($gatewayPaymentChannel);
+            }
+        } else {
+            $gatewayPaymentChannel = GatewayPaymentChannel::whereIn('id', explode(',', $paymentMap->gateway_payment_channel_id))->get();
+            if (! $gatewayPaymentChannel) {
+                return 'gatewayPaymentChannel not exist';
+            }
+
+            foreach ($gatewayPaymentChannel as $item) {
+                if ($item->status == 'Enable') {
+                    $paymentMethod = PaymentMethod::where('id', $item->gateway_account_method_id)->first();
+                    $arrayData['method_name'] = $paymentMethod->method_name;
+                    if (! $paymentMethod) {
+                        return 'paymentMethod not exist';
+                    }
+                    if ($paymentMethod->status == 'Disable') {
+                        return 'paymentMethod is Disable';
+                    }
+                    // gateway_account_method_id
+                    if ($item->risk_control == 1) {
+                        // daily transection limit checking
+                        $checkLimitationRiskMode = $this->checkLimitationRiskMode($item, $paymentMap);
+                        if ($checkLimitationRiskMode) {
+                            $getGatewayParameters = $this->getGatewayParameters($item);
+                            $gatewayPaymentChannel = $item;
+                        } else {
+                            return $checkLimitationRiskMode;
+                        }
+                        // daily transection limit checking
+                    } else {
+                        $getGatewayParameters = $this->getGatewayParameters($item);
+                    }
+                }
+            }
+        }
+        $res = array_merge($arrayData, $getGatewayParameters);
+        $frtransaction = $this->generateUniqueCode();
+        //  echo "<pre>";  print_r($res); die;
+        // Call Curl API code START
+        $client_ip = (isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : $_SERVER['REMOTE_ADDR']);
+        date_default_timezone_set('Asia/Phnom_Penh');
+        $TransactionDateTime=date("Y‐m‐d h:i:sA");
+        // Call Curl API code START
+        $postData = [
+            'ClientIp' => $client_ip,
+            'RefID' => $frtransaction,
+            'CustomerID' => 'ZCUST1001',
+            'ToCurrencyCode' => $request->Currency ?? $request->currency,
+            'ToAmount' => $request->amount,
+            'TransactionDateTime' => $TransactionDateTime,
+            'Remark' => 'payment',
+            'ToBankAccountName' => $request->bank_account_name ?? $request->customer_name,
+            'ToBankAccountNumber' => $request->customer_account_number,
+            'ToBankCode' => $request->bank_code,
+        ];
+        $response = Http::withHeaders([
+            'Content-Type' => 'application/x-www-form-urlencoded',
+            'API-AGENT-CODE' => $res['api_agent_code'],
+            'API-KEY' => $res['apiKey'],
+            'API-AGENT-USER-NAME' => $res['api_agent_username'],
+        ])->asForm()->post($res['api_url'], $postData);
+    
+        $result = $response->json();
+        // echo "<pre>";  print_r($result); die;
+        if($result['success'] == '1'){
+            $RefId = $result['RefId'];
+
+            $response2 = Http::withHeaders([
+                'Content-Type' => 'application/x-www-form-urlencoded',
+                'API-AGENT-CODE' => $res['api_agent_code'],
+                'API-KEY' => $res['apiKey'],
+                'API-AGENT-USER-NAME' => $res['api_agent_username'],
+            ])->asForm()->post('https://agent.99speedpay.com/api/services/CheckPayout', [
+                'RefID' => $RefId
+            ]);
+            $result2 = $response2->json();
+
+            if(!empty($result2)){
+                $Transactionid = $result2['info']['PayoutID']; 
+                $message = $result2['info']['Status']; 
+                $status = match ($result2['info']['Status'] ?? '') {
+                    'Approved' => 'success',
+                    'Successful' => 'success',
+                    'Created' => 'processing',
+                    'Pending' => 'processing',
+                    'Processing' => 'processing',
+                    default => 'failed',
+                };
+            }
+
+
+        } else {
+            $message = $result['message']; 
+            $status = 'failed';
+        }
+
+                ////Insert Record into DB
+            $client_ip = (isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : $_SERVER['REMOTE_ADDR']);
+                $addRecord = [
+                    'settlement_trans_id' => $Transactionid ?? '',
+                    'fourth_party_transection' => $frtransaction,
+                    'merchant_track_id' => $request->referenceId,
+                    'gateway_name' => 'speedPay',
+                    'agent_id' => $merchantData->agent_id,
+                    'merchant_id' => $merchantData->id,
+                    'merchant_code' => $request->merchant_code,
+                    'callback_url' => $request->callback_url,
+                    'total' => $request->amount,
+                    'customer_bank_name' => $request->customer_name,
+                    'bank_code' => $request->bank_code,
+                    'customer_account_number' => $request->customer_account_number,
+                    'Currency' => $request->Currency,
+                    'product_id' => $request->product_id,
+                    'payment_channel' => $gatewayPaymentChannel->id,
+                    'payment_method' => $paymentMethod->method_name,
+                    'customer_name' => $request->customer_name,
+                    'api_response' => json_encode($result2 ?? $result),
+                    'message' => $message,
+                    'ip_address' => $client_ip, 
+                    'status' => $status,
+                ];
+                SettleRequest::create($addRecord);
+
+                $paymentDetail = SettleRequest::where('fourth_party_transection', $frtransaction)->first();
+                $callbackUrl = $paymentDetail->callback_url;
+                $postData = [
+                    'merchant_code' => $paymentDetail->merchant_code,
+                    'referenceId' => $paymentDetail->merchant_track_id,
+                    'transaction_id' => $paymentDetail->fourth_party_transection,
+                    'amount' => $paymentDetail->total,
+                    'Currency' => $paymentDetail->Currency,
+                    'customer_name' => $paymentDetail->customer_name,
+                    'status' => $paymentDetail->status,
+                    'created_at' => $paymentDetail->created_at,
+                    'orderremarks' => $paymentDetail->message,
+                ];
+                return view('payout.payout_status', compact('request', 'postData', 'callbackUrl'));
+            
+        
     }
 
     public function getGatewayParameters($gatewayPaymentChannel): array
