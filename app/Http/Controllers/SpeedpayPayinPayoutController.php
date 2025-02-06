@@ -460,6 +460,22 @@ class SpeedpayPayinPayoutController extends Controller
         
     }
 
+    public function s2pPayoutcallbackURL(Request $request)
+    {
+        $data = $request->all();
+        echo "Transaction Information as follows" . '<br/>' .
+            "Merchant_code : " . $data['merchant_code'] . '<br/>' .
+            "ReferenceId : " . $data['referenceId'] . '<br/>' .
+            "TransactionId : " . $data['transaction_id'] . '<br/>' .
+            "Type : Withdrawal" .'<br/>' .
+            "Currency : " . $data['Currency'] . '<br/>' .
+            "Amount : " . $data['amount'] . '<br/>' .
+            "customer_name : " . $data['customer_name'] . '<br/>' .
+            "Datetime : " . $data['created_at'] . '<br/>' .
+            "Status : " . $data['status'];
+         die;
+    }
+
     public function getGatewayParameters($gatewayPaymentChannel): array
     {
         $arrayData = [];
