@@ -476,6 +476,58 @@ class SpeedpayPayinPayoutController extends Controller
          die;
     }
 
+    public function s2pWithdrawNotifiication(Request $request)
+    {
+        // Decode the JSON payload automatically
+        $results = $request->json()->all();
+        if(!empty($results)) {
+            // Extract data
+            $RefID = $results['RefID'];
+            $status = $results['Status'];
+            if ( in_array($status, ['Successful', 'Approved']) ) {
+                $orderStatus = 'success';
+            } elseif (in_array($status, ['Pending', 'Processing', 'Created'])) {
+                $orderStatus = 'processing';
+            } else {
+                $orderStatus = 'failed';
+            }
+            // Simulate delay
+            // sleep(20);
+            $updateData = [
+                'status' => $orderStatus,
+                'api_response' => json_encode($results),
+            ];
+            // echo "<pre>";  print_r($updateData); die;
+            SettleRequest::where('fourth_party_transection', $RefID)->update($updateData);
+            echo "Transaction updated successfully!";
+            //Call webhook API START
+            $paymentDetail = SettleRequest::where('fourth_party_transection', $RefID)->first();
+            $callbackUrl = $paymentDetail->callback_url;
+            $postData = [
+                'merchant_code' => $paymentDetail->merchant_code,
+                'referenceId' => $paymentDetail->transaction_id,
+                'transaction_id' => $paymentDetail->fourth_party_transection,
+                'amount' => $paymentDetail->total,
+                'Currency' => $paymentDetail->Currency,
+                'customer_name' => $paymentDetail->customer_name,
+                'status' => $paymentDetail->payment_status,
+                'created_at' => $paymentDetail->created_at,
+            ];
+            try {
+                if ($paymentDetail->callback_url != null) {
+                    $response = Http::post($paymentDetail->callback_url, $postData);
+                    echo $response->body(); die;
+                }
+            } catch (\Exception $e) {
+                return response()->json(['error' => 'Failed to call webhook','message' => $e->getMessage()], 500);
+            }
+             //Call webhook API START
+
+        }else{
+            return response()->json(['error' => 'Data Not Found or Invalid Request!'], 400);
+        }
+    }
+
     public function getGatewayParameters($gatewayPaymentChannel): array
     {
         $arrayData = [];
