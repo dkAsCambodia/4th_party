@@ -278,6 +278,20 @@ class SpeedpayPayinPayoutController extends Controller
     public function payout(Request $request)
     {
         // echo "<pre>";  print_r($request->all()); die;
+        $CURRENCY = $request->Currency ?? $request->currency;
+        $totalDepositSumAfterCharge = PaymentDetail::where('merchant_code', $request->merchant_code)->where('Currency', $CURRENCY)->where('payment_status', 'success')->sum('net_amount');
+        $totalPayoutSumAfterCharge = SettleRequest::where('merchant_code', $request->merchant_code)->where('Currency', $CURRENCY)->where('status', 'success')->sum('net_amount');
+        $AvailableforPayout=$totalDepositSumAfterCharge-$totalPayoutSumAfterCharge;
+        //  For speedpay charge START
+        $percentage = 0.7;
+        $totalWidth = $AvailableforPayout;
+        $new_width = ($percentage / 100) * $totalWidth;
+        @$finalAmount = $totalWidth-$new_width;
+        //  For speedpay charge END
+        if($finalAmount < $request->amount){
+            return "<h2 style='color:red'>Balance is not enough in Gateway Wallet!</h2>"; 
+        }
+        // echo "<pre>"; print_r($totalPayoutSum); die;
         $arrayData = [];
         $getGatewayParameters = [];
         $paymentMap = PaymentMap::where('id', $request->product_id)->first();
@@ -415,8 +429,16 @@ class SpeedpayPayinPayoutController extends Controller
             $status = 'failed';
         }
 
-                ////Insert Record into DB
+        ////Insert Record into DB
             $client_ip = (isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : $_SERVER['REMOTE_ADDR']);
+             // for speedpay payout charge START
+            if(!empty($request->amount)){
+                $percentage = 0.7;
+                $totalWidth = $request->amount;
+                $mdr_fee_amount = ($percentage / 100) * $totalWidth;
+                $net_amount= $totalWidth+$mdr_fee_amount;
+            }
+            // for speedpay charge END
                 $addRecord = [
                     'settlement_trans_id' => $Transactionid ?? '',
                     'fourth_party_transection' => $frtransaction,
@@ -427,6 +449,8 @@ class SpeedpayPayinPayoutController extends Controller
                     'merchant_code' => $request->merchant_code,
                     'callback_url' => $request->callback_url,
                     'total' => $request->amount,
+                    'net_amount' => $net_amount,
+                    'mdr_fee_amount' => $mdr_fee_amount,
                     'customer_bank_name' => $request->customer_name,
                     'bank_code' => $request->bank_code,
                     'customer_account_number' => $request->customer_account_number,
