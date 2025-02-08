@@ -48,14 +48,14 @@ class QRCodeController extends Controller
         $url = url('/fc/s2pdeposit/'.base64_encode($amount).'/'.base64_encode($invoice_number).'/'.base64_encode($customer_name));
 
         // $path = 'assets/images/qrcode/'.$invoice_number.'-'.$amount.'.png';
-        // $addRecord = [
-        //     'customer_name' => $customer_name,
-        //     'amount' => $amount,
-        //     'invoice_number' => $invoice_number,
-        //     'qr_img_url' => $url,
-        //     'status' => '1',
-        // ];
-        // Qrgenerater::create($addRecord);
+        $addRecord = [
+            'customer_name' => $customer_name,
+            'amount' => $amount,
+            'invoice_number' => $invoice_number,
+            // 'qr_img_url' => $url,
+            'status' => '1',
+        ];
+        Qrgenerater::create($addRecord);
         return view('fc.showQR', compact('url','amount','invoice_number'));
     }
 
