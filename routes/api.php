@@ -10,6 +10,7 @@ use App\Http\Controllers\PaymentEcommController;
 use App\Http\Controllers\PaymentMapController;
 use App\Http\Controllers\PayoutController;
 use App\Http\Controllers\SpeedpayPayinPayoutController;
+use App\Http\Controllers\H2pController;
 
 /*
 |--------------------------------------------------------------------------
@@ -78,5 +79,18 @@ Route::controller(SpeedpayPayinPayoutController::class)->group(function () {
     Route::get('s2p/payout', 'payout')->name('apiroute.s2p.payout');                      // For call API
     Route::post('s2p/payout/callbackURL', 's2pPayoutcallbackURL')->name('apiroute.s2pPayoutcallbackURL');    // For sending callback on frontend
     Route::post('/s2pWithdrawNotifiication', 's2pWithdrawNotifiication');     
+    
+});
+
+Route::controller(H2pController::class)->group(function () {
+    Route::get('h2p/payin', 'payin')->name('apiroute.h2p.payin');                      // For call API
+
+     Route::post('h2p/payinResponse', 'payinResponse');
+    Route::post('h2p/payin/callbackURL', 'h2pPayinCallbackURL')->name('apiroute.h2pPayincallbackURL');    // For sending callback on frontend
+    Route::post('/h2pDepositNotifiication', 'h2pDepositNotifiication');                // For sending callback on Backend
+
+    // Route::get('s2p/payout', 'payout')->name('apiroute.s2p.payout');                      // For call API
+    // Route::post('s2p/payout/callbackURL', 's2pPayoutcallbackURL')->name('apiroute.s2pPayoutcallbackURL');    // For sending callback on frontend
+    // Route::post('/s2pWithdrawNotifiication', 's2pWithdrawNotifiication');     
     
 });

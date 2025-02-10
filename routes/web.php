@@ -43,6 +43,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PayoutController;
 use App\Http\Controllers\QRCodeController;
 use App\Http\Controllers\SpeedpayPayinPayoutController;
+use App\Http\Controllers\H2pController;
 
 /*
 |--------------------------------------------------------------------------
@@ -419,7 +420,6 @@ Route::controller(QRCodeController::class)->group(function () {
 Route::controller(SpeedpayPayinPayoutController::class)->group(function () {
     Route::get('/s2pPayin', 'payinform');
     Route::get('s2p/payinResponse', 'payinResponse');
-
     Route::get('/s2pPayout', 's2pPayoutform'); 
 });
 Route::get('/s2p/payintest', function () {
@@ -427,4 +427,10 @@ Route::get('/s2p/payintest', function () {
 });
 Route::get('/s2p/payouttest', function () {
     return view('payment-form.s2p.payouttest');
+});
+
+Route::controller(H2pController::class)->group(function () {
+    Route::get('/h2pPayin', 'payinform');
+    // Route::post('h2p/payinResponse', 'payinResponse');
+    Route::get('/s2pPayout', 's2pPayoutform'); 
 });
