@@ -207,6 +207,7 @@ class SpeedpayPayinPayoutController extends Controller
     {
         $data = $request->all();
         echo "Transaction Information as follows" . '<br/>' .
+            "Merchant : " . $data['merchant_code'] . '<br/>' .
             "ReferenceId : " . $data['referenceId'] . '<br/>' .
             "TransactionId : " . $data['transaction_id'] . '<br/>' .
             "Type : Deposit" .'<br/>' .
