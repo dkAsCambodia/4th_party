@@ -85,7 +85,7 @@ Route::controller(SpeedpayPayinPayoutController::class)->group(function () {
 Route::controller(H2pController::class)->group(function () {
     Route::get('h2p/payin', 'payin')->name('apiroute.h2p.payin');                      // For call API
 
-     Route::post('h2p/payinResponse', 'payinResponse');
+    Route::post('h2p/payinResponse', 'payinResponse');              // for receive gateway response 
     Route::post('h2p/payin/callbackURL', 'h2pPayinCallbackURL')->name('apiroute.h2pPayincallbackURL');    // For sending callback on frontend
     Route::post('/h2pDepositNotifiication', 'h2pDepositNotifiication');                // For sending callback on Backend
 
