@@ -220,6 +220,57 @@ class H2pController extends Controller
          die;
     }
 
+    public function h2pDepositNotifiication(Request $request)
+    {
+         // Get raw XML data from request
+         $xmlData = file_get_contents("php://input");
+        if (!empty($xmlData)) {
+             // Convert XML to Array
+             $xmlObject = simplexml_load_string($xmlData, "SimpleXMLElement", LIBXML_NOCDATA);
+             $jsonString = json_encode($xmlObject);
+             $data = json_decode($jsonString, true);
+ 
+             if (!isset($data['Status'], $data['TransactionID'], $data['ID'])) {
+                 return response()->json(['error' => 'Invalid Data'], 400);
+             }
+ 
+            $orderStatus = $data['Status'] == '000' ? 'success' : 'failed';
+            $RefID = $data['TransactionID'];
+            $updateData = [
+                'payment_status' => $orderStatus,
+                'response_data' => json_encode($data),
+            ];
+            // echo "<pre>";  print_r($updateData); die;
+            PaymentDetail::where('fourth_party_transection', $RefID)->update($updateData);
+            echo "Transaction updated successfully!";
+            //Call webhook API START
+            $paymentDetail = PaymentDetail::where('fourth_party_transection', $RefID)->first();
+            $callbackUrl = $paymentDetail->callback_url;
+            $postData = [
+                'merchant_code' => $paymentDetail->merchant_code,
+                'referenceId' => $paymentDetail->transaction_id,
+                'transaction_id' => $paymentDetail->fourth_party_transection,
+                'amount' => $paymentDetail->amount,
+                'Currency' => $paymentDetail->Currency,
+                'customer_name' => $paymentDetail->customer_name,
+                'payment_status' => $paymentDetail->payment_status,
+                'created_at' => $paymentDetail->created_at,
+            ];
+            try {
+                if ($paymentDetail->callback_url != null) {
+                    $response = Http::post($paymentDetail->callback_url, $postData);
+                    echo $response->body(); die;
+                }
+            } catch (\Exception $e) {
+                return response()->json(['error' => 'Failed to call webhook','message' => $e->getMessage()], 500);
+            }
+             //Call webhook API START
+
+        }else{
+            return response()->json(['error' => 'Data Not Found or Invalid Request!'], 400);
+        }
+    }
+
     public function getGatewayParameters($gatewayPaymentChannel): array
     {
         $arrayData = [];
