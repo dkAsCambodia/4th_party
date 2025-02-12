@@ -271,6 +271,234 @@ class H2pController extends Controller
         }
     }
 
+    public function h2pPayoutform(Request $request)
+    {
+        return view('payment-form.h2p.payout-form');
+    }
+
+    public function payout(Request $request)
+    {
+        // echo "<pre>";  print_r($request->all()); die;
+        $CURRENCY = $request->Currency ?? $request->currency;
+        $totalDepositSumAfterCharge = PaymentDetail::where('merchant_code', $request->merchant_code)->where('Currency', $CURRENCY)->where('payment_status', 'success')->sum('net_amount');
+        $totalPayoutSumAfterCharge = SettleRequest::where('merchant_code', $request->merchant_code)->where('Currency', $CURRENCY)->where('status', 'success')->sum('net_amount');
+        $AvailableforPayout=$totalDepositSumAfterCharge-$totalPayoutSumAfterCharge;
+        //  For speedpay charge START
+        $percentage = 2.5;
+        $totalWidth = $AvailableforPayout;
+        $new_width = ($percentage / 100) * $totalWidth;
+        @$finalAmount = $totalWidth-$new_width;
+        //  For speedpay charge END
+        if($finalAmount < $request->amount){
+            return "<h2 style='color:red'>Balance is not enough in Gateway Wallet!</h2>"; 
+        }
+        // echo "<pre>"; print_r($finalAmount); die;
+        $arrayData = [];
+        $getGatewayParameters = [];
+        $paymentMap = PaymentMap::where('id', $request->product_id)->first();
+        if (! $paymentMap) {
+            return 'product not exist';
+        }
+        if ($paymentMap->status == 'Disable') {
+            return 'product is Disable';
+        }
+        $merchantData=Merchant::where('merchant_code', $request->merchant_code)->first();
+        if (empty($merchantData)) {
+            return 'Invalid Merchants!';
+        }
+
+        if ($paymentMap->channel_mode == 'single') {
+            $gatewayPaymentChannel = GatewayPaymentChannel::where('id', $paymentMap->gateway_payment_channel_id)->first();
+            if (! $gatewayPaymentChannel) {
+                return 'gatewayPaymentChannel not exist';
+            }
+            if ($gatewayPaymentChannel->status == 'Disable') {
+                return 'gatewayPaymentChannel is Disable';
+            }
+            $paymentMethod = PaymentMethod::where('id', $gatewayPaymentChannel->gateway_account_method_id)->first();
+            $arrayData['method_name'] = $paymentMethod->method_name;
+            if (! $paymentMethod) {
+                return 'paymentMethod not exist';
+            }
+            if ($paymentMethod->status == 'Disable') {
+                return 'paymentMethod is Disable';
+            }
+           
+            if ($gatewayPaymentChannel->risk_control == 1) {
+                // daily transection limit checking
+                $checkLimitationRiskMode = $this->checkLimitationRiskMode($gatewayPaymentChannel, $paymentMap);
+                if ($checkLimitationRiskMode) {
+                    $getGatewayParameters = $this->getGatewayParameters($gatewayPaymentChannel);
+                } else {
+                    return $checkLimitationRiskMode;
+                }
+                // daily transection limit checking
+            } else {
+                $getGatewayParameters = $this->getGatewayParameters($gatewayPaymentChannel);
+            }
+        } else {
+            $gatewayPaymentChannel = GatewayPaymentChannel::whereIn('id', explode(',', $paymentMap->gateway_payment_channel_id))->get();
+            if (! $gatewayPaymentChannel) {
+                return 'gatewayPaymentChannel not exist';
+            }
+
+            foreach ($gatewayPaymentChannel as $item) {
+                if ($item->status == 'Enable') {
+                    $paymentMethod = PaymentMethod::where('id', $item->gateway_account_method_id)->first();
+                    $arrayData['method_name'] = $paymentMethod->method_name;
+                    if (! $paymentMethod) {
+                        return 'paymentMethod not exist';
+                    }
+                    if ($paymentMethod->status == 'Disable') {
+                        return 'paymentMethod is Disable';
+                    }
+                    // gateway_account_method_id
+                    if ($item->risk_control == 1) {
+                        // daily transection limit checking
+                        $checkLimitationRiskMode = $this->checkLimitationRiskMode($item, $paymentMap);
+                        if ($checkLimitationRiskMode) {
+                            $getGatewayParameters = $this->getGatewayParameters($item);
+                            $gatewayPaymentChannel = $item;
+                        } else {
+                            return $checkLimitationRiskMode;
+                        }
+                        // daily transection limit checking
+                    } else {
+                        $getGatewayParameters = $this->getGatewayParameters($item);
+                    }
+                }
+            }
+        }
+        $res = array_merge($arrayData, $getGatewayParameters);
+        $frtransaction = $this->generateUniqueCode();
+        //  echo "<pre>";  print_r($res); die;
+        // Call Curl API code START
+        $client_ip = (isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : $_SERVER['REMOTE_ADDR']);
+        date_default_timezone_set('UTC'); //GMT+0
+        $dated=date("Y-m-d H:i:s");
+        $Datetime=date("YmdHis");
+        $formattedAmount = is_float($request->amount) ? $request->amount : number_format($request->amount, 2, '.', '');
+        $Keystring= $res['Merchant'].$frtransaction.$request->customer_name.$formattedAmount.$request->Currency.$Datetime.$res['SecurityCode'].$client_ip;
+        // echo $Keystring;
+        $Key= MD5($Keystring);
+        // Withdrawal verification URL code START
+        $verificationUrl = url("api/h2p/payout/verifytransaction?transId=" . $frtransaction . "&key=" . $Key);
+        $response = Http::post($verificationUrl);
+        print_r($response->body());
+        // Withdrawal verification URL code END
+
+        // Call Curl API code START
+        $payload = [
+            'ClientIP' => $client_ip,
+            'ReturnURI' => url('api/h2pWithdrawNotifiication'), 
+            'MerchantCode' => $res['Merchant'],
+            'TransactionID' => $frtransaction,
+            'CurrencyCode' => $request->Currency,
+            'MemberCode' => $request->referenceId,
+            'Amount' => $request->amount,
+            'TransactionDateTime' => $dated,
+            'BankCode' => $request->bank_code,
+            'toBankAccountName' => $request->customer_name,
+            'toBankAccountNumber' => $request->customer_account_number,
+            'Key' => $Key,
+        ];
+          
+        $response = Http::post($res['api_url'], $payload);
+        if ($response->successful()) {
+            $xml = simplexml_load_string($response->body());
+            $json = json_encode($xml);
+            $resArray = json_decode($json, true);
+            // echo "<pre>";  print_r($resArray); die;
+            if (!empty($resArray) && isset($resArray['statusCode'])) {
+                $status = ($resArray['statusCode'] == '000') ? 'success' : 'failed';
+                $message = $dated . ' ' . $resArray['message'];
+            }
+        } else {
+            $message = $resArray['message']; 
+            $status = 'failed';
+        }
+
+        ////Insert Record into DB
+          
+             // for H2p payout charge START
+            if(!empty($request->amount)){
+                $percentage = 2.5;
+                $totalWidth = $request->amount;
+                $mdr_fee_amount = ($percentage / 100) * $totalWidth;
+                $net_amount= $totalWidth+$mdr_fee_amount;
+            }
+            // for H2p charge END
+                $addRecord = [
+                    'settlement_trans_id' => $Transactionid ?? '',
+                    'fourth_party_transection' => $frtransaction,
+                    'merchant_track_id' => $request->referenceId,
+                    'gateway_name' => 'hlep2Pay',
+                    'agent_id' => $merchantData->agent_id,
+                    'merchant_id' => $merchantData->id,
+                    'merchant_code' => $request->merchant_code,
+                    'callback_url' => $request->callback_url,
+                    'total' => $request->amount,
+                    'net_amount' => $net_amount,
+                    'mdr_fee_amount' => $mdr_fee_amount,
+                    'customer_bank_name' => $request->customer_name,
+                    'bank_code' => $request->bank_code,
+                    'customer_account_number' => $request->customer_account_number,
+                    'Currency' => $request->Currency,
+                    'product_id' => $request->product_id,
+                    'payment_channel' => $gatewayPaymentChannel->id,
+                    'payment_method' => $paymentMethod->method_name,
+                    'customer_name' => $request->customer_name,
+                    'api_response' => json_encode($resArray),
+                    'message' => $message,
+                    'ip_address' => $client_ip, 
+                    'status' => $status,
+                ];
+                SettleRequest::create($addRecord);
+
+                $paymentDetail = SettleRequest::where('fourth_party_transection', $frtransaction)->first();
+                $callbackUrl = $paymentDetail->callback_url;
+                $postData = [
+                    'merchant_code' => $paymentDetail->merchant_code,
+                    'referenceId' => $paymentDetail->merchant_track_id,
+                    'transaction_id' => $paymentDetail->fourth_party_transection,
+                    'amount' => $paymentDetail->total,
+                    'Currency' => $paymentDetail->Currency,
+                    'customer_name' => $paymentDetail->customer_name,
+                    'status' => $paymentDetail->status,
+                    'created_at' => $paymentDetail->created_at,
+                    'orderremarks' => $paymentDetail->message,
+                ];
+                return view('payout.payout_status', compact('request', 'postData', 'callbackUrl'));
+            
+        
+    }
+
+    public function verifyPayoutTransaction(Request $request)
+    {
+         if(!empty($request->transId) && !empty($request->key)){
+            return "True";
+         }else{
+            return "False";
+         }
+    } 
+
+    public function h2pPayoutcallbackURL(Request $request)
+    {
+        $data = $request->all();
+        echo "Transaction Information as follows" . '<br/>' .
+            "Merchant_code : " . $data['merchant_code'] . '<br/>' .
+            "ReferenceId : " . $data['referenceId'] . '<br/>' .
+            "TransactionId : " . $data['transaction_id'] . '<br/>' .
+            "Type : Withdrawal" .'<br/>' .
+            "Currency : " . $data['Currency'] . '<br/>' .
+            "Amount : " . $data['amount'] . '<br/>' .
+            "customer_name : " . $data['customer_name'] . '<br/>' .
+            "Datetime : " . $data['created_at'] . '<br/>' .
+            "Status : " . $data['status'];
+         die;
+    }
+
+
     public function getGatewayParameters($gatewayPaymentChannel): array
     {
         $arrayData = [];

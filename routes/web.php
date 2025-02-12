@@ -432,7 +432,7 @@ Route::get('/s2p/payouttest', function () {
 Route::controller(H2pController::class)->group(function () {
     Route::get('/h2pPayin', 'payinform');
     // Route::post('h2p/payinResponse', 'payinResponse');
-    Route::get('/s2pPayout', 's2pPayoutform'); 
+    Route::get('/h2pPayout', 'h2pPayoutform'); 
 });
 Route::get('/h2p/payintest', function () {
     return view('payment-form.h2p.payintest');
