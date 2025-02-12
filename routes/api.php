@@ -89,8 +89,10 @@ Route::controller(H2pController::class)->group(function () {
     Route::post('h2p/payin/callbackURL', 'h2pPayinCallbackURL')->name('apiroute.h2pPayincallbackURL');    // For sending callback on frontend
     Route::post('/h2pDepositNotifiication', 'h2pDepositNotifiication');                // For sending callback on Backend
 
-    // Route::get('s2p/payout', 'payout')->name('apiroute.s2p.payout');                      // For call API
-    // Route::post('s2p/payout/callbackURL', 's2pPayoutcallbackURL')->name('apiroute.s2pPayoutcallbackURL');    // For sending callback on frontend
-    // Route::post('/s2pWithdrawNotifiication', 's2pWithdrawNotifiication');     
+    Route::get('h2p/payout', 'payout')->name('apiroute.h2p.payout');                      // For call API
+    
+    Route::post('h2p/payout/verifytransaction', 'verifyPayoutTransaction');    // For veryfy payout transaction URL
+    Route::post('h2p/payout/callbackURL', 'h2pPayoutcallbackURL')->name('apiroute.h2pPayoutcallbackURL');    // For sending callback on frontend
+    Route::post('/h2pWithdrawNotifiication', 'h2pWithdrawNotifiication');     
     
 });
