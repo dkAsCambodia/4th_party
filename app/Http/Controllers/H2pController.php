@@ -375,35 +375,36 @@ class H2pController extends Controller
         // Call Curl API code START
         $client_ip = (isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : $_SERVER['REMOTE_ADDR']);
         date_default_timezone_set('UTC'); //GMT+0
-        $dated=date("Y-m-d H:i:s");
+        $dated=date("Y-m-d h:i:sA");
         $Datetime=date("YmdHis");
         $formattedAmount = is_float($request->amount) ? $request->amount : number_format($request->amount, 2, '.', '');
-        $Keystring= $res['Merchant'].$frtransaction.$request->customer_name.$formattedAmount.$request->Currency.$Datetime.$res['SecurityCode'].$client_ip;
-        // echo $Keystring;
+        $Keystring= $res['Merchant'].$frtransaction.$request->referenceId.$formattedAmount.$request->Currency.$Datetime.$request->customer_account_number.$res['SecurityCode'];
         $Key= MD5($Keystring);
+
         // Withdrawal verification URL code START
         $verificationUrl = url("api/h2p/payout/verifytransaction?transId=" . $frtransaction . "&key=" . $Key);
         $response = Http::post($verificationUrl);
-        print_r($response->body());
+        $response->body();
         // Withdrawal verification URL code END
 
         // Call Curl API code START
-        $payload = [
+        $response = Http::asForm()->withHeaders([
+            'User-Agent' => request()->header('User-Agent'),
+            'Content-Type' => 'application/x-www-form-urlencoded',
+        ])->post('https://app.safepaymentapp.com/merchantpayout/G0313', [
             'ClientIP' => $client_ip,
             'ReturnURI' => url('api/h2pWithdrawNotifiication'), 
             'MerchantCode' => $res['Merchant'],
             'TransactionID' => $frtransaction,
             'CurrencyCode' => $request->Currency,
             'MemberCode' => $request->referenceId,
-            'Amount' => $request->amount,
+            'Amount' => $formattedAmount,
             'TransactionDateTime' => $dated,
             'BankCode' => $request->bank_code,
             'toBankAccountName' => $request->customer_name,
             'toBankAccountNumber' => $request->customer_account_number,
             'Key' => $Key,
-        ];
-          
-        $response = Http::post($res['api_url'], $payload);
+        ]);
         if ($response->successful()) {
             $xml = simplexml_load_string($response->body());
             $json = json_encode($xml);
@@ -411,7 +412,7 @@ class H2pController extends Controller
             // echo "<pre>";  print_r($resArray); die;
             if (!empty($resArray) && isset($resArray['statusCode'])) {
                 $status = ($resArray['statusCode'] == '000') ? 'success' : 'failed';
-                $message = $dated . ' ' . $resArray['message'];
+                $message = $resArray['message'];
             }
         } else {
             $message = $resArray['message']; 
@@ -476,9 +477,9 @@ class H2pController extends Controller
     public function verifyPayoutTransaction(Request $request)
     {
          if(!empty($request->transId) && !empty($request->key)){
-            return "True";
+            echo "True";
          }else{
-            return "False";
+            echo "False";
          }
     } 
 
@@ -496,6 +497,57 @@ class H2pController extends Controller
             "Datetime : " . $data['created_at'] . '<br/>' .
             "Status : " . $data['status'];
          die;
+    }
+
+    public function h2pWithdrawNotifiication(Request $request)
+    {
+         // Get raw XML data from request
+         $xmlData = file_get_contents("php://input");
+        if (!empty($xmlData)) {
+             // Convert XML to Array
+             $xmlObject = simplexml_load_string($xmlData, "SimpleXMLElement", LIBXML_NOCDATA);
+             $jsonString = json_encode($xmlObject);
+             $data = json_decode($jsonString, true);
+ 
+             if (!isset($data['Status'], $data['TransactionID'], $data['ID'])) {
+                 return response()->json(['error' => 'Invalid Data'], 400);
+             }
+ 
+            $orderStatus = $data['Status'] == '000' ? 'success' : 'failed';
+            $RefID = $data['TransactionID'];
+            $updateData = [
+                'payment_status' => $orderStatus,
+                'response_data' => json_encode($data),
+            ];
+            // echo "<pre>";  print_r($updateData); die;
+            PaymentDetail::where('fourth_party_transection', $RefID)->update($updateData);
+            echo "Transaction updated successfully!";
+            //Call webhook API START
+            $paymentDetail = PaymentDetail::where('fourth_party_transection', $RefID)->first();
+            $callbackUrl = $paymentDetail->callback_url;
+            $postData = [
+                'merchant_code' => $paymentDetail->merchant_code,
+                'referenceId' => $paymentDetail->transaction_id,
+                'transaction_id' => $paymentDetail->fourth_party_transection,
+                'amount' => $paymentDetail->amount,
+                'Currency' => $paymentDetail->Currency,
+                'customer_name' => $paymentDetail->customer_name,
+                'payment_status' => $paymentDetail->payment_status,
+                'created_at' => $paymentDetail->created_at,
+            ];
+            try {
+                if ($paymentDetail->callback_url != null) {
+                    $response = Http::post($paymentDetail->callback_url, $postData);
+                    echo $response->body(); die;
+                }
+            } catch (\Exception $e) {
+                return response()->json(['error' => 'Failed to call webhook','message' => $e->getMessage()], 500);
+            }
+             //Call webhook API START
+
+        }else{
+            return response()->json(['error' => 'Data Not Found or Invalid Request!'], 400);
+        }
     }
 
 
