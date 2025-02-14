@@ -382,9 +382,9 @@ class H2pController extends Controller
         $Key= MD5($Keystring);
 
         // Withdrawal verification URL code START
-        $verificationUrl = url("api/h2p/payout/verifytransaction?transId=" . $frtransaction . "&key=" . $Key);
-        $response = Http::post($verificationUrl);
-        $response->body();
+        // $verificationUrl = url("api/h2p/payout/verifytransaction?transId=" . $frtransaction . "&key=" . $Key);
+        // $response = Http::post($verificationUrl);
+        // $response->body();
         // Withdrawal verification URL code END
 
         // Call Curl API code START
@@ -516,14 +516,14 @@ class H2pController extends Controller
             $orderStatus = $data['Status'] == '000' ? 'success' : 'failed';
             $RefID = $data['TransactionID'];
             $updateData = [
-                'payment_status' => $orderStatus,
-                'response_data' => json_encode($data),
+                'status' => $orderStatus,
+                'api_response' => json_encode($data),
             ];
             // echo "<pre>";  print_r($updateData); die;
-            PaymentDetail::where('fourth_party_transection', $RefID)->update($updateData);
+            SettleRequest::where('fourth_party_transection', $RefID)->update($updateData);
             echo "Transaction updated successfully!";
             //Call webhook API START
-            $paymentDetail = PaymentDetail::where('fourth_party_transection', $RefID)->first();
+            $paymentDetail = SettleRequest::where('fourth_party_transection', $RefID)->first();
             $callbackUrl = $paymentDetail->callback_url;
             $postData = [
                 'merchant_code' => $paymentDetail->merchant_code,
@@ -532,7 +532,7 @@ class H2pController extends Controller
                 'amount' => $paymentDetail->amount,
                 'Currency' => $paymentDetail->Currency,
                 'customer_name' => $paymentDetail->customer_name,
-                'payment_status' => $paymentDetail->payment_status,
+                'status' => $paymentDetail->status,
                 'created_at' => $paymentDetail->created_at,
             ];
             try {

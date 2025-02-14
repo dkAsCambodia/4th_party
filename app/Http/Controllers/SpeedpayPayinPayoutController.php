@@ -535,7 +535,7 @@ class SpeedpayPayinPayoutController extends Controller
                 'amount' => $paymentDetail->total,
                 'Currency' => $paymentDetail->Currency,
                 'customer_name' => $paymentDetail->customer_name,
-                'status' => $paymentDetail->payment_status,
+                'status' => $paymentDetail->status,
                 'created_at' => $paymentDetail->created_at,
             ];
             try {
