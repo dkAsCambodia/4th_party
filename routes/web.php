@@ -437,3 +437,6 @@ Route::controller(H2pController::class)->group(function () {
 Route::get('/h2p/payintest', function () {
     return view('payment-form.h2p.payintest');
 });
+Route::get('/h2p/payouttest', function () {
+    return view('payment-form.h2p.payouttest');
+});
