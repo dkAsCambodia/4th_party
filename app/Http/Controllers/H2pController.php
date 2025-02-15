@@ -430,7 +430,7 @@ class H2pController extends Controller
             }
             // for H2p charge END
                 $addRecord = [
-                    'settlement_trans_id' => $Transactionid ?? '',
+                    // 'settlement_trans_id' => $Transactionid ?? '',
                     'fourth_party_transection' => $frtransaction,
                     'merchant_track_id' => $request->referenceId,
                     'gateway_name' => 'hlep2Pay',
@@ -515,7 +515,10 @@ class H2pController extends Controller
  
             $orderStatus = $data['Status'] == '000' ? 'success' : 'failed';
             $RefID = $data['TransactionID'];
+             // Simulate delay
+            sleep(20);
             $updateData = [
+                'settlement_trans_id' => $data['ID'],
                 'status' => $orderStatus,
                 'api_response' => json_encode($data),
             ];
