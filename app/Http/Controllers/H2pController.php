@@ -222,13 +222,9 @@ class H2pController extends Controller
 
     public function h2pDepositNotifiication(Request $request)
     {
-         // Get raw XML data from request
-         $xmlData = file_get_contents("php://input");
-        if (!empty($xmlData)) {
-             // Convert XML to Array
-             $xmlObject = simplexml_load_string($xmlData, "SimpleXMLElement", LIBXML_NOCDATA);
-             $jsonString = json_encode($xmlObject);
-             $data = json_decode($jsonString, true);
+          // Get all request data (since it's application/x-www-form-urlencoded)    XML data
+         $data = $request->all();
+        if (!empty($data)) {
  
              if (!isset($data['Status'], $data['TransactionID'], $data['ID'])) {
                  return response()->json(['error' => 'Invalid Data'], 400);
@@ -512,10 +508,11 @@ class H2pController extends Controller
             $orderStatus = $data['Status'] == '000' ? 'success' : 'failed';
             $RefID = $data['TransactionID'];
              // Simulate delay
-            sleep(20);
+            // sleep(20);
             $updateData = [
                 'settlement_trans_id' => $data['ID'],
                 'status' => $orderStatus,
+                'message' => $data['Message'],
                 'api_response' => json_encode($data),
             ];
             // echo "<pre>";  print_r($updateData); die;
