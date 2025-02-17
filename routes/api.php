@@ -91,6 +91,6 @@ Route::controller(H2pController::class)->group(function () {
     Route::get('h2p/payout', 'payout')->name('apiroute.h2p.payout');                      // For call API
     Route::post('h2p/payout/verifytransaction', 'verifyPayoutTransaction');    // For veryfy payout transaction URL
     Route::post('h2p/payout/callbackURL', 'h2pPayoutcallbackURL')->name('apiroute.h2pPayoutcallbackURL');    // For sending callback on frontend
-    Route::post('/h2pWithdrawNotifiication', 'h2pWithdrawNotifiication');     
+    Route::post('/h2p/withdraw/notifiication', 'h2pWithdrawNotifiication');     
     
 });

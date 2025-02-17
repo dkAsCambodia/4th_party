@@ -393,7 +393,7 @@ class H2pController extends Controller
             'Content-Type' => 'application/x-www-form-urlencoded',
         ])->post('https://app.safepaymentapp.com/merchantpayout/G0313', [
             'ClientIP' => $client_ip,
-            'ReturnURI' => url('api/h2pWithdrawNotifiication'), 
+            'ReturnURI' => url('api/h2p/withdraw/notifiication'), 
             'MerchantCode' => $res['Merchant'],
             'TransactionID' => $frtransaction,
             'CurrencyCode' => $request->Currency,
