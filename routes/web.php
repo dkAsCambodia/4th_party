@@ -44,6 +44,7 @@ use App\Http\Controllers\PayoutController;
 use App\Http\Controllers\QRCodeController;
 use App\Http\Controllers\SpeedpayPayinPayoutController;
 use App\Http\Controllers\H2pController;
+use App\Http\Controllers\M2pController;
 
 /*
 |--------------------------------------------------------------------------
@@ -439,4 +440,10 @@ Route::get('/h2p/payintest', function () {
 });
 Route::get('/h2p/payouttest', function () {
     return view('payment-form.h2p.payouttest');
+});
+
+Route::controller(M2pController::class)->group(function () {
+    Route::get('/h2pPayin', 'payinform');
+    // Route::post('h2p/payinResponse', 'payinResponse');
+    Route::get('/h2pPayout', 'h2pPayoutform'); 
 });
