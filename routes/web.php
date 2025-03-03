@@ -443,7 +443,7 @@ Route::get('/h2p/payouttest', function () {
 });
 
 Route::controller(M2pController::class)->group(function () {
-    Route::get('/h2pPayin', 'payinform');
+    Route::get('/m2pPayin', 'payinform');
     // Route::post('h2p/payinResponse', 'payinResponse');
     Route::get('/h2pPayout', 'h2pPayoutform'); 
 });
