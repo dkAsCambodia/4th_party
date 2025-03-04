@@ -104,59 +104,9 @@ class M2pController extends Controller
             }
         }
         $res = array_merge($arrayData, $getGatewayParameters);
-        //   echo "<pre>";  print_r($res);
+        //   echo "<pre>";  print_r($res);die;
         $frtransaction = $this->generateUniqueCode();
         $client_ip = (isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : $_SERVER['REMOTE_ADDR']);
-        // date_default_timezone_set('UTC'); //GMT+0
-        // $dated=date("Y-m-d H:i:s");
-        // $Datetime=date("YmdHis");
-        // $formattedAmount = is_float($request->amount) ? $request->amount : number_format($request->amount, 2, '.', '');
-        
-
-        $apiToken = $res['apiToken'];
-        $callbackUrl = url('api/m2p/payinResponse');
-        $paymentCurrency='USX';
-        $paymentGatewayName = 'USDT TRC20';
-        $timestamp = time();
-        $secretKey = $res['secretKey'];
-
-        // Concatenate the string
-        $finalString = $request->amount . $apiToken . $callbackUrl . $request->Currency . $paymentCurrency . $paymentGatewayName . $timestamp . $secretKey;
-        // Generate SHA-384 hash
-        $signature = hash('sha384', $finalString);
-        echo $signature;
-
-
-
-        $apiUrl = 'https://m2p.match-trade.com/api/v2/deposit/crypto_agent';
-        $postdata = [
-            "amount" =>  $request->amount,
-            "apiToken" => $apiToken,
-            "callbackUrl" => $callbackUrl,
-            "currency" => $request->Currency,
-            "paymentCurrency" => $paymentCurrency,
-            "paymentGatewayName" => $paymentGatewayName,
-            "signature" => $signature,
-            "timestamp" => $timestamp,
-            "tradingAccountLogin" => "tradingAccountLogin"
-        ];
-
-        $response = Http::withHeaders([
-            'Content-Type' => 'application/json',
-            'Content-Length: ' . strlen(json_encode($postdata)),
-        ])->post($apiUrl, json_encode($postdata));
-        // if ($response->failed()) {
-        //     return response()->json(['error' => 'Request failed', 'details' => $response->body()], 500);
-        // }
-        $responseData = $response->json();
-        echo "<pre>";  print_r($responseData); die;
-        // Check response and update transaction status
-        if (!empty($responseData['paymentId'])) {
-            // Your logic for updating transaction status
-        }
-
-
-       
         //Insert data into DB
              // for Help2Pay deposit charge START
              if(!empty($request->amount)){
@@ -180,7 +130,7 @@ class M2pController extends Controller
                 'payment_channel' => $gatewayPaymentChannel->id,
                 'payment_method' => $paymentMethod->method_name,
                 'request_data' => json_encode($res),
-                'gateway_name' => 'Help2Pay',
+                'gateway_name' => 'M2p',
                 'customer_name' => $request->customer_name,
                 'ip_address' => $client_ip,
                 'net_amount' => $net_amount ?? '',
@@ -189,25 +139,86 @@ class M2pController extends Controller
             //   echo "<pre>";  print_r($addRecord); die;
             PaymentDetail::create($addRecord);
             $res = [
-                'Merchant' => $res['Merchant'],
-                'Currency' => $request->Currency ?? $request->currency,
-                'Customer' => $request->customer_name,
+                "amount" =>  $request->amount,
+                "apiToken" => $res['apiToken'],
+                "api_url" => $res['api_url'],
+                "callbackUrl" => url('api/m2pDepositNotifiication/'.$frtransaction),
+                "currency" => $request->Currency,
                 'Reference' => $frtransaction,
-                'Key' => $Key,
-                'Amount' => $request->amount,
-                'Note' => 'payment',
-                'Datetime' => $dated,
-                'FrontURI' => url('api/h2p/payinResponse'), 
-                'BackURI' => url('api/h2pDepositNotifiication'), 
-                'Language' => 'en-us',
-                'Bank' => $request->bank_code,
-                'ClientIP' => $client_ip,
-                'CompanyName' => 'Zaffran PSP',
-                'api_url' => $res['api_url'],
+                'secretKey' => $res['secretKey'],
             ];
-        return view('payment-form.h2p.gateway-form', compact('res'));
+        return view('payment-form.m2p.gateway-form', compact('res'));
 
     }
+
+    
+    public function callDepositAPI(Request $request)
+    {
+        $postData = $request->all();
+        unset($postData['secretKey']);
+        unset($postData['Reference']);
+        // unset($postData['api_url']);
+        $response = Http::withHeaders([
+            'Content-Type' => 'application/json',
+        ])->post($request->api_url, $postData);
+        $responseData = $response->json();
+        // echo "<pre>";  print_r($responseData); die;
+
+        if (!empty($responseData) && isset($responseData['checkoutUrl'])) {
+            $updateData = [
+                'TransId' =>  $responseData['paymentId'],
+                'receipt_url' =>  $responseData['checkoutUrl'],
+                'payin_arr' => json_encode($responseData),
+            ];
+            PaymentDetail::where('fourth_party_transection', $request->Reference)->update($updateData);
+            return redirect()->to($responseData['checkoutUrl']);
+        }else{
+            $updateData = [
+                'payment_status' => 'failed',
+                'payin_arr' => json_encode($responseData),
+            ];
+            PaymentDetail::where('fourth_party_transection', $request->Reference)->update($updateData);
+            $paymentDetail = PaymentDetail::where('fourth_party_transection', $request->Reference)->first();
+            $callbackUrl = $paymentDetail->callback_url;
+            $postData = [
+                'merchant_code' => $paymentDetail->merchant_code,
+                'referenceId' => $paymentDetail->transaction_id,
+                'transaction_id' => $paymentDetail->fourth_party_transection,
+                'amount' => $paymentDetail->amount,
+                'Currency' => $paymentDetail->Currency,
+                'customer_name' => $paymentDetail->customer_name,
+                'payment_status' => $paymentDetail->payment_status,
+                'created_at' => $paymentDetail->created_at,
+            ];
+            return view('payment.payment_status', compact('request', 'postData', 'callbackUrl'));
+        }
+
+    }
+
+    public function m2pPayinCallbackURL(Request $request)
+    {
+        $data = $request->all();
+        echo "Transaction Information as follows" . '<br/>' .
+            "Merchant : " . $data['merchant_code'] . '<br/>' .
+            "ReferenceId : " . $data['referenceId'] . '<br/>' .
+            "TransactionId : " . $data['transaction_id'] . '<br/>' .
+            "Type : Crypto Deposit" .'<br/>' .
+            "Currency : " . $data['Currency'] . '<br/>' .
+            "Amount : " . $data['amount'] . '<br/>' .
+            "customer_name : " . $data['customer_name'] . '<br/>' .
+            "Datetime : " . $data['created_at'] . '<br/>' .
+            "Status : " . $data['payment_status'];
+         die;
+    }
+
+
+    
+    public function m2pDepositNotifiication(Request $request)
+    {
+        echo "<pre>";  print_r($request->all()); die;
+    }
+
+
 
     public function getGatewayParameters($gatewayPaymentChannel): array
     {

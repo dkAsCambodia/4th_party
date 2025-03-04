@@ -46,7 +46,7 @@
                         <form class="form-horizontal" action="{{ route('apiroute.m2p.payin') }}" method="GET" id="paymentForm">
                             <input type="hidden" name="merchant_code" value="testmerchant005">
                             <input type="hidden" name="product_id" value="9">   {{--  //M2p Deposit --}}
-                            <input type="hidden" name="callback_url" value="{{ route('apiroute.h2pPayincallbackURL') }}">
+                            <input type="hidden" name="callback_url" value="{{ route('apiroute.m2pPayincallbackURL') }}">
 							<div class="row mb-4">
                                 <label for="Reference" class="col-md-4 form-label">Reference ID</label>
                                 <div class="col-md-8">
