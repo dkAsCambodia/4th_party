@@ -157,7 +157,7 @@ class M2pController extends Controller
         $postData = $request->all();
         unset($postData['secretKey']);
         unset($postData['Reference']);
-        // unset($postData['api_url']);
+        unset($postData['api_url']);
         $response = Http::withHeaders([
             'Content-Type' => 'application/json',
         ])->post($request->api_url, $postData);
