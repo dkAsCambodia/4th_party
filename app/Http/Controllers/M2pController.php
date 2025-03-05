@@ -142,7 +142,7 @@ class M2pController extends Controller
                 "amount" =>  $request->amount,
                 "apiToken" => $res['apiToken'],
                 "api_url" => $res['api_url'],
-                "callbackUrl" => url('api/m2pDepositNotifiication/'.$frtransaction),
+                "callbackUrl" => url('api/m2pDepositNotifiication'),
                 "currency" => $request->Currency,
                 'Reference' => $frtransaction,
                 'secretKey' => $res['secretKey'],
@@ -215,7 +215,74 @@ class M2pController extends Controller
     
     public function m2pDepositNotifiication(Request $request)
     {
-        echo "<pre>";  print_r($request->all()); die;
+        // echo "<pre>";  print_r($request->all());
+        // $results = '{
+    //     "depositAddress":"C9wic7ex7etARjPGQPKBHGLr2cRcCD17aZ",
+    //     "cryptoTransactionInfo":
+    //       [
+    //         {
+    //         "txid":"b20feab400c3cd61a9d0daec8526d739a2335fe1900415f24835001e58a837a7",
+    //         "confirmations":2,
+    //         "amount":0.10000000,
+    //         "confirmedTime":"Mar 20, 2019 7:06:38PM",
+    //         "status":"DONE",    
+    //         "processingFee":0.00500000,
+    //         "conversionRate":3198.64800
+    //         }
+    //       ],
+    //     "paymentId":"99ca8c34-5191-41d9-a1a2-666b9badf1ce",
+    //     "status":"DONE", //PENDING
+    //     "transactionAmount":0.10000000,
+    //     "netAmount":0.09500000,
+    //     "transactionCurrency":"BTC",
+    //     "processingFee":0.00500000,
+    //     "finalAmount":303.87,
+    //     "finalCurrency":"USD",
+    //     "conversionRate":3198.65
+    //     }';
+        $data = $request->json()->all(); // Get JSON data from request
+        if (!empty($data)) {
+             $orderStatus = match ($data['status'] ?? '') {
+                'DONE' => 'success',
+                'PENDING' => 'pending',
+                'PROCESSING' => 'processing',
+                default => 'failed',
+            };
+            $TransId = $data['paymentId'];
+            $updateData = [
+                'payment_status' => $orderStatus,
+                'response_data' => json_encode($data),
+            ];
+            // echo "<pre>";  print_r($updateData); die;
+            PaymentDetail::where('TransId', $TransId)->update($updateData);
+            echo "Transaction updated successfully!";
+            //Call webhook API START
+            $paymentDetail = PaymentDetail::where('TransId', $TransId)->first();
+            $callbackUrl = $paymentDetail->callback_url;
+            $postData = [
+                'merchant_code' => $paymentDetail->merchant_code,
+                'referenceId' => $paymentDetail->transaction_id,
+                'transaction_id' => $paymentDetail->fourth_party_transection,
+                'amount' => $paymentDetail->amount,
+                'Currency' => $paymentDetail->Currency,
+                'customer_name' => $paymentDetail->customer_name,
+                'payment_status' => $paymentDetail->payment_status,
+                'created_at' => $paymentDetail->created_at,
+            ];
+            try {
+                if ($paymentDetail->callback_url != null) {
+                    $response = Http::post($paymentDetail->callback_url, $postData);
+                    echo $response->body(); die;
+                }
+            } catch (\Exception $e) {
+                return response()->json(['error' => 'Failed to call webhook','message' => $e->getMessage()], 500);
+            }
+             //Call webhook API START
+
+        }else{
+            return response()->json(['error' => 'Data Not Found or Invalid Request!'], 400);
+        }
+
     }
 
 
