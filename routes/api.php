@@ -100,7 +100,7 @@ Route::controller(M2pController::class)->group(function () {
     Route::get('m2p/payin', 'payin')->name('apiroute.m2p.payin');                      // For call API
     Route::post('m2p/callDepositAPI', 'callDepositAPI')->name('apiroute.m2p.callDepositAPI');            // for calling gateway deposit API
     Route::post('m2p/payin/callbackURL', 'm2pPayinCallbackURL')->name('apiroute.m2pPayincallbackURL');    // For sending callback on frontend
-    Route::post('/m2pDepositNotifiication{Reference}', 'm2pDepositNotifiication')->name('apiroute.m2p.DepositNotifiication');                // For sending callback on Backend
+    Route::post('/m2pDepositNotifiication', 'm2pDepositNotifiication')->name('apiroute.m2p.DepositNotifiication');                // For sending callback on Backend
 
     // Route::get('h2p/payout', 'payout')->name('apiroute.h2p.payout');                      // For call API
     // Route::post('h2p/payout/verifytransaction', 'verifyPayoutTransaction');    // For veryfy payout transaction URL
