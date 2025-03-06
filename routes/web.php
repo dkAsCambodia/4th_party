@@ -45,6 +45,8 @@ use App\Http\Controllers\QRCodeController;
 use App\Http\Controllers\SpeedpayPayinPayoutController;
 use App\Http\Controllers\H2pController;
 use App\Http\Controllers\M2pController;
+use App\Http\Controllers\RichPayController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -449,4 +451,11 @@ Route::controller(M2pController::class)->group(function () {
 });
 Route::get('/m2p/payintest', function () {
     return view('payment-form.m2p.payintest');
+});
+
+
+Route::controller(RichPayController::class)->group(function () {
+    Route::get('/r2pPayin', 'payinform');
+    // Route::get('s2p/payinResponse', 'payinResponse');
+    // Route::get('/s2pPayout', 's2pPayoutform'); 
 });

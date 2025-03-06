@@ -12,6 +12,7 @@ use App\Http\Controllers\PayoutController;
 use App\Http\Controllers\SpeedpayPayinPayoutController;
 use App\Http\Controllers\H2pController;
 use App\Http\Controllers\M2pController;
+use App\Http\Controllers\RichPayController;
 
 /*
 |--------------------------------------------------------------------------
@@ -106,5 +107,16 @@ Route::controller(M2pController::class)->group(function () {
     // Route::post('h2p/payout/verifytransaction', 'verifyPayoutTransaction');    // For veryfy payout transaction URL
     // Route::post('h2p/payout/callbackURL', 'h2pPayoutcallbackURL')->name('apiroute.h2pPayoutcallbackURL');    // For sending callback on frontend
     // Route::post('/h2p/withdraw/notifiication', 'h2pWithdrawNotifiication');     
+    
+});
+
+Route::controller(RichPayController::class)->group(function () {
+    Route::get('r2p/payin', 'payin')->name('apiroute.r2p.payin');                      // For call API
+    Route::post('r2p/payin/callbackURL', 'r2pPayinCallbackURL')->name('apiroute.r2pPayincallbackURL');    // For sending callback on frontend
+    Route::post('/r2pDepositNotifiication', 'r2pDepositNotifiication');                // For sending callback on Backend
+
+    // Route::get('s2p/payout', 'payout')->name('apiroute.s2p.payout');                      // For call API
+    // Route::post('s2p/payout/callbackURL', 's2pPayoutcallbackURL')->name('apiroute.s2pPayoutcallbackURL');    // For sending callback on frontend
+    // Route::post('/s2pWithdrawNotifiication', 's2pWithdrawNotifiication');     
     
 });
