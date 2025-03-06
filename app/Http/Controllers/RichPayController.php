@@ -247,7 +247,7 @@ class RichPayController extends Controller
             }
              //Call webhook API START
 
-        }else{
+        }else{ 
             return response()->json(['error' => 'Data Not Found or Invalid Request!'], 400);
         }
 
