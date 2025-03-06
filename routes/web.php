@@ -447,3 +447,6 @@ Route::controller(M2pController::class)->group(function () {
    
     // Route::get('/h2pPayout', 'h2pPayoutform'); 
 });
+Route::get('/m2p/payintest', function () {
+    return view('payment-form.m2p.payintest');
+});
