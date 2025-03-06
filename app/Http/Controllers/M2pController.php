@@ -245,7 +245,7 @@ class M2pController extends Controller
              $orderStatus = match ($data['status'] ?? '') {
                 'DONE' => 'success',
                 'PENDING' => 'pending',
-                'PROCESSING' => 'processing',
+                'NEW' => 'processing',
                 default => 'failed',
             };
             $TransId = $data['paymentId'];
