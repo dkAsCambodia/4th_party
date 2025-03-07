@@ -45,7 +45,7 @@
                         <h3 class="text-center mb-4"><b>Merchant Transfer or Deposit</b></h3>
                         <form class="form-horizontal" action="{{ route('apiroute.r2p.payin') }}" method="GET" id="paymentForm">
                             <input type="hidden" name="merchant_code" value="testmerchant005">
-                            <input type="hidden" name="product_id" value="26">   {{-- // for live  26 --}}
+                            <input type="hidden" name="product_id" value="26">   {{-- // for live and local  26 --}}
                             <input type="hidden" name="callback_url" value="{{ route('apiroute.r2pPayincallbackURL') }}">
 							<div class="row mb-4">
                                 <label for="Reference" class="col-md-4 form-label">Reference ID</label>
