@@ -38,10 +38,11 @@
                 <div class="col-xl-12">
                     <div class="auth-form">
                         <h3 class="text-center mb-4"><b>POIPET RESORT</b></h3>
-                        <form class="form-horizontal" action="{{ route('apiroute.s2p.payin') }}" method="GET" id="paymentForm">
+                        <form class="form-horizontal" action="{{ route('apiroute.r2p.payin') }}" method="GET" id="paymentForm">
                             <input type="hidden" name="merchant_code" value="FCmerchant001">
-                            <input type="hidden" name="product_id" value="24">
-                            <input type="hidden" name="callback_url" value="{{ route('apiroute.s2pPayincallbackURL') }}">
+                             <input type="hidden" name="product_id" value="27">     {{-- for live 27 --}}
+                             {{-- <input type="hidden" name="product_id" value="25">     for local 25 --}}
+                            <input type="hidden" name="callback_url" value="{{ route('apiroute.r2pPayincallbackURL') }}">
                             <input type="hidden" name="amount" value="{{ $amount ?? '' }}">
                             <input type="hidden" name="Currency" value="THB">
 							<div class="row mb-4">
@@ -70,15 +71,14 @@
                                 <div class="col-md-8">
 										<select class="form-control select2-show-search form-select  text-dark" name="bank_code" required data-placeholder="---">
                                             <option value="">Select Bank</option>
-                                            <option value="BBL">Bangkok Bank</option>
-                                            <option value="BOA">Bank of AYUDHYA</option>
-                                            <option value="KTB">Krung Thai Bank</option>
-                                            <option value="SCB">Siam Commercial Bank</option>
-                                            <option value="KKR">Kasikorn Bank</option>
-                                            <option value="GSB">Government Savings Bank</option>
-                                            <option value="SCBT">Standard Chartered Bank</option>
-                                            <option value="KNK">KIATNAKIN PHATRA Bank</option>
-                                            <option value="TMB">Thai Military Bank (TMB THANACHART Bank)</option>
+                                            <option value="002">Bangkok Bank</option>
+                                            <option value="025">Bank of Ayudhya (Krungsri)</option>
+                                            <option value="017">Citibank</option>
+                                            <option value="004">Karsikorn Bank (K-Bank)</option>
+                                            <option value="069">Kiatnakin Bank</option>
+                                            <option value="006">Krung Thai Bank</option>
+                                            <option value="014">Siam Commercial Bank</option>
+                                            <option value="011">TMB Bank Public Company Limited</option>
 										</select>
                                 </div>
                             </div>
