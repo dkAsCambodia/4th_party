@@ -23,7 +23,7 @@
                             </div>
                             <div class="mb-3">
                                 <label class="mb-1"><strong>Enter Amount</strong></label>
-                                <input type="text" class="form-control @error('amount') is-invalid @enderror" name="amount" value="{{ old('amount') }}" placeholder="Enter amount should be in decimal such as 300.00">
+                                <input type="text" class="form-control @error('amount') is-invalid @enderror" name="amount" value="{{ old('amount') }}" placeholder="Enter amount should be in decimal such as 100.00">
                                 @error('amount')
                                 <span class="invalid-feedback" role="alert">
                                     <strong>{{ $message }}</strong>

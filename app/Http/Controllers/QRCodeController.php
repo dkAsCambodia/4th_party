@@ -27,14 +27,15 @@ class QRCodeController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'customer_name' => 'required',
-            'amount' => ['required', 'numeric', 'min:5.00'],
+            'amount' => 'required',
+            'amount' => ['required', 'numeric'],
             // 'amount' => ['required', 'numeric', 'min:300.00'],
             'invoice_number' => ['required', 'regex:/^[a-zA-Z0-9\-\/#]+$/', Rule::unique('qrgeneraters', 'invoice_number'),],
         ], [
             'customer_name.required' => 'Customer name is required.',
             'amount.required' => 'Amount is required.',
             'amount.numeric' => 'Amount must be a valid number.',
-            'amount.min' => 'Amount must be 300.00 or greater.',
+            // 'amount.min' => 'Amount must be 300.00 or greater.',
             'invoice_number.required' => 'Invoice number is required.',
             'invoice_number.regex' => 'Invoice number can only contain letters, numbers, and hyphens.',
             'invoice_number.unique' => 'Invoice number must be unique.',

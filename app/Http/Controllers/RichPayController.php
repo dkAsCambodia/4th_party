@@ -254,7 +254,7 @@ class RichPayController extends Controller
             default => 'failed',
         };
         $updateData = [
-            'payment_status' => 'processing',
+            'payment_status' => $orderStatus,
             'response_data' => json_encode($jsonData),
         ];
         PaymentDetail::where('fourth_party_transection', $RefID)->update($updateData);
