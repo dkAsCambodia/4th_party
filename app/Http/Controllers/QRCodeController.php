@@ -27,7 +27,8 @@ class QRCodeController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'customer_name' => 'required',
-            'amount' => ['required', 'numeric', 'min:300.00'],
+            'amount' => ['required', 'numeric', 'min:5.00'],
+            // 'amount' => ['required', 'numeric', 'min:300.00'],
             'invoice_number' => ['required', 'regex:/^[a-zA-Z0-9\-\/#]+$/', Rule::unique('qrgeneraters', 'invoice_number'),],
         ], [
             'customer_name.required' => 'Customer name is required.',
@@ -45,7 +46,8 @@ class QRCodeController extends Controller
         $customer_name=$request->customer_name;
         $amount=$request->amount;
         $invoice_number=$request->invoice_number;
-        $url = url('/fc/s2pdeposit/'.base64_encode($amount).'/'.base64_encode($invoice_number).'/'.base64_encode($customer_name));
+        // $url = url('/fc/s2pdeposit/'.base64_encode($amount).'/'.base64_encode($invoice_number).'/'.base64_encode($customer_name));
+        $url = url('/fc/r2pdeposit/'.base64_encode($amount).'/'.base64_encode($invoice_number).'/'.base64_encode($customer_name));
 
         // $path = 'assets/images/qrcode/'.$invoice_number.'-'.$amount.'.png';
         $addRecord = [
@@ -65,7 +67,8 @@ class QRCodeController extends Controller
         $amount=base64_decode($amount);
         $invoice_number=base64_decode($invoice_number);
         $customer_name=base64_decode($customer_name);
-        return view('fc.deposit-form', compact('amount','invoice_number','customer_name'));
+        // return view('fc.deposit-form', compact('amount','invoice_number','customer_name'));   for spaadPay
+        return view('fc.deposit-form-richpay', compact('amount','invoice_number','customer_name'));
     }
 
     // public function saveQrCode(Request $request)

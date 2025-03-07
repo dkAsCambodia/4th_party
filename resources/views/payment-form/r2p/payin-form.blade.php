@@ -74,17 +74,16 @@
                             <div class="row mb-4">
                                 <label for="Bank-Code" class="col-md-4 form-label">Bank Code</label>
                                 <div class="col-md-8">
-										<select class="form-control select2-show-search form-select  text-dark" name="bank_code" required data-placeholder="---">
+										<select class="form-control" name="bank_code" required>
                                             <option value="">Select Bank</option>
-                                            <option value="BBL">Bangkok Bank</option>
-                                            <option value="BOA">Bank of AYUDHYA</option>
-                                            <option value="KTB">Krung Thai Bank</option>
-                                            <option value="SCB">Siam Commercial Bank</option>
-                                            <option value="KKR">Kasikorn Bank</option>
-                                            <option value="GSB">Government Savings Bank</option>
-                                            <option value="SCBT">Standard Chartered Bank</option>
-                                            <option value="KNK">KIATNAKIN PHATRA Bank</option>
-                                            <option value="TMB">Thai Military Bank (TMB THANACHART Bank)</option>
+                                            <option value="002">Bangkok Bank</option>
+                                            <option value="025">Bank of Ayudhya (Krungsri)</option>
+                                            <option value="017">Citibank</option>
+                                            <option value="004">Karsikorn Bank (K-Bank)</option>
+                                            <option value="069">Kiatnakin Bank</option>
+                                            <option value="006">Krung Thai Bank</option>
+                                            <option value="014">Siam Commercial Bank</option>
+                                            <option value="011">TMB Bank Public Company Limited</option>
 										</select>
                                 </div>
                             </div>

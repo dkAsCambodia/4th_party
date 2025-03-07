@@ -417,6 +417,7 @@ Route::controller(QRCodeController::class)->group(function () {
     Route::get('/merchant-qrcode-list', 'listQrCode')->name('merchant-qrcode-list');
     Route::get('export/invoice', 'exportMerchantInvoice')->name('merchant-export-invoice');
     Route::get('fc/s2pdeposit/{amount}/{invoice_number}/{customer_name}', 'fcs2pDeposit')->name('fc.s2p.Deposit');
+    Route::get('fc/r2pdeposit/{amount}/{invoice_number}/{customer_name}', 'fcs2pDeposit')->name('fc.s2p.Deposit');
 
     Route::get('fc/s2pWithdrawal/', 'fcs2pWithdrawalForm')->name('fc.s2p.withdrawal');
 });
