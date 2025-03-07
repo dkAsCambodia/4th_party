@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <title>Gtechz PSP – Payment Service Provider</title>
   <style>
+    body{
+      background-color: rgb(11, 3, 58);
+    }
     .abf-frame p {
 	font-family: Helvetica!important;
 	line-height: 18px;
@@ -114,7 +117,7 @@
   <div class="abf-form">
   <br/>
     <hr style="border-top: 1px solid #dedede;">
-    <h2 style="text-align:center; color:#28a745!important;">สแกนด่วนเพื่อชำระเงิน</h2>
+    <h2 style="text-align:center; color:rgb(11, 3, 58);!important;">สแกนด่วนเพื่อชำระเงิน</h2>
     <hr style="border-top: 1px solid #dedede;"><br/>
     <div class="abf-topline"><div>
       <div style="text-align:center; height:186px"><img src="https://payin.implogix.com/api/vizpay/processing.gif" style="display: inline;height:200px;width:230px;margin-top: -5%;" alt="official QR code for payment"> </div>
