@@ -327,7 +327,7 @@ class RichPayController extends Controller
                 default => 'failed',
             };
             $RefID = $data['txn_ref_order_id'];
-            sleep(10);
+            sleep(20);
             $updateData = [
                 'payment_status' => $orderStatus,
                 'response_data' => json_encode($data),
