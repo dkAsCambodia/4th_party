@@ -176,12 +176,97 @@ class RichPayController extends Controller
             ];
             //   echo "<pre>";  print_r($addRecord); die;
             PaymentDetail::create($addRecord);
-              sleep(20);
-            return redirect($jsonData['qr_image_link']);
+            // sleep(20);
+            return redirect(url('r2pPaymentPage/'.base64_encode($frtransaction)));
         }else{
             return back()->with('error', 'Payment link not found.');
         }
 
+    }
+
+    public function paymentPage(Request $request, $frtransaction)
+    {
+        $RefID = base64_decode($frtransaction);
+        $paymentDetail = PaymentDetail::where('fourth_party_transection', $RefID)->first();
+          
+            $data = [
+                'merchant_code' => $paymentDetail->merchant_code,
+                'referenceId' => $paymentDetail->transaction_id,
+                'transaction_id' => $paymentDetail->fourth_party_transection,
+                'amount' => $paymentDetail->amount,
+                'Currency' => $paymentDetail->Currency,
+                'customer_name' => $paymentDetail->customer_name,
+                'bank_account_name' => $paymentDetail->bank_account_name,
+                'bank_code' => $paymentDetail->bank_code,
+                'bank_account_number' => $paymentDetail->bank_account_number,
+                'receipt_url' => $paymentDetail->receipt_url,
+                'payment_status' => $paymentDetail->payment_status,
+                'created_at' => $paymentDetail->created_at,
+            ];
+                // echo "<pre>";  print_r($data); die;
+        return view('payment-form.r2p.paymentPage', compact('data'));
+    }
+
+    public function paymentProcessingPage(Request $request, $frtransaction)
+    {
+        $RefID = base64_decode($frtransaction);
+        $paymentDetail = PaymentDetail::where('fourth_party_transection', $RefID)->first();
+            $data = [
+                'merchant_code' => $paymentDetail->merchant_code,
+                'referenceId' => $paymentDetail->transaction_id,
+                'transaction_id' => $paymentDetail->fourth_party_transection,
+                'amount' => $paymentDetail->amount,
+                'Currency' => $paymentDetail->Currency,
+                'customer_name' => $paymentDetail->customer_name,
+                'bank_account_name' => $paymentDetail->bank_account_name,
+                'bank_code' => $paymentDetail->bank_code,
+                'bank_account_number' => $paymentDetail->bank_account_number,
+                'receipt_url' => $paymentDetail->receipt_url,
+                'payment_status' => $paymentDetail->payment_status,
+                'created_at' => $paymentDetail->created_at,
+            ];
+            // echo "<pre>";  print_r($data); die;
+        return view('payment-form.r2p.paymentProcessingPage', compact('data'));
+    }
+
+    public function payinResponse(Request $request, $frtransaction)
+    {
+       
+        $RefID = base64_decode($frtransaction);
+        $paymentDetail = PaymentDetail::where('fourth_party_transection', $RefID)->first();
+
+        echo "<pre>";  print_r($paymentDetail); die;
+
+
+
+
+
+
+
+
+
+
+
+        $updateData = [
+            // 'TransId' => $request->RefId,
+            'payment_status' => $request->status,
+            // 'payin_arr' => '',
+        ];
+        PaymentDetail::where('fourth_party_transection', $request->RefId)->update($updateData);
+        $paymentDetail = PaymentDetail::where('fourth_party_transection', $request->RefId)->first();
+        $callbackUrl = $paymentDetail->callback_url;
+        $postData = [
+            'merchant_code' => $paymentDetail->merchant_code,
+            'referenceId' => $paymentDetail->transaction_id,
+            'transaction_id' => $paymentDetail->fourth_party_transection,
+            'amount' => $paymentDetail->amount,
+            'Currency' => $paymentDetail->Currency,
+            'customer_name' => $paymentDetail->customer_name,
+            'payment_status' => $paymentDetail->payment_status,
+            'created_at' => $paymentDetail->created_at,
+        ];
+
+        return view('payment.payment_status', compact('request', 'postData', 'callbackUrl'));
     }
 
     public function r2pDepositNotifiication(Request $request)
@@ -216,16 +301,17 @@ class RichPayController extends Controller
                 'PROCESSING' => 'processing',
                 default => 'failed',
             };
-            $TransId = $data['txn_ref_id'];
+            $RefID = $data['txn_ref_order_id'];
+            sleep(10);
             $updateData = [
                 'payment_status' => $orderStatus,
                 'response_data' => json_encode($data),
             ];
             // echo "<pre>";  print_r($updateData); die;
-            PaymentDetail::where('TransId', $TransId)->update($updateData);
+            PaymentDetail::where('fourth_party_transection', $RefID)->update($updateData);
             echo "Transaction updated successfully!";
             //Call webhook API START
-            $paymentDetail = PaymentDetail::where('TransId', $TransId)->first();
+            $paymentDetail = PaymentDetail::where('fourth_party_transection', $RefID)->first();
             $callbackUrl = $paymentDetail->callback_url;
             $postData = [
                 'merchant_code' => $paymentDetail->merchant_code,

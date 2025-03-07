@@ -456,6 +456,8 @@ Route::get('/m2p/payintest', function () {
 
 Route::controller(RichPayController::class)->group(function () {
     Route::get('/r2pPayin', 'payinform');
-    // Route::get('s2p/payinResponse', 'payinResponse');
+    Route::get('/r2pPaymentPage/{frtransaction}', 'paymentPage');
+    Route::get('/r2pPaymentPage2/{frtransaction}', 'paymentProcessingPage');
+    Route::get('r2p/payinResponse/{frtransaction}', 'payinResponse');
     // Route::get('/s2pPayout', 's2pPayoutform'); 
 });
