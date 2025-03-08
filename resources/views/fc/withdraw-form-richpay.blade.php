@@ -46,8 +46,7 @@
                         <h3 class="text-center mb-4"><b>POIPET RESORT - WITHDRAWAL</b></h3>
                         <form class="form-horizontal" action="{{ route('apiroute.r2p.payout') }}" method="GET" id="paymentForm">
                             <input type="hidden" name="merchant_code" value="FCmerchant001">
-                             {{-- <input type="hidden" name="product_id" value="28">    for Local 28 --}}
-                             <input type="hidden" name="product_id" value="29">    {{--for Live  29 --}}
+                             <input type="hidden" name="product_id" value="29">    {{--for Local 28 || for Live  29 --}}
                             <input type="hidden" name="callback_url" value="{{ route('apiroute.r2pPayoutcallbackURL') }}">
 							<div class="row mb-4">
                                 <label for="Reference" class="col-md-4 form-label">Reference ID</label>
