@@ -416,10 +416,11 @@ Route::controller(QRCodeController::class)->group(function () {
     // Route::post('/save-qr-code', 'saveQrCode');
     Route::get('/merchant-qrcode-list', 'listQrCode')->name('merchant-qrcode-list');
     Route::get('export/invoice', 'exportMerchantInvoice')->name('merchant-export-invoice');
-    Route::get('fc/s2pdeposit/{amount}/{invoice_number}/{customer_name}', 'fcs2pDeposit')->name('fc.s2p.Deposit');
+    // Route::get('fc/s2pdeposit/{amount}/{invoice_number}/{customer_name}', 'fcs2pDeposit')->name('fc.s2p.Deposit');
     Route::get('fc/r2pdeposit/{amount}/{invoice_number}/{customer_name}', 'fcs2pDeposit')->name('fc.s2p.Deposit');
 
-    Route::get('fc/s2pWithdrawal/', 'fcs2pWithdrawalForm')->name('fc.s2p.withdrawal');
+    // Route::get('fc/s2pWithdrawal/', 'fcs2pWithdrawalForm')->name('fc.s2p.withdrawal');
+    Route::get('fc/r2pWithdrawal/', 'fcr2pWithdrawalForm')->name('fc.r2p.withdrawal');
 });
 Route::controller(SpeedpayPayinPayoutController::class)->group(function () {
     Route::get('/s2pPayin', 'payinform');
@@ -460,5 +461,5 @@ Route::controller(RichPayController::class)->group(function () {
     Route::get('/r2pPaymentPage/{frtransaction}', 'paymentPage');
     Route::get('/r2pPaymentPage2/{frtransaction}', 'paymentProcessingPage');
     Route::get('r2p/payinResponse/{frtransaction}', 'payinResponse');
-    // Route::get('/s2pPayout', 's2pPayoutform'); 
+    Route::get('/r2pPayout', 'r2pPayoutform'); 
 });

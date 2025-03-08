@@ -358,6 +358,291 @@ class RichPayController extends Controller
 
     }
 
+    public function r2pPayoutform(Request $request)
+    {
+        return view('payment-form.r2p.payout-form');
+    }
+
+    public function payout(Request $request)
+    {
+        // echo "<pre>";  print_r($request->all()); die;
+        $totalDepositSumAfterCharge = PaymentDetail::where('merchant_code', $request->merchant_code)->where('Currency', $request->Currency)->where('payment_status', 'success')->sum('net_amount');
+        $totalPayoutSumAfterCharge = SettleRequest::where('merchant_code', $request->merchant_code)->where('Currency', $request->Currency)->where('status', 'success')->sum('net_amount');
+        $AvailableforPayout=$totalDepositSumAfterCharge-$totalPayoutSumAfterCharge;
+        //  For speedpay charge START
+        $percentage = 0.7;
+        $totalWidth = $AvailableforPayout;
+        $new_width = ($percentage / 100) * $totalWidth;
+        @$finalAmount = $totalWidth-$new_width;
+        //  For speedpay charge END
+        if($finalAmount < $request->amount){
+            return "<h2 style='color:red'>Balance is not enough in Gateway Wallet!</h2>"; 
+        }
+        // echo "<pre>"; print_r($totalPayoutSum); die;
+        $arrayData = [];
+        $getGatewayParameters = [];
+        $paymentMap = PaymentMap::where('id', $request->product_id)->first();
+        if (! $paymentMap) {
+            return 'product not exist';
+        }
+        if ($paymentMap->status == 'Disable') {
+            return 'product is Disable';
+        }
+        $merchantData=Merchant::where('merchant_code', $request->merchant_code)->first();
+        if (empty($merchantData)) {
+            return 'Invalid Merchants!';
+        }
+
+        if ($paymentMap->channel_mode == 'single') {
+            $gatewayPaymentChannel = GatewayPaymentChannel::where('id', $paymentMap->gateway_payment_channel_id)->first();
+            if (! $gatewayPaymentChannel) {
+                return 'gatewayPaymentChannel not exist';
+            }
+            if ($gatewayPaymentChannel->status == 'Disable') {
+                return 'gatewayPaymentChannel is Disable';
+            }
+            $paymentMethod = PaymentMethod::where('id', $gatewayPaymentChannel->gateway_account_method_id)->first();
+            $arrayData['method_name'] = $paymentMethod->method_name;
+            if (! $paymentMethod) {
+                return 'paymentMethod not exist';
+            }
+            if ($paymentMethod->status == 'Disable') {
+                return 'paymentMethod is Disable';
+            }
+           
+            if ($gatewayPaymentChannel->risk_control == 1) {
+                // daily transection limit checking
+                $checkLimitationRiskMode = $this->checkLimitationRiskMode($gatewayPaymentChannel, $paymentMap);
+                if ($checkLimitationRiskMode) {
+                    $getGatewayParameters = $this->getGatewayParameters($gatewayPaymentChannel);
+                } else {
+                    return $checkLimitationRiskMode;
+                }
+                // daily transection limit checking
+            } else {
+                $getGatewayParameters = $this->getGatewayParameters($gatewayPaymentChannel);
+            }
+        } else {
+            $gatewayPaymentChannel = GatewayPaymentChannel::whereIn('id', explode(',', $paymentMap->gateway_payment_channel_id))->get();
+            if (! $gatewayPaymentChannel) {
+                return 'gatewayPaymentChannel not exist';
+            }
+
+            foreach ($gatewayPaymentChannel as $item) {
+                if ($item->status == 'Enable') {
+                    $paymentMethod = PaymentMethod::where('id', $item->gateway_account_method_id)->first();
+                    $arrayData['method_name'] = $paymentMethod->method_name;
+                    if (! $paymentMethod) {
+                        return 'paymentMethod not exist';
+                    }
+                    if ($paymentMethod->status == 'Disable') {
+                        return 'paymentMethod is Disable';
+                    }
+                    // gateway_account_method_id
+                    if ($item->risk_control == 1) {
+                        // daily transection limit checking
+                        $checkLimitationRiskMode = $this->checkLimitationRiskMode($item, $paymentMap);
+                        if ($checkLimitationRiskMode) {
+                            $getGatewayParameters = $this->getGatewayParameters($item);
+                            $gatewayPaymentChannel = $item;
+                        } else {
+                            return $checkLimitationRiskMode;
+                        }
+                        // daily transection limit checking
+                    } else {
+                        $getGatewayParameters = $this->getGatewayParameters($item);
+                    }
+                }
+            }
+        }
+        $res = array_merge($arrayData, $getGatewayParameters);
+        $frtransaction = $this->generateUniqueCode();
+        //  echo "<pre>";  print_r($res); die;
+
+        // Call Curl API code START
+        $secretKey =  $res['secretKey']; // Store secret key in .env file
+        $orderId = $frtransaction; // Replace with actual Order ID
+        $amount =  $request->amount; // Replace with actual Amount
+        // Step 1: Concatenate in required format
+        $signatureString = "{$secretKey}:{$orderId}:{$amount}";
+        // Step 2: Encode using Base64
+        $encodedSignature = base64_encode($signatureString);
+
+        // Call Curl API code START
+        $postData = [
+            'amount' => $request->amount,
+            'dest_bank_acc_no' => $request->customer_account_number,
+            'dest_bank_acc_name' => $request->customer_name,
+            'dest_bank_code' => $request->bank_code,
+            'withdraw_code' => '482615',
+            'callback_url' => url('api/r2pWithdrawNotifiication'),
+            'order_id' => $frtransaction,
+        ];
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoiT1NNTyIsInNpZ25hdHVyZSI6ImNTMUNYMlZ6ZEU0MkxWUjNiMnRLZDFNeE1qQmhXRUpTZWpSTlFtOUVSVlpzWTFGblRXeHpNR1ZGVmtGRFoyNXdOSGxrTW1adVMyaFlTemxLTkRFeGFIa3phV3hwYjJVdE1VOXRlblYyY1daak16TXhVVkpIYVd0d09XeHJZV2xPVEhKVVRuZzNhV3cxVHpaMVpVNDVTMkZ0T0VoZlZraFhWRk56WW1GWGJEUkZUbEJTYXpWcVdrcHhNRXhuVkZabWN6bEJQUT09IiwiaWRlbnRpZmllciI6IlowRkJRVUZCUW01NVdISlJUa1JyZUdaVFRIcFdhMk41ZURaM2NVSm1SMmhCWkU5TU5scGxkR1E1TlV0bWNuaFZjQzExV213eFRFZGFSRXRTTUhKMFdqVm9iRGhrTTBwd2RFNU1aa1Y0VGtGYU1DMXphVmgzTlRZd1gzTXRhazVRWnpVeFMxTm5kVXBhWTBwSk0xbHdUVGRDU2tGRk5HODkifQ.gvm5-f2jGiJyDXYlaRsgLgscgQv3YS2zV7IHE4ZgWwg', // Ensure proper concatenation
+            'x-api-key' => $res['apiKey'], // Correct usage of array key
+            'x-signature' => $encodedSignature, // No change needed
+        ])->post($res['api_url'], $postData);
+        $jsonData = $response->json();
+        // echo "<pre>";  print_r($jsonData['detail']); die;
+
+        if(!empty($jsonData['status'])){
+            $Transactionid = $jsonData['ref_id'];
+            $status = match ($jsonData['status'] ?? '') {
+                'SUCCESS' => 'success',
+                'AUTO_SUCCESS' => 'success',
+                'PROCESSING' => 'processing',
+                'PENDING_CONFIRM' => 'pending',
+                default => 'failed',
+            };
+            $message = $status;
+        } else {
+            $status = 'failed';
+            $message = $jsonData['detail']; 
+        }
+
+        ////Insert Record into DB
+            $client_ip = (isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : $_SERVER['REMOTE_ADDR']);
+             // for speedpay payout charge START
+            if(!empty($request->amount)){
+                $percentage = 0.7;
+                $totalWidth = $request->amount;
+                $mdr_fee_amount = ($percentage / 100) * $totalWidth;
+                $net_amount= $totalWidth+$mdr_fee_amount;
+            }
+            // for speedpay charge END
+                $addRecord = [
+                    'settlement_trans_id' => $Transactionid ?? '',
+                    'fourth_party_transection' => $frtransaction,
+                    'merchant_track_id' => $request->referenceId,
+                    'gateway_name' => 'RichPay',
+                    'agent_id' => $merchantData->agent_id,
+                    'merchant_id' => $merchantData->id,
+                    'merchant_code' => $request->merchant_code,
+                    'callback_url' => $request->callback_url,
+                    'total' => $request->amount,
+                    'net_amount' => $net_amount,
+                    'mdr_fee_amount' => $mdr_fee_amount,
+                    'customer_bank_name' => $request->customer_name,
+                    'bank_code' => $request->bank_code,
+                    'customer_account_number' => $request->customer_account_number,
+                    'Currency' => $request->Currency,
+                    'product_id' => $request->product_id,
+                    'payment_channel' => $gatewayPaymentChannel->id,
+                    'payment_method' => $paymentMethod->method_name,
+                    'customer_name' => $request->customer_name,
+                    'api_response' => json_encode($jsonData),
+                    'message' => $message ?? '',
+                    'ip_address' => $client_ip, 
+                    'status' => $status,
+                ];
+                SettleRequest::create($addRecord);
+
+                $paymentDetail = SettleRequest::where('fourth_party_transection', $frtransaction)->first();
+                $callbackUrl = $paymentDetail->callback_url;
+                $postData = [
+                    'merchant_code' => $paymentDetail->merchant_code,
+                    'referenceId' => $paymentDetail->merchant_track_id,
+                    'transaction_id' => $paymentDetail->fourth_party_transection,
+                    'amount' => $paymentDetail->total,
+                    'Currency' => $paymentDetail->Currency,
+                    'customer_name' => $paymentDetail->customer_name,
+                    'status' => $paymentDetail->status,
+                    'created_at' => $paymentDetail->created_at,
+                    'orderremarks' => $paymentDetail->message,
+                ];
+                return view('payout.payout_status', compact('request', 'postData', 'callbackUrl'));
+            
+        
+    }
+
+    public function r2pPayoutcallbackURL(Request $request)
+    {
+        $data = $request->all();
+        echo "Transaction Information as follows" . '<br/>' .
+            "Merchant_code : " . $data['merchant_code'] . '<br/>' .
+            "ReferenceId : " . $data['referenceId'] . '<br/>' .
+            "TransactionId : " . $data['transaction_id'] . '<br/>' .
+            "Type : Withdrawal" .'<br/>' .
+            "Currency : " . $data['Currency'] . '<br/>' .
+            "Amount : " . $data['amount'] . '<br/>' .
+            "customer_name : " . $data['customer_name'] . '<br/>' .
+            "Datetime : " . $data['created_at'] . '<br/>' .
+            "Status : " . $data['status'];
+         die;
+    }
+
+    public function r2pWithdrawNotifiication(Request $request)
+    {
+         // $results = '{
+        //   "type": "DEPOSIT",
+        //   "status": "SUCCESS",
+        //   "status_des": "",
+        //   "amount": 0,
+        //   "txn_ref_id": "",
+        //   "txn_ref_order_id": "",
+        //   "txn_ref_bank_code": "",
+        //   "txn_ref_bank_acc_no": "",
+        //   "txn_ref_bank_acc_name": "",
+        //   "txn_ref_user_id": "",
+        //   "txn_ref1": "",
+        //   "txn_ref2": "",
+        //   "txn_timestamp": "1970-01-01T00:00:00",
+        //   "stm_timestamp": "1970-01-01T00:00:00",
+        //   "stm_bank_code": "",
+        //   "stm_bank_acc_no": "",
+        //   "stm_bank_acc_name": "",
+        //   "stm_desc": "",
+        //   "stm_ref_id": ""
+        // }';
+
+        // Decode the JSON payload automatically
+        $results = $request->json()->all();
+        if(!empty($results)) {
+            $status = match ($results['status'] ?? '') {
+                'SUCCESS' => 'success',
+                'AUTO_SUCCESS' => 'success',
+                'PROCESSING' => 'processing',
+                'PENDING_CONFIRM' => 'pending',
+                default => 'failed',
+            };
+            $RefID = $results['txn_ref_order_id'];
+            sleep(50);
+            $updateData = [
+                'status' => $status,
+                'api_response' => json_encode($results),
+            ];
+            // echo "<pre>";  print_r($updateData); die;
+            SettleRequest::where('fourth_party_transection', $RefID)->update($updateData);
+            echo "Transaction updated successfully!";
+            //Call webhook API START
+            $paymentDetail = SettleRequest::where('fourth_party_transection', $RefID)->first();
+            $callbackUrl = $paymentDetail->callback_url;
+            $postData = [
+                'merchant_code' => $paymentDetail->merchant_code,
+                'referenceId' => $paymentDetail->transaction_id,
+                'transaction_id' => $paymentDetail->fourth_party_transection,
+                'amount' => $paymentDetail->total,
+                'Currency' => $paymentDetail->Currency,
+                'customer_name' => $paymentDetail->customer_name,
+                'status' => $paymentDetail->status,
+                'created_at' => $paymentDetail->created_at,
+            ];
+            try {
+                if ($paymentDetail->callback_url != null) {
+                    $response = Http::post($paymentDetail->callback_url, $postData);
+                    echo $response->body(); die;
+                }
+            } catch (\Exception $e) {
+                return response()->json(['error' => 'Failed to call webhook','message' => $e->getMessage()], 500);
+            }
+             //Call webhook API START
+
+        }else{
+            return response()->json(['error' => 'Data Not Found or Invalid Request!'], 400);
+        }
+    }
+
 
     public function getGatewayParameters($gatewayPaymentChannel): array
     {

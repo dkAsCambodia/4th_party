@@ -242,10 +242,14 @@ class QRCodeController extends Controller
         exportExcel($data_array, $date, 'invoice');
     }
 
-    public function fcs2pWithdrawalForm(Request $request)
-    {
-        return view('fc.withdraw-form');
-    }
+    // public function fcs2pWithdrawalForm(Request $request)
+    // {
+    //     return view('fc.withdraw-form');
+    // }
 
+    public function fcr2pWithdrawalForm(Request $request)
+    {
+        return view('fc.withdraw-form-richpay');
+    }
         
 }   
