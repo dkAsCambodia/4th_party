@@ -42,11 +42,12 @@
             <div class="row no-gutters">
                 <div class="col-xl-12">
                     <div class="auth-form">
-                        <h3 class="text-center mb-4"><b>Test Merchant Transfer or Deposit</b></h3>
-                        <form class="form-horizontal" action="{{ route('apiroute.r2p.payin') }}" method="GET" id="paymentForm">
+                        <h3 class="text-center mb-4"><b>Test Merchant Withdrawal or Payout</b></h3>
+                        <form class="form-horizontal" action="{{ route('apiroute.r2p.payout') }}" method="GET" id="paymentForm">
                             <input type="hidden" name="merchant_code" value="testmerchant005">
-                            <input type="hidden" name="product_id" value="26">   {{-- // for live and local  26 --}}
-                            <input type="hidden" name="callback_url" value="{{ route('apiroute.r2pPayincallbackURL') }}">
+                             {{-- <input type="hidden" name="product_id" value="27">    for Local 27 --}}
+                             <input type="hidden" name="product_id" value="28">    {{--for Live 28 --}}
+                            <input type="hidden" name="callback_url" value="{{ route('apiroute.r2pPayoutcallbackURL') }}">
 							<div class="row mb-4">
                                 <label for="Reference" class="col-md-4 form-label">Reference ID</label>
                                 <div class="col-md-8">
@@ -62,7 +63,7 @@
                             <div class="row mb-4">
                                 <label for="price" class="col-md-4 form-label">Amount</label>
                                 <div class="col-md-8">
-									<input class="form-control" required name="amount" placeholder="Enter your Amount" value="100" type="text">
+									<input class="form-control" required name="amount" placeholder="Amount should be minimum 1000" value="1000" type="text">
                                 </div>
                             </div>
                             <div class="row mb-4">
@@ -74,16 +75,17 @@
                             <div class="row mb-4">
                                 <label for="Bank-Code" class="col-md-4 form-label">Bank Code</label>
                                 <div class="col-md-8">
-										<select class="form-control" name="bank_code" required>
+										<select class="form-control select2-show-search form-select  text-dark" name="bank_code" required data-placeholder="---">
                                             <option value="">Select Bank</option>
-                                            <option value="002">Bangkok Bank</option>
-                                            <option value="025">Bank of Ayudhya (Krungsri)</option>
-                                            <option value="017">Citibank</option>
-                                            <option value="004">Karsikorn Bank (K-Bank)</option>
-                                            <option value="069">Kiatnakin Bank</option>
-                                            <option value="006">Krung Thai Bank</option>
-                                            <option value="014">Siam Commercial Bank</option>
-                                            <option value="011">TMB Bank Public Company Limited</option>
+                                            <option value="BBL">Bangkok Bank</option>
+                                            <option value="BOA">Bank of AYUDHYA</option>
+                                            <option value="KTB">Krung Thai Bank</option>
+                                            <option value="SCB">Siam Commercial Bank</option>
+                                            <option value="KKR">Kasikorn Bank</option>
+                                            <option value="GSB">Government Savings Bank</option>
+                                            <option value="SCBT">Standard Chartered Bank</option>
+                                            <option value="KNK">KIATNAKIN PHATRA Bank</option>
+                                            <option value="TMB">Thai Military Bank (TMB THANACHART Bank)</option>
 										</select>
                                 </div>
                             </div>
@@ -98,7 +100,7 @@
                                 <img src="https://i.gifer.com/ZZ5H.gif" alt="Loading..."> <!-- Replace with your spinner image URL -->
                             </div>
                             <div class="text-center">
-                                <button type="submit" id="submitBtn" class="btn btn-primary btn-block">Pay Now</button>
+                                <button type="submit" id="submitBtn" class="btn btn-primary btn-block">Payout Now</button>
                             </div>
                         </form>
                     </div>
