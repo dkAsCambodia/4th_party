@@ -40,8 +40,8 @@
                         <h3 class="text-center mb-4"><b>POIPET RESORT</b></h3>
                         <form class="form-horizontal" action="{{ route('apiroute.r2p.payin') }}" method="GET" id="paymentForm">
                             <input type="hidden" name="merchant_code" value="FCmerchant001">
-                             {{-- <input type="hidden" name="product_id" value="27">    for live 27 --}}
-                             <input type="hidden" name="product_id" value="25">      {{--for local 25 --}}
+                              <input type="hidden" name="product_id" value="27">    {{-- for live 27 --}}
+                             {{-- <input type="hidden" name="product_id" value="25">      for local 25 --}}
                             <input type="hidden" name="callback_url" value="{{ route('apiroute.r2pPayincallbackURL') }}">
                             <input type="hidden" name="amount" value="{{ $amount ?? '' }}">
                             <input type="hidden" name="Currency" value="THB">
