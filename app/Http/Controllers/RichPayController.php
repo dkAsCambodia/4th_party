@@ -166,7 +166,7 @@ class RichPayController extends Controller
                 'payment_method' => $paymentMethod->method_name,
                 'request_data' => json_encode($res),
                 'gateway_name' => 'RichPay',
-                'customer_name' => $request->customer_name,
+                'customer_name' => $request->customer_name ?? $request->bank_account_name,
                 'customer_email' => $request->customer_email,
                 'payin_arr' => json_encode($jsonData),
                 'receipt_url' => $jsonData['qr_image_link'],
@@ -358,6 +358,11 @@ class RichPayController extends Controller
 
     }
 
+    public function payintest(Request $request)
+    {
+        return view('payment-form.r2p.payintest');
+    }
+
     public function r2pPayoutform(Request $request)
     {
         return view('payment-form.r2p.payout-form');
@@ -519,7 +524,7 @@ class RichPayController extends Controller
                     'total' => $request->amount,
                     'net_amount' => $net_amount,
                     'mdr_fee_amount' => $mdr_fee_amount,
-                    'customer_bank_name' => $request->customer_name,
+                    'customer_bank_name' => $request->bank_account_name ?? $request->customer_name,
                     'bank_code' => $request->bank_code,
                     'customer_account_number' => $request->customer_account_number,
                     'Currency' => $request->Currency,
