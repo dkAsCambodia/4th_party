@@ -110,7 +110,7 @@ class M2pController extends Controller
         //Insert data into DB
              // for Help2Pay deposit charge START
              if(!empty($request->amount)){
-                $percentage = 3.5;
+                $percentage = 1;
                 $totalWidth = $request->amount;
                 $mdr_fee_amount = ($percentage / 100) * $totalWidth;
                 $net_amount= $totalWidth-$mdr_fee_amount;
