@@ -142,7 +142,7 @@ class RichPayController extends Controller
             //Insert data into DB
              // for speedpay deposit charge START
             if(!empty($request->amount)){
-                $percentage = 1.35;
+                $percentage = 1.35;     // Deposit Charge for RichPay
                 $totalWidth = $request->amount;
                 $mdr_fee_amount = ($percentage / 100) * $totalWidth;
                 $net_amount= $totalWidth-$mdr_fee_amount;
@@ -369,13 +369,11 @@ class RichPayController extends Controller
         $totalDepositSumAfterCharge = PaymentDetail::where('merchant_code', $request->merchant_code)->where('Currency', $request->Currency)->where('payment_status', 'success')->sum('net_amount');
         $totalPayoutSumAfterCharge = SettleRequest::where('merchant_code', $request->merchant_code)->where('Currency', $request->Currency)->where('status', 'success')->sum('net_amount');
         $AvailableforPayout=$totalDepositSumAfterCharge-$totalPayoutSumAfterCharge;
-        //  For speedpay charge START
-        $percentage = 0.7;
-        $totalWidth = $AvailableforPayout;
-        $new_width = ($percentage / 100) * $totalWidth;
-        @$finalAmount = $totalWidth-$new_width;
-        //  For speedpay charge END
-        if($finalAmount < $request->amount){
+        //  For RichPay charge START
+        $perTransaction = 10;
+        $availableBalance = $AvailableforPayout - $perTransaction;
+        //  For RichPay charge END
+        if($availableBalance < $request->amount){
             return "<h2 style='color:red'>Balance is not enough in Gateway Wallet!</h2>"; 
         }
         // echo "<pre>"; print_r($totalPayoutSum); die;
@@ -503,14 +501,12 @@ class RichPayController extends Controller
 
         ////Insert Record into DB
             $client_ip = (isset($_SERVER['HTTP_X_FORWARDED_FOR']) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : $_SERVER['REMOTE_ADDR']);
-             // for speedpay payout charge START
+             // for RichPay payout charge START
             if(!empty($request->amount)){
-                $percentage = 0.7;
-                $totalWidth = $request->amount;
-                $mdr_fee_amount = ($percentage / 100) * $totalWidth;
-                $net_amount= $totalWidth+$mdr_fee_amount;
+                $mdr_fee_amount = 10;
+                $net_amount= $request->amount+$mdr_fee_amount;
             }
-            // for speedpay charge END
+            // for RichPay charge END
                 $addRecord = [
                     'settlement_trans_id' => $Transactionid ?? '',
                     'fourth_party_transection' => $frtransaction,
