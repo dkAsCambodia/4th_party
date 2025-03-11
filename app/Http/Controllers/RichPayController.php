@@ -358,11 +358,6 @@ class RichPayController extends Controller
 
     }
 
-    public function payintest(Request $request)
-    {
-        return view('payment-form.r2p.payintest');
-    }
-
     public function r2pPayoutform(Request $request)
     {
         return view('payment-form.r2p.payout-form');
@@ -531,7 +526,7 @@ class RichPayController extends Controller
                     'product_id' => $request->product_id,
                     'payment_channel' => $gatewayPaymentChannel->id,
                     'payment_method' => $paymentMethod->method_name,
-                    'customer_name' => $request->customer_name,
+                    'customer_name' => $request->customer_name ?? $request->bank_account_name,
                     'api_response' => json_encode($jsonData),
                     'message' => $message ?? '',
                     'ip_address' => $client_ip, 
@@ -644,6 +639,15 @@ class RichPayController extends Controller
         }
     }
 
+    public function payintest(Request $request)
+    {
+        return view('payment-form.r2p.payintest');
+    }
+    
+    public function payouttest(Request $request)
+    {
+        return view('payment-form.r2p.payouttest');
+    }
 
     public function getGatewayParameters($gatewayPaymentChannel): array
     {
