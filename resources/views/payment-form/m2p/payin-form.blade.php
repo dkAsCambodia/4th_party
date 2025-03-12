@@ -56,7 +56,7 @@
                             <div class="row mb-4">
                                 <label for="Reference" class="col-md-4 form-label">Currency</label>
                                 <div class="col-md-8">
-                                <select class="form-control" name="Currency" required>
+                                <select class="form-control select2-show-search form-select text-dark" name="Currency" required>
                                     <option value="EUR">EUR</option>
                                     <option value="THB">THB</option>
                                     <option value="USD" selected>USD</option>
