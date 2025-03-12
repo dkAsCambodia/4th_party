@@ -449,7 +449,7 @@ Route::get('/h2p/payouttest', function () {
 Route::controller(M2pController::class)->group(function () {
     Route::get('/m2pPayin', 'payinform');
    
-    // Route::get('/h2pPayout', 'h2pPayoutform'); 
+    Route::get('/m2pPayout', 'm2pPayoutform'); 
 });
 Route::get('/m2p/payintest', function () {
     return view('payment-form.m2p.payintest');
@@ -464,5 +464,5 @@ Route::controller(RichPayController::class)->group(function () {
     Route::get('/r2pPayout', 'r2pPayoutform'); 
 
     Route::get('/r2p/payintest', 'payintest'); 
-    Route::get('/r2p/Payouttest', 'payouttest'); 
+    Route::get('/r2p/payouttest', 'payouttest'); 
 });

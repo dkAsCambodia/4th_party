@@ -32588,7 +32588,7 @@ Fixing Order => Base + Typography >> General Layout + Grid >> Page Layout + Comp
 }
 
 .form-control {
-  background: #fff;
+  /* background: #fff; */
   border: 0.0625rem solid #f5f5f5;
   padding: 0.3125rem 1.25rem;
   color: #6e6e6e;

@@ -42,11 +42,11 @@
             <div class="row no-gutters">
                 <div class="col-xl-12">
                     <div class="auth-form">
-                        <h3 class="text-center mb-4"><b>Test Merchant Crypto Transfer or Deposit</b></h3>
-                        <form class="form-horizontal" action="{{ route('apiroute.m2p.payin') }}" method="GET" id="paymentForm">
+                        <h3 class="text-center mb-4"><b> m2pTest Merchant Withdrawal or Payout</b></h3>
+                        <form class="form-horizontal" action="{{ route('apiroute.m2p.payout') }}" method="GET" id="paymentForm">
                             <input type="hidden" name="merchant_code" value="testmerchant005">
-                            <input type="hidden" name="product_id" value="9">   {{--  //M2p Deposit --}}
-                            <input type="hidden" name="callback_url" value="{{ route('apiroute.m2pPayincallbackURL') }}">
+                             <input type="hidden" name="product_id" value="10">   
+                            <input type="hidden" name="callback_url" value="{{ route('apiroute.m2pPayoutcallbackURL') }}">
 							<div class="row mb-4">
                                 <label for="Reference" class="col-md-4 form-label">Reference ID</label>
                                 <div class="col-md-8">
@@ -69,7 +69,7 @@
                             <div class="row mb-4">
                                 <label for="price" class="col-md-4 form-label">Amount</label>
                                 <div class="col-md-8">
-									<input class="form-control" required name="amount" placeholder="Enter your Amount" value="300" type="text">
+									<input class="form-control" required name="amount" placeholder="Enter amount" value="5" type="text">
                                 </div>
                             </div>
                             <div class="row mb-4">
@@ -78,12 +78,19 @@
 								<input  class="form-control" required name="customer_name" placeholder="Enter customer name" type="text">
                                 </div>
                             </div>
+                           
+                            <div class="row mb-4">
+								<label for="customer_account_number" class="col-md-4 form-label">Enter Wallet Address</label>
+								<div class="col-md-8">
+									<input class="form-control" required name="customer_account_number"  placeholder="Enter wallet address" type="text">
+								</div>
+							</div>
                              <!-- Spinner -->
                             <div class="spinner-container">
                                 <img src="https://i.gifer.com/ZZ5H.gif" alt="Loading..."> <!-- Replace with your spinner image URL -->
                             </div>
                             <div class="text-center">
-                                <button type="submit" id="submitBtn" class="btn btn-primary btn-block">Pay Now</button>
+                                <button type="submit" id="submitBtn" class="btn btn-primary btn-block">Payout Now</button>
                             </div>
                         </form>
                     </div>

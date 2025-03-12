@@ -69,7 +69,7 @@
                             <div class="row mb-4">
                                 <label for="Bank-Code" class="col-md-4 form-label">Bank Code</label>
                                 <div class="col-md-8">
-										<select class="form-control" name="bank_code" required>
+										<select class="form-control select2-show-search form-select text-dark" name="bank_code" required>
                                             <option value="">Select Bank</option>
                                             <option value="002">Bangkok Bank</option>
                                             <option value="025">Bank of Ayudhya (Krungsri)</option>

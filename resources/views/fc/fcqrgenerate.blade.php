@@ -22,6 +22,14 @@
                                 @enderror
                             </div>
                             <div class="mb-3">
+                                <label class="mb-1"><strong>Select Currency</strong></label>
+                                <select class="form-control select2-show-search form-select  text-dark" name="Currency" required>
+                                    <option value="THB" selected>THB</option>
+                                    <option value="USD">USD</option>
+                                    <option value="USDT">USDT</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
                                 <label class="mb-1"><strong>Enter Amount</strong></label>
                                 <input type="text" class="form-control @error('amount') is-invalid @enderror" name="amount" value="{{ old('amount') }}" placeholder="Enter amount should be in decimal such as 100.00">
                                 @error('amount')
