@@ -32,9 +32,9 @@
                     <div class="qr-container">
                         <!-- Display QR Code as SVG -->
                         {!! QrCode::size(300)->generate($url) !!}
-                        <center>
-                            <a href="{{$url}}" target="_blank">{{$url}}</a>
-                            <p><b>{{ $invoice_number }}-{{$amount}}.png</b></p>
+                        <center><br/>
+                            <a href="{{$url}}" target="_blank"><p><b>{{ $invoice_number }}-{{$amount}}.png</b></p></a>
+                            
                             <button class="qr-btn" id="downloadQR" 
                                     data-invoice-number="{{ $invoice_number }}" 
                                     data-amount="{{ $amount }}">

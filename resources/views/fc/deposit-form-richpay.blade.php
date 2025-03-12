@@ -58,16 +58,7 @@
                                 </div>
                             </div>
                             <div class="row mb-4">
-                                <label for="customer_name" class="col-md-4 form-label">Bank Account Name</label>
-                                <div class="col-md-8">
-								<input list="browsers" id="browser" class="form-control" required name="bank_account_name" placeholder="Enter Bank account name" type="text">
-                                <datalist id="browsers">
-                                    <option value="{{ $customer_name ?? '' }}">
-                                </datalist>
-                                </div>
-                            </div>
-                            <div class="row mb-4">
-                                <label for="Bank-Code" class="col-md-4 form-label">Bank Code</label>
+                                <label for="Bank-Code" class="col-md-4 form-label">Bank Name</label>
                                 <div class="col-md-8">
 										<select class="form-control select2-show-search form-select text-dark" name="bank_code" required>
                                             <option value="">Select Bank</option>
@@ -83,7 +74,17 @@
                                 </div>
                             </div>
                             <div class="row mb-4">
-								<label for="customer_account_number" class="col-md-4 form-label">Bank Account Number</label>
+                                <label for="customer_name" class="col-md-4 form-label">Account Name</label>
+                                <div class="col-md-8">
+								<input list="browsers" id="browser" class="form-control" required name="bank_account_name" placeholder="Enter Bank account name" type="text">
+                                <datalist id="browsers">
+                                    <option value="{{ $customer_name ?? '' }}">
+                                </datalist>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-4">
+								<label for="customer_account_number" class="col-md-4 form-label">Account Number</label>
 								<div class="col-md-8">
 									<input class="form-control" required name="customer_account_number" id="customer_account_number" placeholder="Enter Bank Account Number" type="text">
 								</div>
