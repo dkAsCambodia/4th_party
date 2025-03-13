@@ -160,7 +160,7 @@ class RichPayController extends Controller
                 'Currency' => $request->Currency,
                 'product_id' => $request->product_id,
                 'bank_account_name' => $request->bank_account_name ?? $request->customer_name,
-                'bank_code' => $request->bank_code,
+                'bank_code' => $request->bank_code_character ?? $request->bank_code,
                 'bank_account_number' => $request->customer_account_number,
                 'payment_channel' => $gatewayPaymentChannel->id,
                 'payment_method' => $paymentMethod->method_name,
