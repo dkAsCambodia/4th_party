@@ -129,8 +129,16 @@
           <div class="abf-value"><b><span class="abf-remains">{{ $data['amount'] ?? ''}}</span>THB</b></div>
         </div>
         <div class="abf-list-item">
-          <div class="abf-label">BackCode:</div>
+          <div class="abf-label">Bank Name:</div>
           <div class="abf-value"><b><span class="abf-remains">{{ $data['bank_code'] ?? ''}}</span></b></div>
+        </div>
+        <div class="abf-list-item">
+          <div class="abf-label">Account Name:</div>
+          <div class="abf-value"><b><span class="abf-remains">{{ $data['bank_account_name'] ?? ''}} </span></b></div>
+        </div>
+        <div class="abf-list-item">
+          <div class="abf-label">Account Number:</div>
+          <div class="abf-value"><b><span class="abf-remains">{{ $data['bank_account_number'] ?? ''}}</span></b></div>
         </div>
         <div class="abf-list-item abf-tx-block">
           <div class="abf-label">Transaction ID:</div>
@@ -144,15 +152,6 @@
           <div class="abf-label">DateTime:</div>
           <div class="abf-value"><b><?php date_default_timezone_set('Asia/Phnom_Penh');
             echo date("Y-m-d h:i A"); ?> </b></div>
-        </div>
-        
-        <div class="abf-list-item">
-          <div class="abf-label">Account Number:</div>
-          <div class="abf-value"><b><span class="abf-remains">{{ $data['bank_account_number'] ?? ''}}</span></b></div>
-        </div>
-        <div class="abf-list-item">
-          <div class="abf-label">Bank Account Name:</div>
-          <div class="abf-value"><b><span class="abf-remains">{{ $data['bank_account_name'] ?? ''}} </span></b></div>
         </div>
         <div class="abf-list-item">
           <div class="abf-label" style="color:#dc3545 !important;">Estimed Time:</div>
