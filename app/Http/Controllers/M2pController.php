@@ -443,9 +443,9 @@ class M2pController extends Controller
             'Content-Type' => 'application/json',
         ])->post($request->api_url, $postData);
         $responseData = $response->json();
-        echo "APIURL:".$request->api_url;
-        echo "<pre> PostData:";  print_r($postData); 
-        echo "<pre> Response:";  print_r($responseData); die;
+        // echo "APIURL:".$request->api_url;
+        // echo "<pre> PostData:";  print_r($postData); 
+        // echo "<pre> Response:";  print_r($responseData); die;
         if (!empty($responseData)) {
             $orderStatus = match ($responseData['status'] ?? '') {
                 'NEW' => 'processing',

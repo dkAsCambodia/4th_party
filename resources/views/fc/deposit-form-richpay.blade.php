@@ -30,7 +30,7 @@
         height: 100px;
     }
 
-      /* Dropdown Container */
+      /* Custom dropdown for select Bank START */
       .custom-dropdown {
             position: relative;
             width: 100%;
@@ -97,6 +97,7 @@
         .rotate {
             transform: rotate(180deg);
         }
+          /* Custom dropdown for select Bank END */
 </style>
 {!! Toastr::message() !!}
 <div class="row justify-content-center align-items-center">
@@ -264,6 +265,7 @@
     });
 </script>
 <script>
+      /* Custom dropdown for select Bank START */
     function toggleDropdown() {
         var dropdownList = document.getElementById("dropdownList");
         var arrow = document.getElementById("arrow");
@@ -295,6 +297,7 @@
     //         document.getElementById("arrow").classList.remove("rotate");
     //     }
     // });
+      /* Custom dropdown for select Bank END */
 </script>
 
 @endsection
