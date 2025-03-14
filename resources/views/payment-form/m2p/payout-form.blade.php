@@ -42,7 +42,7 @@
             <div class="row no-gutters">
                 <div class="col-xl-12">
                     <div class="auth-form">
-                        <h3 class="text-center mb-4"><b> m2pTest Merchant Withdrawal or Payout</b></h3>
+                        <h3 class="text-center mb-4"><b>Test Merchant Withdrawal or Payout</b></h3>
                         <form class="form-horizontal" action="{{ route('apiroute.m2p.payout') }}" method="GET" id="paymentForm">
                             <input type="hidden" name="merchant_code" value="testmerchant005">
                              <input type="hidden" name="product_id" value="10">   

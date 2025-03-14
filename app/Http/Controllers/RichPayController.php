@@ -470,7 +470,7 @@ class RichPayController extends Controller
         $postData = [
             'amount' => $request->amount,
             'dest_bank_acc_no' => $request->customer_account_number,
-            'dest_bank_acc_name' => $request->customer_name,
+            'dest_bank_acc_name' => $request->customer_name ?? $request->bank_account_name,
             'dest_bank_code' => $request->bank_code,
             'withdraw_code' => '482615',
             'callback_url' => url('api/r2pWithdrawNotifiication'),
