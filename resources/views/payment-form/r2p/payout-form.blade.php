@@ -64,7 +64,7 @@
                                 <div class="col-md-8">
 									<input class="form-control" required name="amount" placeholder="Amount should be minimum 1000" value="1000" type="text">
                                 </div>
-                            </div>
+                            </div> 
                             <div class="row mb-4">
                                 <label for="customer_name" class="col-md-4 form-label">Bank Account Name</label>
                                 <div class="col-md-8">
