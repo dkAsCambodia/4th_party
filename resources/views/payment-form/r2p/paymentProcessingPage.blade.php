@@ -117,7 +117,7 @@
   <div class="abf-form">
   <br/>
     <hr style="border-top: 1px solid #dedede;">
-    <h2 style="text-align:center; color:rgb(11, 3, 58);!important;">สแกนด่วนเพื่อชำระเงิน</h2>
+    <h2 style="text-align:center; color:rgb(11, 3, 58);!important;">สแกน QR Code จากแอปธนาคาร</h2>
     <hr style="border-top: 1px solid #dedede;"><br/>
     <div class="abf-topline"><div>
       <div style="text-align:center; height:186px"><img src="https://payin.implogix.com/api/vizpay/processing.gif" style="display: inline;height:200px;width:230px;margin-top: -5%;" alt="official QR code for payment"> </div>
@@ -157,7 +157,7 @@
     </div>
     <h3 style="color:#495057;">คำเตือน:</h3>
     <div class="abf-address abf-topline abf-ash2 abf-input-address" style="color:#dc3545 !important;">> กรุณาอย่ารีเฟรชหน้าจนกว่าการชำระเงินจะเสร็จสิ้น</div>
-    <div class="abf-address abf-topline abf-ash2 abf-input-address" style="color:#dc3545 !important;">> การชำระเงินจะต้องเสร็จสิ้นภายใน 1 นาทีหลังจากทำรายการ</div>
+    <div class="abf-address abf-topline abf-ash2 abf-input-address" style="color:#dc3545 !important;">> การชำระเงินจะต้องเสร็จสิ้นภายใน 2 นาทีหลังจากทำรายการ</div>
     <div class="abf-address abf-topline abf-ash2 abf-input-address" style="color:#dc3545 !important;">> หากรีเฟรชหน้าคุณจะต้องรอด้วยการเริ่มต้นตัวจับเวลาอีกครั้ง</div>
     <div class="abf-address abf-topline abf-ash2 abf-input-address" style="color:#dc3545 !important;">> ตรวจสอบให้แน่ใจว่ารายละเอียดธนาคารด้านบนถูกต้อง มิฉะนั้นธุรกรรมจะล้มเหลว</div>
   </div>

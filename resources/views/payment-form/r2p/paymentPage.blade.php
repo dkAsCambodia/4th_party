@@ -117,7 +117,7 @@
   <div class="abf-form">
   <br/>
     <hr style="border-top: 1px solid #dedede;">
-    <h2 style="text-align:center; color:rgb(11, 3, 58);!important;">สแกนด่วนเพื่อชำระเงิน</h2>
+    <h2 style="text-align:center; color:rgb(11, 3, 58);!important;">สแกน QR Code จากแอปธนาคาร</h2>
     <hr style="border-top: 1px solid #dedede;"><br/>
     <div class="abf-topline"><div>
       <!-- <div style="text-align:center; height: 241px"><img src="https://chart.googleapis.com/chart?chs=150x150&cht=qr&chl=bitcoin%3A1DonateWffyhwAjskoEwXt83pHZxhLTr8H%3Famount%3D0.04656914&choe=UTF-8" style="display: inline;height:auto;width:300px;margin-top: -5%;" alt="QR code for payment"> </div> -->
@@ -163,7 +163,7 @@
     </div>
     <h3 style="color:#495057;">คำเตือน:</h3>
     <div class="abf-address abf-topline abf-ash2 abf-input-address" style="color:#dc3545 !important;">> กรุณาอย่ารีเฟรชหน้าจนกว่าการชำระเงินจะเสร็จสิ้น</div>
-    <div class="abf-address abf-topline abf-ash2 abf-input-address" style="color:#dc3545 !important;">> การชำระเงินจะต้องเสร็จสิ้นภายใน 1 นาทีหลังจากทำรายการ</div>
+    <div class="abf-address abf-topline abf-ash2 abf-input-address" style="color:#dc3545 !important;">> การชำระเงินจะต้องเสร็จสิ้นภายใน 2 นาทีหลังจากทำรายการ</div>
     <div class="abf-address abf-topline abf-ash2 abf-input-address" style="color:#dc3545 !important;">> หากรีเฟรชหน้าคุณจะต้องรอด้วยการเริ่มต้นตัวจับเวลาอีกครั้ง</div>
     <div class="abf-address abf-topline abf-ash2 abf-input-address" style="color:#dc3545 !important;">> ตรวจสอบให้แน่ใจว่ารายละเอียดธนาคารด้านบนถูกต้อง มิฉะนั้นธุรกรรมจะล้มเหลว</div>
   </div>
@@ -186,7 +186,7 @@ $redirecturl = URL::to('/r2pPaymentPage2/'.base64_encode($data['transaction_id']
             // Display the current time with seconds
             document.getElementById("timer").innerHTML = minutes + ":" + seconds + " วินาที";
             // Check if 4 minutes and 30 seconds have passed, then redirect
-            if (minutes >= 1) {
+            if (minutes >= 2) {
                 window.location.href = "<?php echo $redirecturl; ?>";
             }
         }
