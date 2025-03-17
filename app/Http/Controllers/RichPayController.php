@@ -520,7 +520,7 @@ class RichPayController extends Controller
                     'net_amount' => $net_amount,
                     'mdr_fee_amount' => $mdr_fee_amount,
                     'customer_bank_name' => $request->bank_account_name ?? $request->customer_name,
-                    'bank_code' => $request->bank_code,
+                    'bank_code' => $request->bank_code_character ?? $request->bank_code,
                     'customer_account_number' => $request->customer_account_number,
                     'Currency' => $request->Currency,
                     'product_id' => $request->product_id,
