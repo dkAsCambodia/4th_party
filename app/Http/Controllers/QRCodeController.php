@@ -30,7 +30,8 @@ class QRCodeController extends Controller
             'amount' => 'required',
             'amount' => ['required', 'numeric'],
             // 'amount' => ['required', 'numeric', 'min:300.00'],
-            'invoice_number' => ['required', 'regex:/^[a-zA-Z0-9\-\/#]+$/', Rule::unique('qrgeneraters', 'invoice_number'),],
+            // 'invoice_number' => ['required', 'regex:/^[a-zA-Z0-9\-\/#]+$/', Rule::unique('qrgeneraters', 'invoice_number'),],
+            'invoice_number' => ['required', 'regex:/^[a-zA-Z0-9\-\/#]+$/'],
         ], [
             'customer_name.required' => 'Customer name is required.',
             'amount.required' => 'Amount is required.',
