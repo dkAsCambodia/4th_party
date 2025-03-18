@@ -22,26 +22,28 @@ class PaymentDetailReportController extends Controller
                     ->whereDate('created_at', '<=', $end_date);
             })
             ->select(
-                'merchant_code',
                 'created_at',
                 'fourth_party_transection',
                 'transaction_id',
                 'customer_name',
                 'amount',
-                'cny_amount',
+                'mdr_fee_amount',
+                'net_amount',
+                'Currency',
                 'payment_status',
             )
             ->orderBy('created_at', 'desc')
             ->get();
 
         $data_array[] = [
-            __('messages.Merchant Code'),
             __('messages.Created Time'),
             __('messages.Transaction ID'),
-            __('messages.Merchant Track No'),
+            __('messages.Reference ID'),
             __('messages.Customer Name'),
-            __('messages.usd_amount'),
-            __('messages.cny_amount'),
+            __('messages.Amount'),
+            __('messages.MDR'),
+            __('messages.Net'),
+            __('messages.Currency'),
             __('messages.Status'),
         ];
 
@@ -49,13 +51,14 @@ class PaymentDetailReportController extends Controller
 
         foreach ($data as $item) {
             $data_array[] = [
-                __('messages.Merchant Code') => $item->merchant_code,
                 __('messages.Created Time') => $item->created_at->timezone($timezone)->format('Y-m-d H:i:s'),
                 __('messages.Transaction ID') => $item->fourth_party_transection,
-                __('messages.Merchant Track No') => $item->transaction_id,
+                __('messages.Reference ID') => $item->transaction_id,
                 __('messages.Customer Name') => $item->customer_name,
-                __('messages.usd_amount') => number_format($item->amount, 2),
-                __('messages.cny_amount') => number_format($item->cny_amount, 2),
+                __('messages.Amount') => number_format($item->amount, 2),
+                __('messages.MDR') => number_format($item->mdr_fee_amount, 2),
+                __('messages.Net') => number_format($item->net_amount, 2),
+                __('messages.Currency') => $item->Currency,
                 __('messages.Status') => __('messages.'.$item->payment_status),
             ];
         }
@@ -84,35 +87,41 @@ class PaymentDetailReportController extends Controller
                 'transaction_id',
                 'customer_name',
                 'amount',
-                'cny_amount',
+                'mdr_fee_amount',
+                'net_amount',
+                'Currency',
                 'payment_status',
             )
             ->orderBy('created_at', 'desc')
             ->get();
 
-        $data_array[] = [
-            __('messages.Created Time'),
-            __('messages.Transaction ID'),
-            __('messages.Merchant Track No'),
-            __('messages.Customer Name'),
-            __('messages.usd_amount'),
-            __('messages.cny_amount'),
-            __('messages.Status'),
-        ];
-
-        $timezone = Timezone::where('id', $request->timezone)->value('timezone');
-
-        foreach ($data as $item) {
             $data_array[] = [
-                __('messages.Created Time') => $item->created_at->timezone($timezone)->format('Y-m-d H:i:s'),
-                __('messages.Transaction ID') => $item->fourth_party_transection,
-                __('messages.Merchant Track No') => $item->transaction_id,
-                __('messages.Customer Name') => $item->customer_name,
-                __('messages.usd_amount') => number_format($item->amount, 2),
-                __('messages.cny_amount') => number_format($item->cny_amount, 2),
-                __('messages.Status') => __('messages.'.$item->payment_status),
+                __('messages.Created Time'),
+                __('messages.Transaction ID'),
+                __('messages.Invoice Number'),
+                __('messages.Customer Name'),
+                __('messages.Amount'),
+                __('messages.MDR'),
+                __('messages.Net'),
+                __('messages.Currency'),
+                __('messages.Status'),
             ];
-        }
+    
+            $timezone = Timezone::where('id', $request->timezone)->value('timezone');
+    
+            foreach ($data as $item) {
+                $data_array[] = [
+                    __('messages.Created Time') => $item->created_at->timezone($timezone)->format('Y-m-d H:i:s'),
+                    __('messages.Transaction ID') => $item->fourth_party_transection,
+                    __('messages.Invoice Number') => $item->transaction_id,
+                    __('messages.Customer Name') => $item->customer_name,
+                    __('messages.Amount') => number_format($item->amount, 2),
+                    __('messages.MDR') => number_format($item->mdr_fee_amount, 2),
+                    __('messages.Net') => number_format($item->net_amount, 2),
+                    __('messages.Currency') => $item->Currency,
+                    __('messages.Status') => __('messages.'.$item->payment_status),
+                ];
+            }
 
         exportExcel($data_array, $request->daterange, 'merchant-payment-detail');
     }
@@ -137,12 +146,14 @@ class PaymentDetailReportController extends Controller
                     ->whereDate('created_at', '<=', $end_date);
             })
             ->select(
-                'created_at',
+               'created_at',
                 'fourth_party_transection',
                 'transaction_id',
                 'customer_name',
                 'amount',
-                'cny_amount',
+                'mdr_fee_amount',
+                'net_amount',
+                'Currency',
                 'payment_status',
             )
             ->orderBy('created_at', 'desc')
@@ -151,10 +162,12 @@ class PaymentDetailReportController extends Controller
         $data_array[] = [
             __('messages.Created Time'),
             __('messages.Transaction ID'),
-            __('messages.Merchant Track No'),
+            __('messages.Reference ID'),
             __('messages.Customer Name'),
-            __('messages.usd_amount'),
-            __('messages.cny_amount'),
+            __('messages.Amount'),
+            __('messages.MDR'),
+            __('messages.Net'),
+            __('messages.Currency'),
             __('messages.Status'),
         ];
 
@@ -164,10 +177,12 @@ class PaymentDetailReportController extends Controller
             $data_array[] = [
                 __('messages.Created Time') => $item->created_at->timezone($timezone)->format('Y-m-d H:i:s'),
                 __('messages.Transaction ID') => $item->fourth_party_transection,
-                __('messages.Merchant Track No') => $item->transaction_id,
+                __('messages.Reference ID') => $item->transaction_id,
                 __('messages.Customer Name') => $item->customer_name,
-                __('messages.usd_amount') => number_format($item->amount, 2),
-                __('messages.cny_amount') => number_format($item->cny_amount, 2),
+                __('messages.Amount') => number_format($item->amount, 2),
+                __('messages.MDR') => number_format($item->mdr_fee_amount, 2),
+                __('messages.Net') => number_format($item->net_amount, 2),
+                __('messages.Currency') => $item->Currency,
                 __('messages.Status') => __('messages.'.$item->payment_status),
             ];
         }
