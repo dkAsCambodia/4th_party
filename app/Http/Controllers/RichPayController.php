@@ -275,17 +275,17 @@ class RichPayController extends Controller
     public function r2pPayinCallbackURL(Request $request)
     {
         $data = $request->all();
-        echo "Transaction Information as follows" . '<br/>' .
-            "Merchant : " . $data['merchant_code'] . '<br/>' .
-            "ReferenceId : " . $data['referenceId'] . '<br/>' .
-            "TransactionId : " . $data['transaction_id'] . '<br/>' .
-            "Type : Deposit" .'<br/>' .
-            "Currency : " . $data['Currency'] . '<br/>' .
-            "Amount : " . $data['amount'] . '<br/>' .
-            "customer_name : " . $data['customer_name'] . '<br/>' .
-            "Datetime : " . $data['created_at'] . '<br/>' .
-            "Status : " . $data['payment_status'];
-         die;
+        // echo "Transaction Information as follows" . '<br/>' .
+        //     "Merchant : " . $data['merchant_code'] . '<br/>' .
+        //     "ReferenceId : " . $data['referenceId'] . '<br/>' .
+        //     "TransactionId : " . $data['transaction_id'] . '<br/>' .
+        //     "Type : Deposit" .'<br/>' .
+        //     "Currency : " . $data['Currency'] . '<br/>' .
+        //     "Amount : " . $data['amount'] . '<br/>' .
+        //     "customer_name : " . $data['customer_name'] . '<br/>' .
+        //     "Datetime : " . $data['created_at'] . '<br/>' .
+        //     "Status : " . $data['payment_status'];
+        return view('payment-form.r2p.deposit-response-page', compact('data'));
     }
 
     public function r2pDepositNotifiication(Request $request)
