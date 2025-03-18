@@ -56,7 +56,7 @@ class QRCodeController extends Controller
             'customer_name' => $customer_name,
             'amount' => $amount,
             'invoice_number' => $invoice_number,
-            // 'qr_img_url' => $url,
+            'qr_img_url' => $url,
             'status' => '1',
         ];
         Qrgenerater::create($addRecord);
@@ -234,7 +234,7 @@ class QRCodeController extends Controller
             $data_array[] = [
                 trans('messages.Customer Name') => $item->customer_name,
                 trans('messages.Invoice Number') => $item->invoice_number,
-                trans('messages.View') =>  $url,
+                trans('messages.View') =>  $item->qr_img_url,
                 trans('messages.Amount') => number_format($item->amount, 2),
                 trans('messages.Created Time') => $item->created_at->format('Y-m-d H:i:s'),
             ];
