@@ -223,10 +223,7 @@
                                                 <div class="dropdown-item" data-symbol="LHBANK" data-value="073" data-image="{{ URL::to('assets/images/bank-images/LHBANK.jpg') }}" onclick="selectBank(this)">
                                                     <img src="{{ URL::to('assets/images/bank-images/LHBANK.jpg') }}">
                                                     Land and House Bank
-                                                </div>
-                                                
-                                                
-                                                
+                                                </div>   
                                             </div>
                                         </div>
                                 </div>
@@ -268,8 +265,7 @@
                 btn.prop("disabled", true);
         spinnerContainer.style.display = 'flex'; // Show spinner with opaque background
     });
-</script>
-<script>
+
     /* Custom dropdown for select Bank START */
   function toggleDropdown() {
       var dropdownList = document.getElementById("dropdownList");
