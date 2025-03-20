@@ -569,6 +569,16 @@ class M2pController extends Controller
 
     }
 
+    public function payintest(Request $request)
+    {
+        return view('payment-form.m2p.payintest');
+    }
+    
+    public function payouttest(Request $request)
+    {
+        return view('payment-form.m2p.payouttest');
+    }
+
 
     public function getGatewayParameters($gatewayPaymentChannel): array
     {
