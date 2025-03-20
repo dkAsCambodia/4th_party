@@ -448,13 +448,10 @@ Route::get('/h2p/payouttest', function () {
 
 Route::controller(M2pController::class)->group(function () {
     Route::get('/m2pPayin', 'payinform');
-   
     Route::get('/m2pPayout', 'm2pPayoutform'); 
+    Route::get('/m2p/payintest', 'payintest'); 
+    Route::get('/m2p/payouttest', 'payouttest'); 
 });
-Route::get('/m2p/payintest', function () {
-    return view('payment-form.m2p.payintest');
-});
-
 
 Route::controller(RichPayController::class)->group(function () {
     Route::get('/r2pPayin', 'payinform');
