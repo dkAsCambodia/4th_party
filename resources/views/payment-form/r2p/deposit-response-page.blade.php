@@ -78,11 +78,12 @@
     @if ($data['payment_status'] == 'success' || $data['payment_status'] == 'Success' || $data['payment_status'] == 'SUCCESS')
         <div style="text-align: center; padding: 40px 0;">
             <div class="card card-class">
+                <h1 class="p-class h1-class-Processing">THANK YOU FOR YOUR PAYMENT!</h1><br/>
                 <div style="border-radius:200px; height:200px; width:200px; background: #F8FAF5; margin:0 auto;">
                     <i class="success">✓</i>
                 </div>
                 <h1 class="h1-class-success">Status : Success</h1>
-                <div style="text-align: left; padding: 40px 0;">
+                <div style="text-align: left; padding: 10px 0;">
                     <p class="p-class">Currency : {{$data['Currency'] ?? ''}}</p>
                     <p class="p-class">Amount : {{$data['amount'] ?? ''}}</p>
                     <p class="p-class">Type : Deposit</p>
@@ -96,11 +97,12 @@
     @elseif ($data['payment_status'] == 'pending' || $data['payment_status'] == 'Pending' || $data['payment_status'] == 'PENDING')
         <div style="text-align: center; padding: 40px 0;">
             <div class="card card-class">
+                <h1 class="p-class h1-class-Processing">THANK YOU FOR YOUR PAYMENT!</h1><br/>
                 <div style="border-radius:200px; height:200px; width:200px; background: #F8FAF5; margin:0 auto;">
                     <i class="fail">!</i>
                 </div>
                 <h1 class="h1-class-fail">Status : Pending</h1>
-                <div style="text-align: left; padding: 40px 0;">
+                <div style="text-align: left; padding: 10px 0;">
                     <p class="p-class">Currency : {{$data['Currency'] ?? ''}}</p>
                     <p class="p-class">Amount : {{$data['amount'] ?? ''}}</p>
                     <p class="p-class">Type : Deposit</p>
@@ -114,11 +116,12 @@
     @elseif ($data['payment_status'] == 'processing' || $data['payment_status'] == 'Processing' || $data['payment_status'] == 'PROCESSING')
         <div style="text-align: center; padding: 40px 0;">
             <div class="card card-class">
+                <h1 class="p-class h1-class-Processing">THANK YOU FOR YOUR PAYMENT!</h1><br/>
                 <div style="border-radius:200px; height:200px; width:200px; background: #F8FAF5; margin:0 auto;">
                     <i class="Processing">!</i>
                 </div>
                 <h1 class="h1-class-Processing">Status : Processing...</h1>
-                <div style="text-align: left; padding: 40px 0;">
+                <div style="text-align: left; padding: 10px 0;">
                     <p class="p-class">Currency : {{$data['Currency'] ?? ''}}</p>
                     <p class="p-class">Amount : {{$data['amount'] ?? ''}}</p>
                     <p class="p-class">Type : Deposit</p>
@@ -132,11 +135,12 @@
     @else
         <div style="text-align: center; padding: 40px 0;">
             <div class="card card-class">
+                <h1 class="p-class h1-class-Processing">THANK YOU FOR YOUR PAYMENT!</h1><br/>
                 <div style="border-radius:200px; height:200px; width:200px; background: #F8FAF5; margin:0 auto;">
                     <i class="fail">!</i>
                 </div>
                 <h1 class="h1-class-fail">Status : Fail</h1>
-                <div style="text-align: left; padding: 40px 0;">
+                <div style="text-align: left; padding: 10px 0;">
                     <p class="p-class">Currency : {{$data['Currency'] ?? ''}}</p>
                     <p class="p-class">Amount : {{$data['amount'] ?? ''}}</p>
                     <p class="p-class">Type : Deposit</p>
