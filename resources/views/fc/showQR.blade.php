@@ -33,11 +33,12 @@
                         <!-- Display QR Code as SVG -->
                         {!! QrCode::size(300)->generate($url) !!}
                         <center><br/>
-                            <a href="{{$url}}" target="_blank"><p><b>{{ $invoice_number }}-{{$amount}}.png</b></p></a>
+                            <a href="{{$url}}" target="_blank"><p><b>{{ $invoice_number }}-{{$amount}}-{{$Currency}}.png</b></p></a>
                             
                             <button class="qr-btn" id="downloadQR" 
                                     data-invoice-number="{{ $invoice_number }}" 
-                                    data-amount="{{ $amount }}">
+                                    data-amount="{{ $amount }}"
+                                    data-Currency="{{ $Currency }}">
                                 <i class="fa fa-download"></i> Download QR Code
                             </button>
                         </center><br/>
@@ -104,6 +105,7 @@
                             // Get dynamic name values
                             var invoiceNumber = this.getAttribute('data-invoice-number');
                             var amount = this.getAttribute('data-amount');
+                            var Currency = this.getAttribute('data-Currency');
                     
                             // Create a temporary canvas to draw the SVG
                             var canvas = document.createElement('canvas');
@@ -120,7 +122,7 @@
                                 // Create a download link
                                 var a = document.createElement('a');
                                 a.href = imgData;
-                                a.download = `${invoiceNumber}-${amount}.png`; // Dynamic file name
+                                a.download = `${invoiceNumber}-${amount}-${Currency}.png`; // Dynamic file name
                                 a.click();
                             };
                         });

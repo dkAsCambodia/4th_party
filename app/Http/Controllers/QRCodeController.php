@@ -48,9 +48,15 @@ class QRCodeController extends Controller
         $customer_name=$request->customer_name;
         $amount=$request->amount;
         $invoice_number=$request->invoice_number;
-        // $url = url('/fc/s2pdeposit/'.base64_encode($amount).'/'.base64_encode($invoice_number).'/'.base64_encode($customer_name));
-        $url = url('/fc/r2pdeposit/'.base64_encode($amount).'/'.base64_encode($invoice_number).'/'.base64_encode($customer_name));
-
+        $Currency=$request->Currency;
+        if($request->Currency=='USDT'){
+            // http://127.0.0.1:8000/m2p/payintest?amount=1000&Currency=THB&merchant_code=testmerchant005
+            $url = url('/m2p/payintest?amount='.$amount.'&Currency=USD&merchant_code=FCmerchant001');
+        }else{
+                // $url = url('/fc/s2pdeposit/'.base64_encode($amount).'/'.base64_encode($invoice_number).'/'.base64_encode($customer_name));
+                $url = url('/fc/r2pdeposit/'.base64_encode($amount).'/'.base64_encode($invoice_number).'/'.base64_encode($customer_name));
+        }
+      
         // $path = 'assets/images/qrcode/'.$invoice_number.'-'.$amount.'.png';
         $addRecord = [
             'customer_name' => $customer_name,
@@ -60,7 +66,7 @@ class QRCodeController extends Controller
             'status' => '1',
         ];
         Qrgenerater::create($addRecord);
-        return view('fc.showQR', compact('url','amount','invoice_number'));
+        return view('fc.showQR', compact('url','amount','invoice_number','Currency'));
     }
 
     
