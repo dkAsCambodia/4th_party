@@ -420,7 +420,7 @@ Route::controller(QRCodeController::class)->group(function () {
     Route::get('fc/r2pdeposit/{amount}/{invoice_number}/{customer_name}', 'fcs2pDeposit')->name('fc.s2p.Deposit');
 
     // Route::get('fc/s2pWithdrawal/', 'fcs2pWithdrawalForm')->name('fc.s2p.withdrawal');
-    Route::get('fc/r2pWithdrawal/', 'fcr2pWithdrawalForm')->name('fc.r2p.withdrawal');
+    // Route::get('fc/r2pWithdrawal/', 'fcr2pWithdrawalForm')->name('fc.r2p.withdrawal');   for this live about for withdraw Gtechz
 });
 Route::controller(SpeedpayPayinPayoutController::class)->group(function () {
     Route::get('/s2pPayin', 'payinform');
