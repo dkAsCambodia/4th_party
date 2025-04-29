@@ -54,7 +54,7 @@ class PaymentDetailController extends Controller
                         ->whereDate('created_at', '<=', $end_date);
                 })
                 ->when($request->search, function ($q) use ($request) {
-                    $q->where('payment_details.order_status', 'LIKE', '%' . $request->search . '%')
+                    $q->where('payment_details.customer_name', 'LIKE', '%' . $request->search . '%')
                         ->orWhere('payment_details.amount', 'LIKE', '%' . $request->search . '%')
                         ->orWhere('payment_details.transaction_id', 'LIKE', '%' . $request->search . '%')
                         ->orWhere('payment_details.merchant_code', 'LIKE', '%' . $request->search . '%')
@@ -78,7 +78,7 @@ class PaymentDetailController extends Controller
                         ->whereDate('created_at', '<=', $end_date);
                 })
                 ->when($request->search, function ($q) use ($request) {
-                    $q->where('payment_details.order_status', 'LIKE', '%' . $request->search . '%')
+                    $q->where('payment_details.customer_name', 'LIKE', '%' . $request->search . '%')
                         ->orWhere('payment_details.amount', 'LIKE', '%' . $request->search . '%')
                         ->orWhere('payment_details.transaction_id', 'LIKE', '%' . $request->search . '%')
                         ->orWhere('payment_details.merchant_code', 'LIKE', '%' . $request->search . '%')
@@ -103,7 +103,7 @@ class PaymentDetailController extends Controller
                         ->whereDate('created_at', '<=', $end_date);
                 })
                 ->when($request->search, function ($q) use ($request) {
-                    $q->where('payment_details.order_status', 'LIKE', '%' . $request->search . '%')
+                    $q->where('payment_details.customer_name', 'LIKE', '%' . $request->search . '%')
                         ->orWhere('payment_details.amount', 'LIKE', '%' . $request->search . '%')
                         ->orWhere('payment_details.transaction_id', 'LIKE', '%' . $request->search . '%')
                         ->orWhere('payment_details.merchant_code', 'LIKE', '%' . $request->search . '%')
@@ -128,7 +128,7 @@ class PaymentDetailController extends Controller
                         ->whereDate('created_at', '<=', $end_date);
                 })
                 ->when($request->search, function ($q) use ($request) {
-                    $q->where('payment_details.order_status', 'LIKE', '%' . $request->search . '%')
+                    $q->where('payment_details.customer_name', 'LIKE', '%' . $request->search . '%')
                         ->orWhere('payment_details.amount', 'LIKE', '%' . $request->search . '%')
                         ->orWhere('payment_details.transaction_id', 'LIKE', '%' . $request->search . '%')
                         ->orWhere('payment_details.merchant_code', 'LIKE', '%' . $request->search . '%')
@@ -352,7 +352,7 @@ class PaymentDetailController extends Controller
 
                     if (!empty($request->search)) {
                         $data->where(function ($q) use ($request) {
-                            $q->orWhere('payment_details.order_status', 'LIKE', '%' . $request->search . '%')
+                            $q->orWhere('payment_details.customer_name', 'LIKE', '%' . $request->search . '%') 
                                 ->orWhere('payment_details.amount', 'LIKE', '%' . $request->search . '%')
                                 ->orWhere('payment_details.transaction_id', 'LIKE', '%' . $request->search . '%')
                                 ->orWhere('payment_details.fourth_party_transection', 'LIKE', '%' . $request->search . '%');
@@ -509,7 +509,7 @@ class PaymentDetailController extends Controller
 
                     if (!empty($request->search)) {
                         $data->where(function ($q) use ($request) {
-                            $q->orWhere('payment_details.order_status', 'LIKE', '%' . $request->search . '%')
+                            $q->orWhere('payment_details.customer_name', 'LIKE', '%' . $request->search . '%')
                                 ->orWhere('payment_details.amount', 'LIKE', '%' . $request->search . '%')
                                 ->orWhere('payment_details.transaction_id', 'LIKE', '%' . $request->search . '%')
                                 ->orWhere('payment_details.fourth_party_transection', 'LIKE', '%' . $request->search . '%');
