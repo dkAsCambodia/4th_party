@@ -496,7 +496,7 @@ class RichPayController extends Controller
             $message = $status;
         } else {
             $status = 'failed';
-            $message = $jsonData['detail']; 
+            $message = $jsonData['detail'] ?? ''; 
         }
 
         ////Insert Record into DB
