@@ -13,6 +13,7 @@ use App\Http\Controllers\SpeedpayPayinPayoutController;
 use App\Http\Controllers\H2pController;
 use App\Http\Controllers\M2pController;
 use App\Http\Controllers\RichPayController;
+use App\Http\Controllers\XprizoPaymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -119,4 +120,13 @@ Route::controller(RichPayController::class)->group(function () {
     Route::post('r2p/payout/callbackURL', 'r2pPayoutcallbackURL')->name('apiroute.r2pPayoutcallbackURL');    // For sending callback on frontend
     Route::post('/r2pWithdrawNotifiication', 'r2pWithdrawNotifiication');                           // For sending callback on Backend
     
+});
+
+Route::controller(XprizoPaymentController::class)->group(function () {
+    Route::get('xpz/deposit/', 'xpzDepositApifun')->name('apiroute.xpz.depositApi');
+    Route::post('xpz/depositResponse', 'xpzDepositResponse')->name('apiroute.xpzDepositResponse'); 
+    Route::post('/xpzWebhookNotifiication', 'xpzWebhookNotifiication'); 
+
+    Route::get('xpz/withdrawal/', 'xpzwithdrawApifun')->name('apiroute.xpz.withdrawalApi');
+    Route::post('xpz/withdrawalResponse', 'xpzWithdrawalResponse')->name('apiroute.xpzWithdrawalResponse'); 
 });
