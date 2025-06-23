@@ -318,12 +318,13 @@ class RichPayController extends Controller
                 'SUCCESS' => 'success',
                 'AUTO_SUCCESS' => 'success',
                 'PROCESSING' => 'processing',
-                default => 'failed',
+                'Failed' => 'failed',
+                default => 'not confirm',
             };
             $RefID = $data['txn_ref_order_id'];
-            sleep(20);
+            sleep(50);
             $updateData = [
-                'payment_status' => $orderStatus,
+                'payment_status' => $orderStatus ?? $data['status'],
                 'response_data' => json_encode($data),
             ];
             // echo "<pre>";  print_r($updateData); die;

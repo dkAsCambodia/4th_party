@@ -46,6 +46,7 @@ use App\Http\Controllers\SpeedpayPayinPayoutController;
 use App\Http\Controllers\H2pController;
 use App\Http\Controllers\M2pController;
 use App\Http\Controllers\RichPayController;
+use App\Http\Controllers\XprizoPaymentController;
 
 
 /*
@@ -462,4 +463,16 @@ Route::controller(RichPayController::class)->group(function () {
 
     Route::get('/r2p/payintest', 'payintest'); 
     Route::get('/r2p/payouttest', 'payouttest'); 
+});
+
+Route::controller(XprizoPaymentController::class)->group(function () {
+    Route::get('/xpzDeposit', 'xpzDepositform');            // Deposit form
+    Route::get('xpz/deposit/gatewayResponse', 'xpzDepositGatewayResponse');       // for gateway response
+    Route::get('/xpzWithdrawal', 'xpzWithdrawalform');            // Withjdrawal form
+});
+Route::get('/xpz/payintest', function () {
+    return view('payment-form.xpz.payintest');
+});
+Route::get('/xpz/payouttest', function () {
+    return view('payment-form.xpz.payouttest');
 });
