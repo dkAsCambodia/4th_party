@@ -163,6 +163,14 @@ class XprizoPaymentController extends Controller
 
         $result = $response->json();
         //  echo "<pre>";  print_r($result); die;
+         // for XPRIXO deposit charge START
+            if(!empty($request->amount)){
+                $percentage = 1.35;     // Deposit Charge for RichPay
+                $totalWidth = $request->amount;
+                $mdr_fee_amount = ($percentage / 100) * $totalWidth;
+                $net_amount= $totalWidth-$mdr_fee_amount;
+            }
+            // for XPRIXO deposit charge END
         if (isset($result['status'])) {
             if ($result['status'] == 'Redirect') {
                      //Insert data into DB
@@ -184,7 +192,9 @@ class XprizoPaymentController extends Controller
                          'customer_name' => $request->customer_name,
                          'payin_arr' => json_encode($result),
                          'receipt_url' => $result['value'],
-                         'ip_address' => $client_ip,      
+                         'ip_address' => $client_ip, 
+                         'net_amount' => $net_amount ?? '',
+                         'mdr_fee_amount' => $mdr_fee_amount ?? '',     
                      ];
                     //  echo "<pre>";  print_r($addRecord); die;
                     PaymentDetail::create($addRecord);
@@ -209,7 +219,9 @@ class XprizoPaymentController extends Controller
                          'payin_arr' => json_encode($result),
                          'payment_status' => 'failed',
                          'receipt_url' => $result['message'],
-                         'ip_address' => $client_ip,      
+                         'ip_address' => $client_ip,  
+                         'net_amount' => $net_amount ?? '',
+                         'mdr_fee_amount' => $mdr_fee_amount ?? '',    
                      ];
                     PaymentDetail::create($addRecord);
                echo "<pre>"; print_r($result); 
