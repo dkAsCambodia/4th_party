@@ -45,7 +45,7 @@
                         <h3 class="text-center mb-4"><b>GTech Transfer or Deposit</b></h3>
                         <form class="form-horizontal" action="{{ route('apiroute.xpz.depositApi') }}" method="GET" id="paymentForm">
                             <input type="hidden" name="merchant_code" value="testmerchant005">
-                            <input type="hidden" name="product_id" value="21">
+                            <input type="hidden" name="product_id" value="22">
                             <input type="hidden" name="callback_url" value="{{ route('apiroute.xpzDepositResponse') }}">
 							<div class="row mb-4">
                                 <label for="Reference" class="col-md-3 form-label">Reference ID</label>
@@ -85,13 +85,13 @@
                             <div class="row mb-4 hidden cardFiled">
                                 <label for="card_number" class="col-md-3 form-label">Card Number</label>
                                 <div class="col-md-9">
-                                    <input type="text" class="form-control " name="card_number" id="card_number" placeholder="Card number" maxlength='16' value="4444444455551111" required>
+                                    <input type="text" class="form-control " name="card_number" id="card_number" placeholder="Card number" maxlength='16' value="5123450000000008" required>
                                 </div>
                             </div>
                             <div class="row mb-4 hidden cardFiled">
                                 <label for="expiration" class="col-md-3 form-label">Expiration</label>
                                 <div class="col-md-9">
-                                    <input type="text" class="form-control expirationInput" name="expiration" id="expiration"  maxlength='5' placeholder="MM/YY" value="02/26" required>
+                                    <input type="text" class="form-control expirationInput" name="expiration" id="expiration"  maxlength='5' placeholder="MM/YY" value="01/30" required>
                                     <p class="expirationInput-warning text text-danger" style="display:none">Please fillup
                                     correct!</p>
                                 </div>
@@ -99,7 +99,7 @@
                             <div class="row mb-4 hidden cardFiled">
                                 <label for="cvv" class="col-md-3 form-label">CVC</label>
                                 <div class="col-md-9">
-                                    <input type="text" class="form-control" name="cvv" id="cvv" placeholder="Enter your cvv" maxlength='3' value="123" required>
+                                    <input type="text" class="form-control" name="cvv" id="cvv" placeholder="Enter your cvv" maxlength='3' value="100" required>
                                 </div>
                             </div>
                              <!-- Spinner -->
