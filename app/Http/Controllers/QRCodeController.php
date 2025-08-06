@@ -121,12 +121,12 @@ class QRCodeController extends Controller
                 ->editColumn('status', function ($data) {
                     // $fileName = $data->qr_img_url; // Assuming `file_name` is the column holding the file name
                     // $filePath = asset($fileName);
-                    $url = 'https://payin.implogix.com/FCdeposit/deposit.php?aa='.base64_encode($data->amount).'&in='.base64_encode($data->invoice_number).'&cu='.base64_encode($data->customer_name);
+                    $url = $data->qr_img_url;
                     $qrCode = QrCode::size(50)->generate($url);
                     return ' <div>' . $qrCode . '</div>';
                 })
                 ->addColumn('action', function ($data) use ($request) {
-                    $url = 'https://payin.implogix.com/FCdeposit/deposit.php?aa='.base64_encode($data->amount).'&in='.base64_encode($data->invoice_number).'&cu='.base64_encode($data->customer_name);
+                    $url = $data->qr_img_url;
                     $qrCode = QrCode::size(200)->generate($url);
                     // $fileName = $data->qr_img_url; // Assuming `file_name` is the column holding the file name
                     // $filePath = asset($fileName);
