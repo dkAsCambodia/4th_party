@@ -317,14 +317,14 @@ class RichPayController extends Controller
              $orderStatus = match ($data['status'] ?? '') {
                 'SUCCESS' => 'success',
                 'AUTO_SUCCESS' => 'success',
-                'PROCESSING' => 'processing',
+                'PROCESSING' => 'processing1',
                 'Failed' => 'failed',
                 default => 'not confirm',
             };
             $RefID = $data['txn_ref_order_id'];
             sleep(50);
             $updateData = [
-                'payment_status' => $orderStatus ?? $data['status'],
+                'payment_status' => $orderStatus ?? 'success',
                 'response_data' => json_encode($data),
             ];
             // echo "<pre>";  print_r($updateData); die;
