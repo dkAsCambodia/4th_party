@@ -318,7 +318,7 @@ class PaymentEcommController extends Controller
             'status' => 'pending',
             'msg' => 'New Deposit Transaction Created!',
         ];
-        event(new DepositCreated($data));
+        event(new DepositCreated($data));   
         // Broadcast the event Notification code START
         // Insert data in Notification table Code START
         $merchant=Merchant::where('merchant_code', $request->merchant_code)->first();
